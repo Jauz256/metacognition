@@ -1,0 +1,12 @@
+{
+  "ts": "2026-09-07T10:30:00Z",
+  "overall": "RED",
+  "items": [
+    {"id": "no-debug-statements", "status": "GREEN", "msg": "ok"},
+    {"id": "lint-clean", "status": "GREEN", "msg": "ok"},
+    {"id": "typecheck-clean", "status": "RED", "msg": "exit 2: src/app.ts(14,7): type error"},
+    {"id": "few-dependencies", "status": "GREEN", "msg": "ok"},
+    {"id": "proof-in-done", "status": "GREEN", "msg": "ok"},
+    {"id": "atomic-commits", "status": "GREEN", "msg": "ok"}
+  ]
+}

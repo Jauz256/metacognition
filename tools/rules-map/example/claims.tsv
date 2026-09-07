@@ -1,0 +1,7 @@
+# id	claim in plain words	check (must exit 0)
+no-debug-statements	no console.log or debug statements left in src/	! grep -rn "console.log" src --include=*.js --include=*.ts 2>/dev/null | grep -q .
+lint-clean	lint passes before every commit	npm run -s lint
+typecheck-clean	typecheck passes before every commit	npm run -s typecheck
+few-dependencies	dependencies stay minimal: fewer than 15 in package.json	test "$(node -p "Object.keys(require(\"./package.json\").dependencies||{}).length")" -lt 15
+proof-in-done	every done message in the last session came with a command that proves it	test -f .proof-of-done
+atomic-commits	each of the last 20 commits names one change in its message	! git log -20 --format=%s | grep -q " and "

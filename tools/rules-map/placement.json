@@ -1,0 +1,13 @@
+{
+  "_help": "steps: the work pipeline, top to bottom. words: keywords that place a rule on a step (matched by word stem, so 'commits' matches 'commit'). pins: rule id -> step name, for when the keywords guess wrong. links: rule id -> claim id (or a list of ids), for when the word match misses. Get rule ids with: python3 build.py --rules CLAUDE.md --claims claims.tsv --list",
+  "steps": [
+    {"name": "read the ask", "words": ["ask", "asked", "asking", "question", "clarify", "clarifying", "listen", "read", "understand", "scope", "intent", "request", "assume", "assumption", "context"]},
+    {"name": "plan", "words": ["plan", "goal", "restate", "estimate", "design", "decide", "decision", "approach", "confirm", "yes", "wait", "propose", "option", "trade-off", "architecture"]},
+    {"name": "build", "words": ["build", "write", "code", "implement", "package", "dependency", "dependencies", "create", "edit", "refactor", "debug", "console", "function", "file", "abstraction", "library"]},
+    {"name": "verify", "words": ["verify", "test", "check", "lint", "typecheck", "run", "prove", "proof", "screenshot", "evidence", "assert", "pass", "green", "compile"]},
+    {"name": "show", "words": ["show", "report", "deliver", "answer", "reply", "respond", "output", "commit", "ship", "say", "done", "message", "summary", "explain", "tell", "push"]},
+    {"name": "learn", "words": ["learn", "memory", "remember", "mistake", "correction", "correct", "lesson", "repeat", "twice", "rule", "log", "promote", "note", "feedback", "pattern"]}
+  ],
+  "pins": {},
+  "links": {}
+}

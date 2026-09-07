@@ -1,0 +1,19 @@
+# id	claim in plain words	check (must exit 0)
+# One rule per line, three columns separated by a TAB. Lines starting with # are ignored.
+# These are examples. Change the numbers, delete rows that do not fit you, add your own with:
+#   watchdog.mjs add "<claim in plain words>" "<check command>"
+# Checks run with stdin closed and a 20 second limit. "the repo you are standing in" means the
+# current directory; the timer runs from your home folder, so those rows only bite when you
+# run the watchdog by hand inside a project.
+# In the secret patterns, letters in [brackets] stop this file from matching its own rows.
+claude-md-exists	a global CLAUDE.md exists (these are the rules being measured)	test -s ~/.claude/CLAUDE.md
+claude-md-short	CLAUDE.md is under 2.5 KB (a long rule file gets skimmed, not followed)	test ! -f ~/.claude/CLAUDE.md || test "$(wc -c < ~/.claude/CLAUDE.md)" -lt 2500
+claude-md-no-model-name	CLAUDE.md does not pin a model name (names rot; settings.json is the source)	test ! -f ~/.claude/CLAUDE.md || ! grep -qiE "(opus|sonnet|haiku)[ -]?[0-9]" ~/.claude/CLAUDE.md
+settings-valid-json	settings.json is valid JSON (a broken file drops every hook in it without a word)	test ! -f ~/.claude/settings.json || node -e 'JSON.parse(require("fs").readFileSync(process.env.HOME + "/.claude/settings.json", "utf8"))'
+hooks-exist	every hook command in settings.json points at a script that exists on disk	node -e 'const fs=require("fs"),f=process.env.HOME+"/.claude/settings.json";if(!fs.existsSync(f))process.exit(0);const s=JSON.parse(fs.readFileSync(f,"utf8"));const bad=[];for(const list of Object.values(s.hooks||{}))for(const m of (Array.isArray(list)?list:[]))for(const h of m.hooks||[])for(const x of (h.command||"").matchAll(/(?:^|[\s"=])((?:~|\/)[^\s"]+\.(?:sh|m?js|cjs|py))/g)){const p=x[1].replace(/^~/,process.env.HOME);if(!fs.existsSync(p))bad.push(p)}if(bad.length){console.error("missing: "+bad.join(", "));process.exit(1)}'
+no-secrets-loaded	no API-key-shaped strings in CLAUDE.md, settings.json, or memory files	! grep -qE 's[k]-[A-Za-z0-9]{20,}|gh[p]_[A-Za-z0-9]{30,}|AK[I]A[A-Z0-9]{16}|AI[z]a[A-Za-z0-9_-]{30,}|BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY' ~/.claude/CLAUDE.md ~/.claude/settings.json $(find ~/.claude/projects -path '*/memory/*' -name '*.md' 2>/dev/null) 2>/dev/null
+settings-no-plaintext-keys	settings.json holds no long KEY, TOKEN, SECRET or PASSWORD value (keep those in the keychain or an env file)	test ! -f ~/.claude/settings.json || ! grep -qE '"[A-Za-z_]*(KEY|TOKEN|SECRET|PASSWORD)[A-Za-z_]*" *: *"[^"]{16,}"' ~/.claude/settings.json
+memory-index	a memory folder that holds notes also has a MEMORY.md index that is not empty	for d in ~/.claude/projects/*/memory; do [ -d "$d" ] || continue; n=$(ls "$d"/*.md 2>/dev/null | grep -vc '/MEMORY\.md$'); [ "$n" -eq 0 ] || [ -s "$d/MEMORY.md" ] || exit 1; done
+memory-links-resolve	every link in MEMORY.md points at a file that exists (a dead link is a lost memory)	for d in ~/.claude/projects/*/memory; do [ -f "$d/MEMORY.md" ] || continue; for f in $(grep -oE '\]\([^)]+\.md\)' "$d/MEMORY.md" | sed 's/^](//; s/)$//'); do [ -f "$d/$f" ] || exit 1; done; done
+no-console-log-in-src	no console.log left in src/ of the repo you are standing in (skips outside a repo)	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git grep -qE 'console\.log\(' -- 'src/*.js' 'src/*.ts' 'src/*.jsx' 'src/*.tsx' 'src/*.mjs'
+no-conflict-markers	no leftover merge-conflict markers in the repo you are standing in (skips outside a repo)	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git grep -qE '^(<<<<<<< |>>>>>>> )'
