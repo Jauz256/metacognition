@@ -15,7 +15,7 @@ down. It went up. So the rules became checks, and the checks run on a timer.
 **One line to install** (macOS or Linux, Node 18 or newer, asks nothing):
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/Jauz256/rule-drift-watchdog/main/install.sh | bash
+npx rule-drift-watchdog
 ```
 
 **What it does**
@@ -38,7 +38,7 @@ rule-drift-watchdog RED: 2 of 11 rules broken: claude-md-short (exit 1); memory-
   (changed since the previous run)
 ```
 
-`watchdog.mjs status` shows one line per rule. `watchdog.mjs history` shows how often each
+`npx rule-drift-watchdog status` shows one line per rule, and `history` shows how often each
 rule held over the last runs. That per-rule pass rate is the drift meter.
 
 ```text
@@ -64,7 +64,7 @@ The long version is in [docs/how-it-works.md](docs/how-it-works.md).
 ## Add a rule
 
 ```sh
-node ~/.claude/rule-drift-watchdog/bin/watchdog.mjs add \
+npx rule-drift-watchdog add \
   "no console.log in src/" \
   "! git grep -qE 'console\.log\(' -- 'src/*.ts'"
 ```
@@ -97,8 +97,9 @@ installed; otherwise only the SVG.
 - One timer: a launchd agent on macOS, one crontab line on Linux. Every 30 minutes it runs
   the watchdog, then the loop scan.
 
-`bash install.sh --dry-run` prints all of that and changes nothing.
-`bash install.sh --uninstall` removes the hooks, the timer and the code, and keeps your data.
+`npx rule-drift-watchdog --dry-run` prints all of that and changes nothing.
+`npx rule-drift-watchdog --uninstall` removes the hooks, the timer and the code, and keeps
+your data. Cloning the repo and running `bash install.sh` does the same thing.
 
 ## What it does not do
 
