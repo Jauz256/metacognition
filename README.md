@@ -6,6 +6,11 @@ draws it.
 Metacognition means thinking about your own thinking. That is what this does for a coding
 agent: it watches whether the agent still follows the rules you wrote for it.
 
+**Works with Claude Code, Codex, Cursor, Gemini CLI and anything else that reads an instructions
+file.** Rules are plain shell commands, so nothing here is tied to one tool. The shipped rules find
+whichever file your agent reads: `CLAUDE.md`, `AGENTS.md`, `.cursorrules` or `GEMINI.md`. Tested
+against a home with each one, and against a home with none.
+
 Built by a 21-year-old solo founder in Bangkok who got tired of repeating himself to his AI.
 
 **The number.** In August 2026, 82 of 991 messages to Claude Code were corrections: 8.3%.

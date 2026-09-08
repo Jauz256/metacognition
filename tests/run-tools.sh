@@ -6,6 +6,7 @@
 #    and the shipped example/out.svg matches a fresh build.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+ROOT=$PWD
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT
 fail() { echo "FAIL: $1"; exit 1; }
@@ -46,4 +47,27 @@ ALL=$(grep -o 'class="rule ' "$T/out.svg" | wc -l | tr -d ' ')
 [ "$ALL" = "10" ] || fail "expected 10 rule cards, got $ALL"
 cmp -s "$T/out.svg" "$EX/out.svg" || fail "$EX/out.svg is stale; rebuild it with the command in build.py"
 echo "ok  rules-map: 10 cards, 1 red ring, notes and unplaced present, example/out.svg is current"
+
+# --- the shipped rules must work for any agent, not only Claude Code -------------
+# Jazz, 9 Sep 2026: the engine was generic but 9 of 11 shipped rules named Claude.
+# These four homes prove the claim in the README. Each runs from inside its own home.
+agent_home() { # $1 = label, $2 = setup command, $3 = expected word in the verdict
+  local T
+  T=$(mktemp -d)
+  mkdir -p "$T/.claude/metacognition"
+  cp "$ROOT/claims.tsv" "$T/.claude/metacognition/"
+  ( eval "$2" )
+  # the watchdog exits non-zero when a rule is RED, and that is a pass here, so swallow it
+  OUT=$( cd "$T" && HOME="$T" node "$ROOT/bin/watchdog.mjs" run 2>&1 | tail -3 || true )
+  rm -rf "$T"
+  case "$OUT" in
+    *"$3"*) echo "ok  agent home: $1" ;;
+    *) echo "FAIL agent home: $1 — wanted $3, got: $OUT"; fail "agent home $1" ;;
+  esac
+}
+agent_home "Codex, AGENTS.md only"   'printf "# rules\n- answer first\n" > "$T/AGENTS.md"'          GREEN
+agent_home "Cursor, .cursorrules"    'printf "be brief\n" > "$T/.cursorrules"'                       GREEN
+agent_home "Gemini CLI"              'mkdir -p "$T/.gemini"; printf "be brief\n" > "$T/.gemini/GEMINI.md"' GREEN
+agent_home "no agent file at all"    'true'                                                           RED
+
 echo "PASS"

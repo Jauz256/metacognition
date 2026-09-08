@@ -164,7 +164,7 @@ expect_contains "12b all 11 example rules ran" "all 11 rules hold" "$OUT"
 FAKE="$(printf 's''k-')$(printf 'a%.0s' 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24)"
 printf '\nkey: %s\n' "$FAKE" >> "$HOME/.claude/CLAUDE.md"
 OUT=$(cd "$HOME" && node "$WD" run)
-expect_eq "12c a planted token turns no-secrets-loaded RED" RED "$(item_status no-secrets-loaded)"
+expect_eq "12c a planted token turns no-secrets-in-rules RED" RED "$(item_status no-secrets-in-rules)"
 expect_eq "12d the other rules stay GREEN" GREEN "$(item_status hooks-exist)"
 printf '# My rules\n' > "$HOME/.claude/CLAUDE.md"
 rm "$HOME/.claude/keep-me.sh"
