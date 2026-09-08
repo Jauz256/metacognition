@@ -31,7 +31,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-const APP = 'rule-drift-watchdog';
+const APP = 'metacognition';
 
 // Word lists that decide the verdict. Edit them to match how you talk.
 // A message that matches COMPLAINT is a correction. A message that starts like ACCEPT is a yes.

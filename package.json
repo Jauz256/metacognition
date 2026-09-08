@@ -1,12 +1,12 @@
 {
-  "name": "rule-drift-watchdog",
+  "name": "metacognition",
   "version": "0.1.0",
   "description": "Your AI reads your rules and ignores them. This measures which ones, every 30 minutes, and draws it.",
-  "bin": { "rule-drift-watchdog": "bin/cli.mjs" },
+  "bin": { "metacognition": "bin/cli.mjs" },
   "type": "module",
   "engines": { "node": ">=18" },
   "files": ["bin", "hooks", "skills", "tools", "claims.tsv", "install.sh", "docs", "README.md", "LICENSE"],
   "keywords": ["claude-code", "claude", "ai-agent", "rules", "hooks", "watchdog", "linter", "agent-rules"],
   "license": "MIT",
-  "repository": { "type": "git", "url": "git+https://github.com/Jauz256/rule-drift-watchdog.git" }
+  "repository": { "type": "git", "url": "git+https://github.com/Jauz256/metacognition.git" }
 }

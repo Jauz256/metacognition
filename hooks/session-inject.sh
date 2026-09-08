@@ -4,7 +4,7 @@
 # install.sh wires this as a SessionStart hook. It prints one line when the verdict is
 # fresh, and one more when the timer has not run for a while. It never asks anything,
 # never blocks, and needs nothing but bash.
-APP="rule-drift-watchdog"
+APP="metacognition"
 INTERVAL_MIN=30
 DIR="${WATCHDOG_DIR:-$HOME/.claude/$APP}"
 VERDICT="$DIR/verdict.txt"

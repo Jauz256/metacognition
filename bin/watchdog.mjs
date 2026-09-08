@@ -42,7 +42,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 
-const APP = 'rule-drift-watchdog';
+const APP = 'metacognition';
 const INTERVAL_MIN = 30; // the timer runs this often; a verdict older than 2 intervals is stale
 
 const DIR = process.env.WATCHDOG_DIR || path.join(os.homedir(), '.claude', APP);

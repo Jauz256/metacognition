@@ -26,7 +26,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-const APP = 'rule-drift-watchdog';
+const APP = 'metacognition';
 
 // Words that carry no meaning for grouping. Add your own filler words here.
 const STOP = new Set(['that', 'this', 'with', 'what', 'when', 'like', 'have', 'been', 'from',

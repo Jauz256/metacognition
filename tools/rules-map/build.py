@@ -29,7 +29,7 @@ import os
 import re
 import sys
 
-APP = 'rule-drift-watchdog'
+APP = 'metacognition'
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Words that carry no meaning when matching a claim to a rule.

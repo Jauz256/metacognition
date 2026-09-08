@@ -19,7 +19,7 @@
 # Asks nothing. Needs node 18 or newer on PATH.
 set -eu
 
-APP="rule-drift-watchdog"
+APP="metacognition"
 REPO="${WATCHDOG_REPO:-Jauz256/$APP}"   # GitHub owner/name; only used when not run from a clone
 INTERVAL_MIN=30
 

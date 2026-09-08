@@ -1,7 +1,10 @@
-# rule-drift-watchdog
+# metacognition
 
 Your AI reads your rules and ignores them. This measures which ones, every 30 minutes, and
 draws it.
+
+Metacognition means thinking about your own thinking. That is what this does for a coding
+agent: it watches whether the agent still follows the rules you wrote for it.
 
 Built by a 21-year-old solo founder in Bangkok who got tired of repeating himself to his AI.
 
@@ -15,7 +18,7 @@ down. It went up. So the rules became checks, and the checks run on a timer.
 **One line to install** (macOS or Linux, Node 18 or newer, asks nothing):
 
 ```sh
-npx rule-drift-watchdog
+npx metacognition
 ```
 
 **What it does**
@@ -32,13 +35,13 @@ npx rule-drift-watchdog
 At the start of a session, one line:
 
 ```text
-rule-drift-watchdog RED: 2 of 11 rules broken: claude-md-short (exit 1); memory-index (exit 1)
+metacognition RED: 2 of 11 rules broken: claude-md-short (exit 1); memory-index (exit 1)
   RED    claude-md-short: exit 1
   RED    memory-index: exit 1
   (changed since the previous run)
 ```
 
-`npx rule-drift-watchdog status` shows one line per rule, and `history` shows how often each
+`npx metacognition status` shows one line per rule, and `history` shows how often each
 rule held over the last runs. That per-rule pass rate is the drift meter.
 
 ```text
@@ -64,22 +67,22 @@ The long version is in [docs/how-it-works.md](docs/how-it-works.md).
 ## Add a rule
 
 ```sh
-npx rule-drift-watchdog add \
+npx metacognition add \
   "no console.log in src/" \
   "! git grep -qE 'console\.log\(' -- 'src/*.ts'"
 ```
 
-The row lands in `~/.claude/rule-drift-watchdog/claims.tsv` and is checked once right away.
+The row lands in `~/.claude/metacognition/claims.tsv` and is checked once right away.
 Rows are tab-separated: `id`, `claim in plain words`, `check`. The shipped file holds 11
 example rules; delete the ones that do not fit you.
 
 ## Draw the map
 
 ```sh
-python3 ~/.claude/rule-drift-watchdog/tools/rules-map/build.py \
+python3 ~/.claude/metacognition/tools/rules-map/build.py \
   --rules ~/.claude/CLAUDE.md \
-  --claims ~/.claude/rule-drift-watchdog/claims.tsv \
-  --verdict ~/.claude/rule-drift-watchdog/verdict.json \
+  --claims ~/.claude/metacognition/claims.tsv \
+  --verdict ~/.claude/metacognition/verdict.json \
   --out rules-map.svg
 ```
 
@@ -90,15 +93,15 @@ installed; otherwise only the SVG.
 
 ## What gets installed
 
-- `~/.claude/rule-drift-watchdog/`: the code, `claims.tsv`, `verdict.json`, `mistakes.jsonl`,
+- `~/.claude/metacognition/`: the code, `claims.tsv`, `verdict.json`, `mistakes.jsonl`,
   `receipts.jsonl`, `loop-candidates.md`.
 - Three hooks in `~/.claude/settings.json`: SessionStart (prints the verdict), Stop and
   UserPromptSubmit (the mistake log). Your other hooks are kept. The file is backed up first.
 - One timer: a launchd agent on macOS, one crontab line on Linux. Every 30 minutes it runs
   the watchdog, then the loop scan.
 
-`npx rule-drift-watchdog --dry-run` prints all of that and changes nothing.
-`npx rule-drift-watchdog --uninstall` removes the hooks, the timer and the code, and keeps
+`npx metacognition --dry-run` prints all of that and changes nothing.
+`npx metacognition --uninstall` removes the hooks, the timer and the code, and keeps
 your data. Cloning the repo and running `bash install.sh` does the same thing.
 
 ## What it does not do
@@ -106,6 +109,17 @@ your data. Cloning the repo and running `bash install.sh` does the same thing.
 It does not make the AI obey. It measures which rules held, which broke, and which were
 never checked at all. The watchdog also checks itself: four planted failures must come back
 red on every run, or the verdict says BROKEN instead of GREEN.
+
+## How this differs from the linters
+
+[agnix](https://github.com/agent-sh/agnix), [agentlinter](https://github.com/seojoonkim/agentlinter),
+[claudelint](https://github.com/pdugan20/claudelint), [ctxlint](https://github.com/YawLabs/ctxlint)
+and [vigiles](https://github.com/zernie/vigiles) check that your rules **file** is valid, current and
+not lying about your codebase. They are good, they came first, and you should use one.
+
+This asks a different question: did the agent actually **follow** the rule? Each rule becomes a
+command that must pass. It runs every 30 minutes, and `history` shows the pass rate per rule over
+time. A rule sitting at 25% green is a rule your agent keeps breaking.
 
 ## Credits
 

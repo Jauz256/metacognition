@@ -13,7 +13,7 @@ Append one JSON line to `~/.claude/<APP>/no-log.jsonl` before doing anything els
 The reason is arbitrary text: pass it as an argument, never paste it inside shell quotes.
 
 ```bash
-APP=rule-drift-watchdog
+APP=metacognition
 node -e 'const fs=require("fs"),os=require("os"),p=require("path");const f=p.join(os.homedir(),".claude",process.argv[1],"no-log.jsonl");fs.mkdirSync(p.dirname(f),{recursive:true});fs.appendFileSync(f,JSON.stringify({t:new Date().toISOString(),cwd:process.cwd(),reason:process.argv[2]})+"\n")' "$APP" "<the reason, word for word>"
 ```
 
@@ -35,7 +35,7 @@ A correction that repeats should become a check, not another note. When you and 
 row to `claims.tsv` for it, append a closing line so the scan can tell "closed" from "still open":
 
 ```bash
-APP=rule-drift-watchdog
+APP=metacognition
 node -e 'const fs=require("fs"),os=require("os"),p=require("path");fs.appendFileSync(p.join(os.homedir(),".claude",process.argv[1],"no-log.jsonl"),JSON.stringify({t:new Date().toISOString(),mechanized:process.argv[2],via:process.argv[3]})+"\n")' "$APP" "<theme, a few words>" "<claim id in claims.tsv>"
 ```
 

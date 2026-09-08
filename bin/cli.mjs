@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// cli.mjs - what `npx rule-drift-watchdog` runs.
+// cli.mjs - what `npx metacognition` runs.
 //
 // With no arguments it installs: the code goes to ~/.claude/<APP>/, the hooks are added to
 // settings.json, a timer is written, and the watchdog runs once so you see a verdict.
@@ -29,10 +29,10 @@ if (installWords.has(first) || first === '--dry-run' || first === '--uninstall')
 
 console.error(`unknown command: ${first}
 usage:
-  npx rule-drift-watchdog                 install and show the first verdict
-  npx rule-drift-watchdog --dry-run       print what would happen, change nothing
-  npx rule-drift-watchdog --uninstall     remove the hooks, the timer and the code
-  npx rule-drift-watchdog status          print the last verdict
-  npx rule-drift-watchdog history         how often each rule held
-  npx rule-drift-watchdog add "<rule>" "<check command>"`);
+  npx metacognition                 install and show the first verdict
+  npx metacognition --dry-run       print what would happen, change nothing
+  npx metacognition --uninstall     remove the hooks, the timer and the code
+  npx metacognition status          print the last verdict
+  npx metacognition history         how often each rule held
+  npx metacognition add "<rule>" "<check command>"`);
 process.exit(2);
