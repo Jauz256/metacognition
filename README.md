@@ -123,7 +123,7 @@ example rules; delete the ones that do not fit you.
 
 ### Ready made rule sets
 
-Three sets ship in `examples/`, and every one is tested both ways: it passes on a clean project and
+Four sets ship in `examples/`, and every one is tested both ways: it passes on a clean project and
 goes red on a broken one.
 
 ```sh
@@ -135,6 +135,7 @@ cp examples/javascript.tsv ~/.claude/metacognition/claims.tsv
 | `javascript.tsv` | console.log left in `src/`, `it.only` that silently skips your other tests, a missing lock file, a committed `.env` |
 | `python.tsv` | `breakpoint()` and `pdb` left behind, a bare `except:`, unpinned requirements, notebook output committed |
 | `writing.tsv` | TODO and TK left in a document, links to files that do not exist, placeholder Latin, a key pasted into a note |
+| `agent-discipline.tsv` | a report left loose at the top of the repo, a `chart-2.png` beside `chart.png`, a path only one machine has, no plan file, a stale plan, no test command, a ticked task list nobody committed |
 
 ## Draw the map
 

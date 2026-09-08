@@ -81,17 +81,25 @@ example_set() { # $1 = file, $2 = expected word
     cd "$T/repo" && git init -q
     if [ "$2" = GREEN ]; then
       printf 'export const a = 1;\n' > src/a.js
-      printf '{"name":"x","license":"MIT"}\n' > package.json
+      printf '{"name":"x","license":"MIT","scripts":{"test":"echo ok"}}\n' > package.json
       printf '{}\n' > package-lock.json
       printf 'def f():\n    return 1\n' > src/a.py
       printf 'requests==2.0\n' > requirements.txt
       printf '# Notes\n\nReal words here.\n' > notes.md
+      mkdir -p output && printf 'x\n' > output/chart.png
+      printf '# Plan\n\n- [x] first task\n' > PLAN.md
+      printf '# Changelog\n\n- first release\n' > CHANGELOG.md
+      printf '# Rules\n\nAnswer first, then explain.\n' > AGENTS.md
     else
       printf 'console.log("x");\n' > src/a.js
       printf 'import pdb\nexcept:\n' > src/a.py
       printf '{"name":"x"}\n' > package.json
       printf 'requests\n' > requirements.txt
-      printf '# Notes\n\nTODO write this.\n' > notes.md
+      printf '# Notes\n\nTODO write this.\nThe report is in a machine folder that no one else has\n' > notes.md
+      printf 'x\n' > chart.png
+      printf 'x\n' > chart-2.png
+      mkdir -p test-results && printf 'old\n' > test-results/last.txt
+      touch -t 202401010000 test-results/last.txt
     fi
     git add -A -f && git -c user.email=t@t -c user.name=t commit -qm x
   ) >/dev/null 2>&1
@@ -102,7 +110,7 @@ example_set() { # $1 = file, $2 = expected word
     *) echo "FAIL example set: $1 — wanted $2, got: $OUT"; fail "example set $1" ;;
   esac
 }
-for f in javascript.tsv python.tsv writing.tsv; do
+for f in javascript.tsv python.tsv writing.tsv agent-discipline.tsv; do
   example_set "$f" GREEN
   example_set "$f" RED
 done

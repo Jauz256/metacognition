@@ -9,6 +9,9 @@
   "engines": {
     "node": ">=18"
   },
+  "scripts": {
+    "test": "bash tests/run.sh && bash tests/run-tools.sh"
+  },
   "files": [
     "bin",
     "hooks",
