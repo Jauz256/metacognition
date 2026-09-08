@@ -121,6 +121,21 @@ The row lands in `~/.claude/metacognition/claims.tsv` and is checked once right 
 Rows are tab-separated: `id`, `claim in plain words`, `check`. The shipped file holds 11
 example rules; delete the ones that do not fit you.
 
+### Ready made rule sets
+
+Three sets ship in `examples/`, and every one is tested both ways: it passes on a clean project and
+goes red on a broken one.
+
+```sh
+cp examples/javascript.tsv ~/.claude/metacognition/claims.tsv
+```
+
+| File | Catches |
+|---|---|
+| `javascript.tsv` | console.log left in `src/`, `it.only` that silently skips your other tests, a missing lock file, a committed `.env` |
+| `python.tsv` | `breakpoint()` and `pdb` left behind, a bare `except:`, unpinned requirements, notebook output committed |
+| `writing.tsv` | TODO and TK left in a document, links to files that do not exist, placeholder Latin, a key pasted into a note |
+
 ## Draw the map
 
 ```sh

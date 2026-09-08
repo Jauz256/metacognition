@@ -1,0 +1,10 @@
+# id	claim in plain words	check (must exit 0)
+# For writing, notes and documents. Point PROSE_DIR at your folder, or run from inside it.
+# Every check here reads .md files in the current folder and below.
+no-placeholder-text	no TODO, TK or XXX left in a document	! grep -rqE '\b(TODO|TK|XXX|FIXME)\b' --include='*.md' . 2>/dev/null
+no-lorem	no placeholder Latin left from a template	! grep -riq 'lorem ipsum' --include='*.md' . 2>/dev/null
+no-broken-local-links	every link to a local file points at a file that exists	for f in $(grep -rhoE '\]\([^)#][^)]*\.md\)' --include='*.md' . 2>/dev/null | sed 's/^](//; s/)$//'); do [ -e "$f" ] || exit 1; done
+no-empty-headings	no heading is left with nothing under it	! grep -rqE '^#{1,6}\s*$' --include='*.md' . 2>/dev/null
+no-double-spaces	no double space left inside a sentence	! grep -rqE '[a-z],?  [a-z]' --include='*.md' . 2>/dev/null
+no-smart-quote-mix	quotes are consistent, not a mix of straight and curly	! grep -rlq $'“' --include='*.md' . 2>/dev/null || ! grep -rq '"' --include='*.md' . 2>/dev/null
+no-secrets-in-notes	no API-key-shaped string sits in a note	! grep -rqE 's[k]-[A-Za-z0-9]{20,}|gh[p]_[A-Za-z0-9]{30,}|AI[z]a[A-Za-z0-9_-]{30,}' --include='*.md' . 2>/dev/null

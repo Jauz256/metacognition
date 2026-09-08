@@ -70,4 +70,41 @@ agent_home "Cursor, .cursorrules"    'printf "be brief\n" > "$T/.cursorrules"'  
 agent_home "Gemini CLI"              'mkdir -p "$T/.gemini"; printf "be brief\n" > "$T/.gemini/GEMINI.md"' GREEN
 agent_home "no agent file at all"    'true'                                                           RED
 
+# --- the shipped example rule sets must pass clean and catch dirty ---------------
+# An untested example rule set is worse than none: it teaches people a broken check.
+example_set() { # $1 = file, $2 = expected word
+  local T
+  T=$(mktemp -d)
+  mkdir -p "$T/.claude/metacognition" "$T/repo/src"
+  cp "$ROOT/examples/$1" "$T/.claude/metacognition/claims.tsv"
+  (
+    cd "$T/repo" && git init -q
+    if [ "$2" = GREEN ]; then
+      printf 'export const a = 1;\n' > src/a.js
+      printf '{"name":"x","license":"MIT"}\n' > package.json
+      printf '{}\n' > package-lock.json
+      printf 'def f():\n    return 1\n' > src/a.py
+      printf 'requests==2.0\n' > requirements.txt
+      printf '# Notes\n\nReal words here.\n' > notes.md
+    else
+      printf 'console.log("x");\n' > src/a.js
+      printf 'import pdb\nexcept:\n' > src/a.py
+      printf '{"name":"x"}\n' > package.json
+      printf 'requests\n' > requirements.txt
+      printf '# Notes\n\nTODO write this.\n' > notes.md
+    fi
+    git add -A -f && git -c user.email=t@t -c user.name=t commit -qm x
+  ) >/dev/null 2>&1
+  OUT=$( cd "$T/repo" && HOME="$T" node "$ROOT/bin/watchdog.mjs" run 2>&1 | tail -3 || true )
+  rm -rf "$T"
+  case "$OUT" in
+    *"$2"*) echo "ok  example set: $1 is $2 as expected" ;;
+    *) echo "FAIL example set: $1 — wanted $2, got: $OUT"; fail "example set $1" ;;
+  esac
+}
+for f in javascript.tsv python.tsv writing.tsv; do
+  example_set "$f" GREEN
+  example_set "$f" RED
+done
+
 echo "PASS"

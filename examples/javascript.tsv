@@ -1,0 +1,11 @@
+# id	claim in plain words	check (must exit 0)
+# For a JavaScript or TypeScript project. Run the watchdog from inside the repo.
+no-debug-left	no console.log left in src/	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git grep -qE 'console\.(log|debug)\(' -- 'src/*.js' 'src/*.ts' 'src/*.jsx' 'src/*.tsx' 'src/*.mjs'
+no-only-tests	no .only left in a test, which silently skips every other test	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git grep -qE '\b(it|test|describe)\.only\(' -- '*.test.*' '*.spec.*' 'test/*' 'tests/*'
+no-skipped-tests	no test left skipped	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git grep -qE '\b(it|test|describe)\.skip\(' -- '*.test.*' '*.spec.*' 'test/*' 'tests/*'
+lockfile-committed	the lock file is committed, so everyone installs the same versions	test ! -f package.json || ls package-lock.json pnpm-lock.yaml yarn.lock bun.lockb 2>/dev/null | grep -q .
+no-env-committed	no .env file is tracked by git	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git ls-files --error-unmatch .env >/dev/null 2>&1
+env-example-exists	if you use a .env, an example of it exists for other people	test ! -f .env || test -f .env.example || test -f .env.sample
+no-todo-pileup	fewer than 20 files in src/ carry a TODO or FIXME	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || test "$(git grep -lE 'TODO|FIXME' -- 'src/*' 2>/dev/null | wc -l | tr -d ' ')" -lt 20
+package-has-license	package.json names a licence	test ! -f package.json || node -e 'const p=require(process.cwd()+"/package.json"); process.exit(p.license?0:1)'
+no-conflict-markers	no leftover merge-conflict markers	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git grep -qE '^(<<<<<<< |>>>>>>> )'

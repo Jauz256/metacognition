@@ -1,0 +1,10 @@
+{
+  "name": "metacognition",
+  "version": "0.1.0",
+  "description": "Turns each rule in your instructions file into a command that must pass. Runs them every 30 minutes and shows the pass rate for each one.",
+  "author": { "name": "Jauz256", "url": "https://github.com/Jauz256" },
+  "homepage": "https://github.com/Jauz256/metacognition",
+  "repository": "https://github.com/Jauz256/metacognition",
+  "license": "MIT",
+  "keywords": ["rules", "hooks", "quality", "watchdog", "measurement"]
+}

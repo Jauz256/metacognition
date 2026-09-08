@@ -1,0 +1,10 @@
+# id	claim in plain words	check (must exit 0)
+# For a Python project. Run the watchdog from inside the repo.
+no-print-debugging	no bare print( left in the package, only in scripts	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git grep -qE '^\s*print\(' -- 'src/*.py' '*/__init__.py'
+no-breakpoints	no breakpoint() or pdb left behind	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git grep -qE 'breakpoint\(\)|import pdb|pdb\.set_trace' -- '*.py'
+no-bare-except	no bare except:, which hides every error including the one you need	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git grep -qE '^\s*except\s*:' -- '*.py'
+no-skipped-tests	no test left skipped or marked expected-fail	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git grep -qE '@pytest\.mark\.(skip|xfail)' -- 'tests/*' 'test/*'
+requirements-pinned	dependency versions are pinned, so an install today matches an install last month	test ! -f requirements.txt || ! grep -qE '^[A-Za-z0-9_.-]+\s*$' requirements.txt
+no-env-committed	no .env file is tracked by git	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git ls-files --error-unmatch .env >/dev/null 2>&1
+no-notebook-output	no committed notebook carries saved output, which bloats the repo and can leak data	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git grep -ql '"output_type"' -- '*.ipynb'
+no-conflict-markers	no leftover merge-conflict markers	! git rev-parse --is-inside-work-tree >/dev/null 2>&1 || ! git grep -qE '^(<<<<<<< |>>>>>>> )'
