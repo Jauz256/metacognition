@@ -30,6 +30,46 @@ npx metacognition
 
 **How you will know it works:** the first red light on a rule you thought was followed.
 
+## What you get
+
+Six things you cannot get today.
+
+**1. You find out which rules your agent quietly stopped following.** Every rule becomes a command
+that must pass. It runs every 30 minutes. A broken rule appears in the first line of your next
+session. Run against a real, heavily used setup, the 11 example rules found 2 already broken that
+the owner did not know about.
+
+**2. A number instead of a feeling.** "The agent ignores my rules" becomes a pass rate per rule:
+
+```text
+  memory-index                 0/4   green   0%  RED now
+  claude-md-short              1/4   green  25%
+  hooks-exist                  4/4   green 100%
+```
+
+A rule at 25% is one your agent keeps breaking. Now you know which rule to rewrite.
+
+**3. Your rules file can get shorter.** Every time the agent gets something wrong, you add a line.
+The file grows, a long file gets skimmed, and the new rules weaken the old ones. When a rule becomes
+a check, the machine holds it and you can delete the sentence. One real rules file had grown to
+15,147 characters with 113 rules, and only 27 of them had any machine behind them. The other 86 were
+diluting the 27 that worked.
+
+**4. You stop typing the same correction a third time.** Every correction is saved with what the
+agent made and what you said next. The same correction three times in 30 days becomes a candidate,
+with dates and a row ready to paste as a new check.
+
+**5. You see how many of your rules are only decoration.** One picture puts every rule on the step
+where it applies. Green means a check enforces it, grey means it is only written down, a red ring
+means it failed today. The first time you draw it, most cards are grey. That is your real work list.
+
+**6. You catch a broken setup before it costs a session.** A hook pointing at a renamed file, a
+settings file that no longer parses, an API key sitting where you are about to commit it. All three
+fail silently today. All three ship as checks.
+
+It runs on your machine, writes to your machine, and sends nothing anywhere. No account, no service,
+no API key.
+
 ## What you see
 
 At the start of a session, one line:
