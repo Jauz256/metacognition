@@ -1,0 +1,33 @@
+# State the watchdog writes when you run it from inside the repo
+verdict.json
+verdict.txt
+state.json
+receipts.jsonl
+mistakes.jsonl
+no-log.jsonl
+loop-candidates.md
+timer.log
+.run.lock
+
+# Pictures the map builder writes
+rules-map.svg
+rules-map.png
+!docs/rules-map.png
+!tools/rules-map/example/out.svg
+
+# npm
+node_modules/
+*.tgz
+npm-debug.log*
+
+# Editors and operating systems
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Anything private a user drops in while testing
+*.local
+*.local.*
+.env
+.env.*
