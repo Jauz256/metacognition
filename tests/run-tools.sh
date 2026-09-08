@@ -49,7 +49,7 @@ cmp -s "$T/out.svg" "$EX/out.svg" || fail "$EX/out.svg is stale; rebuild it with
 echo "ok  rules-map: 10 cards, 1 red ring, notes and unplaced present, example/out.svg is current"
 
 # --- the shipped rules must work for any agent, not only Claude Code -------------
-# Jazz, 9 Sep 2026: the engine was generic but 9 of 11 shipped rules named Claude.
+# The engine was always generic, but nine of eleven shipped rules named one tool.
 # These four homes prove the claim in the README. Each runs from inside its own home.
 agent_home() { # $1 = label, $2 = setup command, $3 = expected word in the verdict
   local T
