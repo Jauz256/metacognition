@@ -4,7 +4,7 @@ Metacognition is a system that observes how an AI coding agent works for one per
 that person's corrections and the agent's own mistakes, turns repeated corrections into
 executable checks that run on a timer, and reports whether the agent's work improves.
 
-The full foundation, with 28 references, is in [docs/FOUNDATION.md](docs/FOUNDATION.md). This
+The full foundation, with 28 references, is in [FOUNDATION.md](FOUNDATION.md). This
 page is the short form.
 
 ## The problem

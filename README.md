@@ -22,8 +22,8 @@ One line. It asks nothing. Thirty seconds later you see your first verdict, and 
 Claude Code session opens with the last one.
 
 A correction you typed once is never typed again. It becomes a check that can fail, and you
-can see whether the agent improves. Why it exists, with the evidence: [WHY.md](WHY.md). The
-rules for deciding: [PRINCIPLES.md](PRINCIPLES.md). The look: [BRAND.md](BRAND.md).
+can see whether the agent improves. Why it exists, with the evidence: [WHY.md](docs/WHY.md). The
+rules for deciding: [PRINCIPLES.md](docs/PRINCIPLES.md). The look: [BRAND.md](docs/BRAND.md).
 
 Metacognition means thinking about your own thinking. That is what this does for a coding
 agent: it watches whether the agent still follows the rules you wrote for it.

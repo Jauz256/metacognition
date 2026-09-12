@@ -1,7 +1,7 @@
 # Principles
 
 Seven lines. When two good options fight, these decide. Each one is argued in
-[docs/FOUNDATION.md](docs/FOUNDATION.md).
+[FOUNDATION.md](FOUNDATION.md).
 
 1. Everything is for the owner. Every action is judged by "is this good for the owner, and why".
 2. A rule is a check that can fail. A sentence in a file is a wish. A command that exits 0 or 1 is a rule.
