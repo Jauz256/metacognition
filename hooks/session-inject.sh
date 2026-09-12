@@ -17,12 +17,14 @@ if [ ! -f "$VERDICT" ]; then
   exit 0
 fi
 
-# File age in seconds. stat takes different flags on macOS and Linux.
-MTIME=$(stat -f %m "$VERDICT" 2>/dev/null || stat -c %Y "$VERDICT" 2>/dev/null || echo 0)
+# File age in seconds. stat takes different flags on macOS and Linux. GNU first: on Linux
+# `stat -f %m` does not fail, it prints the mount point (found by the first CI run, 13 Sep 2026).
+MTIME=$(stat -c %Y "$VERDICT" 2>/dev/null || stat -f %m "$VERDICT" 2>/dev/null || echo 0)
+case "$MTIME" in ''|*[!0-9]*) MTIME=0 ;; esac
 NOW=$(date +%s)
 AGE=$(( NOW - MTIME ))
 if [ "$AGE" -gt $(( 2 * INTERVAL_MIN * 60 )) ]; then
-  WHEN=$(date -r "$MTIME" "+%Y-%m-%d %H:%M" 2>/dev/null || date -d "@$MTIME" "+%Y-%m-%d %H:%M" 2>/dev/null || echo "unknown time")
+  WHEN=$(date -d "@$MTIME" "+%Y-%m-%d %H:%M" 2>/dev/null || date -r "$MTIME" "+%Y-%m-%d %H:%M" 2>/dev/null || echo "unknown time")
   echo "$APP is STALE, last run $WHEN ($(( AGE / 60 )) min ago; the timer should run every $INTERVAL_MIN min). Run: $RUN"
 fi
 
