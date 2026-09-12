@@ -27,7 +27,8 @@ So the loop never closes: correct, comply once, forget, correct again.
    it is specific and close to the action (Wisniewski, Zierer and Hattie, 2020: d = 0.48 across
    435 studies, d = 0.99 for high-information feedback). Mechanism: every check gives a one-line
    verdict, printed first in every session, re-run every 30 minutes, and a red check older than
-   24 hours blocks the end of a turn until a decision is recorded.
+   24 hours says so in every verdict until a decision is recorded. (In the author's own setup a gate
+   also blocks the end of a turn; the package does not ship that gate yet.)
 
 2. **A correction is recorded once and never typed again.** Compiling corrections into runtime
    checks cut preference violations from 100% to 37.6% and to 2.0% in two settings, where a
@@ -57,7 +58,7 @@ So the loop never closes: correct, comply once, forget, correct again.
 ## What it is not
 
 - Not a memory tool. Memory is a part; the object is the change in behaviour.
-- Not an enforcer. Today it observes, names the broken rule, and blocks the end of a turn until
+- Not an enforcer. Today it observes, names the broken rule, and repeats it at every session start until
   a decision is recorded. It does not correct the agent's output by itself.
 - Not a second agent, not a skills framework, not a model benchmark.
 

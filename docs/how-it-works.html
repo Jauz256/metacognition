@@ -276,11 +276,11 @@
 <!-- 10 · nothing stays red -->
 <section class="slide" data-s="10">
   <div class="chip">10</div><div class="chap">Nothing stays red</div>
-  <div class="title">A rule red for more than a day stops Claude Code from ending its reply, until someone decides.</div>
+  <div class="title">A rule red for more than a day says so, in the verdict, until someone decides.</div>
   <div class="debt b keep" data-k="0"><span class="c-red">RED for 26 h</span> &nbsp; tests-green &nbsp; <span class="c-dim">the test suite passes</span><br><span class="c-dim">Two ways out, and both are decisions. Silence is not one of them.</span></div>
-  <div class="way b" data-k="1" style="left:80px;top:340px"><div class="w1">Fixed it</div><div class="w2">node red-debt.mjs fixed "tests-green"</div></div>
-  <div class="way b" data-k="1" data-d="3" style="left:670px;top:340px"><div class="w1">Not fixing it now, and why</div><div class="w2">node red-debt.mjs debt "tests-green"<br>"the test needs a fix from another team on Monday"</div></div>
-  <div class="cap b" data-k="1" data-d="7" style="left:80px;top:480px;width:1120px;font-size:17px">That note lasts 24 hours. Then it asks again. Nothing stays red by accident.</div>
+  <div class="way b" data-k="1" style="left:80px;top:340px"><div class="w1">In the package today</div><div class="w2" style="font-family:Inter,system-ui,sans-serif">The verdict line adds "(red for 26 h)". Every session start repeats it. It does not go quiet.</div></div>
+  <div class="way b" data-k="1" data-d="3" style="left:670px;top:340px"><div class="w1">In the author's own setup, not in the package yet</div><div class="w2" style="font-family:Inter,system-ui,sans-serif">A gate stops the reply until someone types "fixed" or one plain sentence why not now. That note lasts 24 hours.</div></div>
+  <div class="cap b" data-k="1" data-d="7" style="left:80px;top:480px;width:1120px;font-size:17px">Either way, nothing stays red by accident. The gate is measured on one machine; the package ships the verdict line.</div>
 </section>
 
 <!-- 11 · the map -->
@@ -383,8 +383,8 @@
     [8,1,'So Claude Code sees the red rule before it sees your question, and it cannot pretend everything is fine.'],
     [9,0,'Every correction you type is logged, word for word. Here the same one comes three times: answer first.'],
     [9,1,'The third time, it becomes a new line in the table with its own check. From now on the timer checks it 48 times a day, and the light shows whether the mistake comes back.'],
-    [10,0,'A rule that stays red for more than a day stops Claude Code from ending its reply, until someone decides.'],
-    [10,1,'Two ways out: fix it, or write one plain sentence why not now. That note lasts 24 hours, then it asks again. Nothing stays red by accident.'],
+    [10,0,'A rule that stays red for more than a day says so in the verdict: red for 26 hours. Every session start repeats it, so it cannot go quiet.'],
+    [10,1,'In the author\'s own setup a gate goes one step further: it stops the reply until someone types fixed, or one plain sentence why not now. That gate is not in the package yet.'],
     [11,0,'Any task has five steps: ask, plan, build, test, commit.'],
     [11,1,'The map puts every rule on the step where it applies. Red is the one failing now, grey is a rule with no check yet. One look tells you where the work breaks.'],
     [12,0,'The proof. We broke ten rules on purpose, on a test computer with nothing else on it.'],

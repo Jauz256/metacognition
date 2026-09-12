@@ -114,8 +114,9 @@ untested: every new check must be shown to fail on a planted break before it cou
 ## 3. What it is not
 
 - Not a memory tool. Memory is a part; the object is the change in behaviour that the memory causes.
-- Not an enforcer. Today the system observes, names the broken rule, and blocks the end of a
-  turn until a decision is recorded. It does not correct the agent's output by itself.
+- Not an enforcer. Today the system observes, names the broken rule, and repeats it at every session
+  start until a decision is recorded (the author's own setup also blocks the end of a turn; the package
+  does not ship that gate yet). It does not correct the agent's output by itself.
 - Not a second agent. It is the instrumentation around one agent.
 - Not a skills framework. Skills can live inside it; it is not made of them.
 - Not a model benchmark. It measures one agent's work for one owner over weeks.
