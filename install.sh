@@ -142,7 +142,7 @@ if [ -n "${BASH_SOURCE[0]:-}" ] && [ -f "$(dirname "${BASH_SOURCE[0]}")/bin/watc
   SRC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 fi
 if [ -z "$SRC" ]; then
-  URL="https://github.com/$REPO/archive/refs/heads/main.tar.gz"
+  URL="https://github.com/$REPO/archive/refs/heads/master.tar.gz"
   if [ "$DRY" = 1 ]; then
     step "download $URL to a temp folder"
   else
