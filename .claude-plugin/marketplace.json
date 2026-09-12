@@ -1,0 +1,14 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
+  "name": "metacognition",
+  "description": "Your AI reads your rules and ignores them. This measures which ones, every 30 minutes, and draws it.",
+  "owner": { "name": "Jauz256", "url": "https://github.com/Jauz256" },
+  "plugins": [
+    {
+      "name": "metacognition",
+      "description": "Turns each rule in your instructions file into a command that must pass, runs them on a timer, and prints the verdict when a session starts.",
+      "source": "./",
+      "category": "quality"
+    }
+  ]
+}

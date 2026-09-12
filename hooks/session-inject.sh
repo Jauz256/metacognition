@@ -8,7 +8,9 @@ APP="metacognition"
 INTERVAL_MIN=30
 DIR="${WATCHDOG_DIR:-$HOME/.claude/$APP}"
 VERDICT="$DIR/verdict.txt"
-RUN="node ~/.claude/$APP/bin/watchdog.mjs run"
+# When installed as a Claude Code plugin, the code lives in the plugin folder, not ~/.claude/<APP>.
+BIN="${CLAUDE_PLUGIN_ROOT:-$HOME/.claude/$APP}/bin/watchdog.mjs"
+RUN="node \"$BIN\" run"
 
 if [ ! -f "$VERDICT" ]; then
   echo "$APP: no verdict yet. Run: $RUN"

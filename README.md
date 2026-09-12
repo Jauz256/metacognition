@@ -26,6 +26,16 @@ down. It went up. So the rules became checks, and the checks run on a timer.
 npx metacognition
 ```
 
+**Or install it as a Claude Code plugin** (gives the 3 hooks and a `/metacognition` command):
+
+```sh
+claude plugin marketplace add Jauz256/metacognition
+claude plugin install metacognition@metacognition
+npx metacognition --no-hooks     # the rules file and the 30-minute timer; the plugin has the hooks
+```
+
+Then `/metacognition` inside any session runs the checks and names the red rules.
+
 **What it does**
 
 1. Turns a rule into a check: one row in `claims.tsv`, with a command that exits 0 when the
