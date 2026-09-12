@@ -1,6 +1,8 @@
 # AGENTS.md
 
-This file is for coding agents working inside this repository.
+This file is for coding agents working inside this repository. AGENTS.md takes precedence over
+CLAUDE.md: the only CLAUDE.md here, `tools/rules-map/example/CLAUDE.md`, is a sample input for the
+picture builder, not a rule file.
 
 ## What this project is
 
@@ -18,15 +20,13 @@ them every 30 minutes and reports which rules held and which broke.
   writes files.
 - Keep the name in the single `APP` constant at the top of each script. Do not hardcode it elsewhere.
 - Plain English in comments and messages. Short sentences. No jokes.
-- This is the only rules file for agents in this repo. `tools/rules-map/example/CLAUDE.md` is a
-  sample input for the picture builder, not a rule file. When the two disagree, this file wins.
 
 ## Two examples
 
 Example 1, one rule in `claims.tsv` (tab-separated: id, plain-words claim, check command):
 
 ```
-tests-green	the test suite passes	bash ~/.claude/metacognition/tests/run.sh >/dev/null 2>&1
+tests-green	the test suite passes	bash tests/run.sh >/dev/null 2>&1
 ```
 
 Example 2, what the watchdog prints for it when the tests fail:
