@@ -283,6 +283,14 @@ function runOnce(quiet) {
   return overall === 'GREEN' ? 0 : overall === 'RED' ? 1 : 2;
 }
 
+// Colour only on a terminal (or FORCE_COLOR=1), never into a pipe or a file; NO_COLOR wins.
+const COLOR = !process.env.NO_COLOR && (process.stdout.isTTY || process.env.FORCE_COLOR === '1');
+const paint = (text, code) => (COLOR ? `\x1b[${code}m${text}\x1b[0m` : text);
+const paintStatus = (st) => (st === 'RED' ? paint(st, '1;31') : st === 'GREEN' ? paint(st, '32') : st);
+// On a terminal, fit each rule to one line instead of wrapping; a pipe still gets the full text.
+const COLUMNS = Number(process.env.COLUMNS) || (process.stdout.isTTY ? process.stdout.columns : 0) || 0;
+const fit = (line) => (COLUMNS > 40 && line.length > COLUMNS ? line.slice(0, COLUMNS - 1) + '…' : line);
+
 function cmdStatus() {
   const v = loadJson(VERDICT_JSON, null);
   if (!v || !v.ts) {
@@ -291,10 +299,11 @@ function cmdStatus() {
   }
   const ageMin = Math.max(0, Math.round((Date.now() - Date.parse(v.ts)) / 60000));
   const stale = ageMin > 2 * INTERVAL_MIN;
-  console.log(v.sentence);
+  console.log(v.sentence.replace(/^(\S+) (RED|GREEN)\b/, (m, app, st) => `${app} ${paintStatus(st)}`));
   console.log(`last run ${clock(v.ts)} (${ageMin} min ago)` + (stale ? ` - STALE, the timer should run every ${INTERVAL_MIN} min` : ''));
   for (const i of v.items || []) {
-    console.log(`  ${i.status.padEnd(6)} ${i.id.padEnd(26)} ${i.claim}${i.status === 'RED' ? ` - ${i.msg}` : ''}`);
+    const plain = `  ${i.status.padEnd(6)} ${i.id.padEnd(26)} ${i.claim}${i.status === 'RED' ? ` - ${i.msg}` : ''}`;
+    console.log(fit(plain).replace(/^  (RED|GREEN) /, (m, st) => `  ${paintStatus(st)} `));
   }
   if (v.canaries && v.canaries.blind && v.canaries.blind.length) {
     console.log(`  canaries blind: ${v.canaries.blind.join('; ')}`);

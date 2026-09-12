@@ -1,23 +1,25 @@
+<div align="center">
+
 # metacognition
 
 **Your AI reads your rules and ignores them. This measures which ones.**
+
+<a href="https://jazzs-thoughts.github.io/metacognition/what-is-metacognition.html"><img src="docs/btn-what-is.svg" alt="What is metacognition: 8 scenes, one click at a time" height="48"></a>&nbsp;&nbsp;<a href="https://jazzs-thoughts.github.io/metacognition/how-it-works.html"><img src="docs/btn-how-it-works.svg" alt="How it works, step by step: 10 slides" height="48"></a>
 
 [![stars](https://img.shields.io/github/stars/jazzs-thoughts/metacognition?style=flat&color=DC2626)](https://github.com/jazzs-thoughts/metacognition/stargazers)
 [![tests](https://img.shields.io/badge/tests-88%20passing-111111)](tests/)
 [![license](https://img.shields.io/badge/license-MIT-111111)](LICENSE)
 
-![The verdict line: RED, 1 of 11 rules failed, tests-green underlined](docs/hero.png)
+<img src="docs/verdict.png" alt="Terminal: metacognition RED, 1 of 11 rules broken, rules-file-no-model-name, then one line per rule, ten GREEN and one RED" width="920">
+
+</div>
 
 ```sh
 npx github:jazzs-thoughts/metacognition
 ```
 
-One line. It asks nothing. Thirty seconds later you see your first verdict.
-
-**See it move, no install:**
-[**What is metacognition**](https://jazzs-thoughts.github.io/metacognition/what-is-metacognition.html) (8 scenes, 27 clicks, one idea per click)
-·
-[**How it works, step by step**](https://jazzs-thoughts.github.io/metacognition/how-it-works.html) (4 minutes, 10 slides)
+One line. It asks nothing. Thirty seconds later you see your first verdict, and every new
+Claude Code session opens with the last one.
 
 A correction you typed once is never typed again. It becomes a check that can fail, and you
 can see whether the agent improves. Why it exists, with the evidence: [WHY.md](WHY.md). The
@@ -37,14 +39,6 @@ Built by a 21-year-old solo founder in Bangkok who got tired of repeating himsel
 In June it was 22 of 494: 4.5%. Counted by matching phrases like "again", "redo" and
 "not what I" in the messages. No AI judged it. Adding rules to CLAUDE.md did not bring it
 down. It went up. So the rules became checks, and the checks run on a timer.
-
-![Every rule on the step where it applies](docs/rules-map.png)
-
-**One line to install** (macOS or Linux, Node 18 or newer, asks nothing):
-
-```sh
-npx github:jazzs-thoughts/metacognition
-```
 
 **Or install it as a Claude Code plugin** (gives the 3 hooks and a `/metacognition` command):
 
@@ -168,6 +162,11 @@ cp examples/javascript.tsv ~/.claude/metacognition/claims.tsv
 | `agent-discipline.tsv` | a report left loose at the top of the repo, a `chart-2.png` beside `chart.png`, a path only one machine has, no plan file, a stale plan, no test command, a ticked task list nobody committed |
 
 ## Draw the map
+
+![Every rule on the step where it applies: six steps down the left, each rule a card wired to its step; green cards have a check, grey cards are notes, a red ring is a check that failed, step 0 holds rules not placed yet](docs/rules-map.png)
+
+The example above is the shipped demo data, drawn on purpose with one failed check (the red
+ring) and one rule nobody has placed yet (step 0), so every state the map can show is visible.
 
 ```sh
 python3 ~/.claude/metacognition/tools/rules-map/build.py \
