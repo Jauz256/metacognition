@@ -20,7 +20,7 @@
     "examples",
     "claims.tsv",
     "install.sh",
-    "docs",
+    "docs/*.md",
     "README.md",
     "LICENSE",
     ".claude-plugin"
