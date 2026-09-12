@@ -15,7 +15,7 @@ npx metacognition
 One line. It asks nothing. Thirty seconds later you see your first verdict.
 
 **See it move, no install:**
-[**What is metacognition**](https://jauz256.github.io/metacognition/what-is-metacognition.html) (60 seconds, autoplay, click to skip)
+[**What is metacognition**](https://jauz256.github.io/metacognition/what-is-metacognition.html) (8 scenes, 27 clicks, one idea per click)
 ·
 [**How it works, step by step**](https://jauz256.github.io/metacognition/how-it-works.html) (4 minutes, 10 slides)
 

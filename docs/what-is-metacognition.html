@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>What is metacognition</title>
-<meta name="description" content="Your AI reads your rules and ignores them. This measures which ones. 60 seconds.">
+<meta name="description" content="Your AI reads your rules and ignores them. This measures which ones. 8 scenes, one click at a time.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap">
 <style>
 :root{--bg:#0A0A0A;--ink:#F2F2F2;--dim:#8A8F98;--panel:#141414;--line:#2A2A2A;--red:#FF453A;--green:#30D158;
@@ -12,48 +12,58 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
 .mono{font-family:"JetBrains Mono",Menlo,Consolas,monospace}
 #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
 #stage{position:relative;width:1280px;height:720px;background:var(--bg);transform-origin:center center;overflow:hidden}
-.scene{position:absolute;inset:0;opacity:0;transform:scale(1.02);pointer-events:none;transition:opacity 350ms var(--emph),transform 350ms var(--emph)}
-.scene.on{opacity:1;transform:scale(1);pointer-events:auto}
-.scene.black{background:#000}
+.slide{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity 350ms var(--emph)}
+.slide.on{opacity:1;pointer-events:auto}
+.slide.black{background:#000}
+/* builds: one click = one idea. .now is the focus, .past is dimmed, .keep never dims (drawn scene parts) */
+.b{opacity:0;transform:translateY(12px) scale(.97);transition:opacity 280ms var(--quint),transform 280ms var(--quint)}
+.b.fromleft{transform:translateX(-28px)}
+.b.pop{transform:scale(.6)}
+.b.now,.b.past{opacity:1;transform:none}
+.b.past:not(.keep){opacity:.5}
 .big{position:absolute;left:100px;right:100px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
-.big .w{display:inline-block;margin-right:.24em}
 .red{color:var(--red)}.green{color:var(--green)}.dim{color:var(--dim)}
 .cap{position:absolute;font-size:18px;color:var(--dim);line-height:1.45}
 .src{position:absolute;font-size:16px;color:var(--dim)}
 .num{position:absolute;font-weight:800;letter-spacing:-.03em;line-height:1}
+/* the zero: one push-in per deck */
+.zero{display:inline-block;transform:scale(1.9);transform-origin:left center;transition:transform 700ms var(--emph)}
+.b.now .zero,.b.past .zero{transform:scale(1)}
 /* board of lights */
 .board{position:absolute;display:flex;gap:16px;padding:18px 20px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
-.lt{width:32px;height:32px;border-radius:50%;background:var(--green);position:relative}
+.lt{width:32px;height:32px;border-radius:50%;background:var(--green);position:relative;transition:background 300ms,opacity 280ms var(--quint),transform 280ms var(--quint)}
 .lt.red{background:var(--red)}
-.lt.pulse{animation:pulse 1.6s ease-in-out infinite}
+.lt.hot{background:var(--red);animation:pulse 1.6s ease-in-out infinite}
 @keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.18);opacity:.75}}
 .lt .tick{position:absolute;left:0;right:0;top:44px;text-align:center;font-size:20px;font-weight:700;color:var(--ink)}
+.lt.nl{box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--green),0 0 24px rgba(48,209,88,.6)}
 /* terminal */
 .term{position:absolute;background:#000;border:1px solid var(--line);border-radius:12px;padding:20px 24px;font-size:20px;line-height:1.7;box-sizing:border-box}
 .term .l{white-space:nowrap}
 /* rule card */
 .card{position:absolute;background:#fff;color:#111;border-radius:8px;padding:12px 16px;font-size:18px;line-height:1.6;box-sizing:border-box}
 .card .h{font-size:14px;color:#666;margin-bottom:4px}
-/* ring */
+/* ring: four arcs draw one per click */
 .ring{position:absolute;left:0;top:0;width:1280px;height:720px}
 .ring .k{position:absolute;font-size:30px;font-weight:700;letter-spacing:-.02em;width:260px;text-align:center}
 .ring svg{position:absolute;left:0;top:0}
-/* clock */
+.arc{stroke:#3A3A3A;stroke-width:3;stroke-dasharray:300;stroke-dashoffset:300;transition:stroke-dashoffset 500ms var(--quint)}
+.arc.on{stroke-dashoffset:0}
+/* clock: the hand sweeps once when the scene opens */
 .clock{position:absolute;width:160px;height:160px;border-radius:50%;border:3px solid var(--ink)}
-.clock .hand{position:absolute;left:78px;top:12px;width:4px;height:68px;background:var(--red);border-radius:2px;transform-origin:2px 68px}
+.clock .hand{position:absolute;left:78px;top:12px;width:4px;height:68px;background:var(--red);border-radius:2px;transform-origin:2px 68px;transition:transform 700ms var(--emph)}
+.clock .hand.swept{transform:rotate(300deg)}
 /* corrections */
 .corr{position:absolute;left:80px;width:420px;padding:12px 18px;border-radius:10px;background:var(--panel);border:1px solid var(--line);font-size:19px}
 .count{position:absolute;left:80px;width:420px;text-align:center;font-size:26px;font-weight:800;color:var(--red)}
 /* chrome */
 #ctr{position:absolute;right:24px;top:22px;font-size:15px;color:var(--dim);z-index:9}
-#play{position:absolute;right:24px;top:52px;z-index:9;font:600 15px Inter,system-ui,sans-serif;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
-#play.on{border-color:var(--red);color:var(--red)}
 #hint{position:absolute;left:0;right:0;bottom:22px;text-align:center;font-size:15px;color:var(--dim);z-index:9;transition:opacity 400ms}
 #hint.off{opacity:0}
 #bar{position:absolute;left:0;bottom:0;width:1280px;height:4px;background:#1A1A1A;z-index:9}
 #bar i{display:block;height:4px;width:1280px;background:var(--red);transform-origin:left;transform:scaleX(0);transition:transform 400ms var(--emph)}
 #home{position:absolute;left:24px;top:22px;z-index:9;font:500 15px "JetBrains Mono",Menlo,monospace;color:var(--dim);text-decoration:none}
-/* script bar (S): the words to say out loud, one line per scene */
+/* script strip (S): hidden by default, one line per click */
 #say{position:absolute;left:0;right:0;bottom:4px;min-height:78px;background:var(--panel);border-top:1px solid var(--line);display:none;align-items:center;justify-content:center;z-index:10;padding:12px 40px;box-sizing:border-box}
 #say.show{display:flex}
 #say b{color:var(--red);font-size:14px;letter-spacing:.1em;margin-right:18px;font-weight:700;white-space:nowrap}
@@ -64,8 +74,6 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
 #itl{position:absolute;left:24px;top:22px;font-size:15px;color:var(--dim)}
 #iskip{position:absolute;right:24px;top:92px;z-index:21;font:600 15px Inter,system-ui,sans-serif;color:var(--dim);background:transparent;border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
 #iskip:hover{color:var(--ink)}
-#play{z-index:21;transition:box-shadow .4s}
-#play.glow{box-shadow:0 0 0 3px var(--red),0 0 28px rgba(255,69,58,.45)}
 #venus{position:absolute;left:0;top:0;width:220px;height:280px;z-index:5;transition:transform 1s cubic-bezier(.3,.7,.2,1)}
 #venusInner{animation:bob 3.2s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
@@ -90,105 +98,110 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
 @keyframes rip{0%{width:22px;height:22px;opacity:.9}100%{width:110px;height:110px;opacity:0}}
 #ihint{position:absolute;left:0;right:0;bottom:22px;text-align:center;font-size:15px;color:var(--dim);transition:opacity .3s}
 #intro.say #ihint{opacity:0}
-@media (prefers-reduced-motion:reduce){.scene{transition:opacity 200ms;transform:none}.lt.pulse{animation:none}#venusInner,#ighost.on .ripple{animation:none}#venus,#bubble{transition:none}}
+@media (prefers-reduced-motion:reduce){.slide{transition:opacity 200ms}.b,.b.fromleft,.b.pop{transform:none;transition:opacity 200ms}.lt.hot{animation:none}#venusInner,#ighost.on .ripple{animation:none}#venus,#bubble{transition:none}}
 </style>
 </head>
 <body>
 <div id="wrap"><div id="stage">
 
 <!-- 1 · cold open -->
-<section class="scene black" data-s="1">
-  <div class="big" style="top:250px;font-size:64px"><span class="w">Your</span><span class="w">AI</span><span class="w">ignored</span><span class="w">a</span><span class="w">rule</span><span class="w">this</span><span class="w">week.</span></div>
-  <div class="big" style="top:360px;font-size:64px"><span class="w">You</span><span class="w">saw</span><span class="w red zero">0.</span></div>
+<section class="slide black" data-s="1">
+  <div class="big b" data-k="0" style="top:250px;font-size:64px">Your AI ignored a rule this week.</div>
+  <div class="big b" data-k="1" style="top:360px;font-size:64px">You saw <span class="red zero">0.</span></div>
 </section>
 
-<!-- 2 · the loop -->
-<section class="scene" data-s="2">
+<!-- 2 · the loop: four arcs, one per click, then the loop never closes -->
+<section class="slide" data-s="2">
   <div class="ring">
-    <svg width="1280" height="720" viewBox="0 0 1280 720" fill="none"><circle class="arc" cx="360" cy="360" r="190" stroke="#2A2A2A" stroke-width="3"/><path class="arrow" d="M545 300 l14 26 l-28 6z" fill="#FF453A"/></svg>
-    <div class="k" style="left:230px;top:120px">correct</div>
-    <div class="k" style="left:440px;top:340px">obey once</div>
-    <div class="k" style="left:230px;top:560px">forget</div>
-    <div class="k" style="left:20px;top:340px">correct again</div>
+    <svg width="1280" height="720" viewBox="0 0 1280 720" fill="none">
+      <path class="arc" d="M360,170 A190,190 0 0 1 550,360"/>
+      <path class="arc" d="M550,360 A190,190 0 0 1 360,550"/>
+      <path class="arc" d="M360,550 A190,190 0 0 1 170,360"/>
+      <path class="arc" d="M170,360 A190,190 0 0 1 360,170"/>
+      <path class="b keep pop" data-k="3" data-d="6" d="M352,158 l24,12 l-24,12z" fill="#FF453A" style="transform-origin:364px 170px;transform-box:fill-box"/>
+    </svg>
+    <div class="k b keep" data-k="0" style="left:230px;top:110px">correct</div>
+    <div class="k b keep" data-k="1" style="left:560px;top:342px">obey once</div>
+    <div class="k b keep" data-k="2" style="left:230px;top:572px">forget</div>
+    <div class="k b keep" data-k="3" style="left:40px;top:342px">correct again</div>
   </div>
-  <div class="num" style="left:760px;top:250px;font-size:80px"><span class="pct dim" data-to="4.5">4.5</span><span class="dim">%</span></div>
-  <div class="num" style="left:1010px;top:250px;font-size:80px"><span class="pct2 red" data-to="8.3">8.3</span><span class="red">%</span></div>
-  <div class="num dim" style="left:945px;top:262px;font-size:52px">→</div>
-  <div class="cap" style="left:760px;top:360px;width:460px">corrections as a share of messages, June to August 2026. The rules file grew the whole time.</div>
-  <div class="cap" style="left:760px;top:170px;width:460px;color:var(--ink);font-size:24px;font-weight:600">The loop never closes.</div>
+  <div class="cap b" data-k="3" data-d="8" style="left:760px;top:170px;width:460px;color:var(--ink);font-size:24px;font-weight:600">The loop never closes.</div>
+  <div class="num b" data-k="4" style="left:760px;top:250px;font-size:80px"><span class="dim">4.5%</span></div>
+  <div class="num dim b" data-k="4" data-d="3" style="left:945px;top:262px;font-size:52px">→</div>
+  <div class="num b" data-k="4" data-d="5" style="left:1010px;top:250px;font-size:80px"><span class="red">8.3%</span></div>
+  <div class="cap b" data-k="4" data-d="8" style="left:760px;top:360px;width:460px">corrections as a share of messages, June to August 2026. The rules file grew the whole time.</div>
 </section>
 
 <!-- 3 · a command can fail -->
-<section class="scene" data-s="3">
-  <div class="big" style="top:70px;font-size:44px"><span class="w">A</span><span class="w">sentence</span><span class="w">cannot</span><span class="w">fail.</span><span class="w">A</span><span class="w">command</span><span class="w">can.</span></div>
-  <div class="card rule" style="left:100px;top:230px;width:360px"><div class="h">CLAUDE.md</div>- run the tests before commit</div>
-  <div class="board b3" style="left:520px;top:236px">
-    <div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt red pulse"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div>
+<section class="slide" data-s="3">
+  <div class="big b" data-k="0" style="top:70px;font-size:44px">A sentence cannot fail. A command can.</div>
+  <div class="card b fromleft" data-k="1" style="left:100px;top:230px;width:360px"><div class="h">CLAUDE.md</div>- run the tests before commit</div>
+  <div class="board b keep" data-k="2" style="left:520px;top:236px">
+    <div class="lt b keep" data-k="2" data-d="1"></div><div class="lt b keep" data-k="2" data-d="2"></div><div class="lt b keep" data-k="2" data-d="3"></div><div class="lt b keep" data-k="2" data-d="4"></div><div class="lt b keep" data-k="2" data-d="5"></div><div class="lt b keep" data-k="2" data-d="6"></div><div class="lt b keep" id="l3hot" data-k="2" data-d="7"></div><div class="lt b keep" data-k="2" data-d="8"></div><div class="lt b keep" data-k="2" data-d="9"></div><div class="lt b keep" data-k="2" data-d="10"></div><div class="lt b keep" data-k="2" data-d="11"></div>
   </div>
-  <div class="cap" style="left:520px;top:330px;width:660px">11 rules, 11 lights. Each one is a command that exits 0 when the rule holds.</div>
-  <div class="term mono t3" style="left:100px;top:420px;width:1080px">
-    <div class="l">$ claude</div>
-    <div class="l"><span class="red" style="font-weight:700">metacognition RED</span>: 1 of 11 rules failed. <span style="border-bottom:3px solid #FF453A">tests-green</span> is FALSE right now</div>
-    <div class="l dim">fix: bash tests/run.sh</div>
+  <div class="cap b" data-k="2" data-d="12" style="left:520px;top:330px;width:660px">11 rules, 11 lights. Each one is a command that exits 0 when the rule holds.</div>
+  <div class="term mono b keep" data-k="3" style="left:100px;top:420px;width:1080px">
+    <div class="l b keep" data-k="3" data-d="2">$ claude</div>
+    <div class="l b keep" data-k="3" data-d="5"><span class="red" style="font-weight:700">metacognition RED</span>: 1 of 11 rules failed. <span style="border-bottom:3px solid #FF453A">tests-green</span> is FALSE right now</div>
+    <div class="l dim b keep" data-k="3" data-d="8">fix: bash tests/run.sh</div>
   </div>
 </section>
 
 <!-- 4 · the clock -->
-<section class="scene" data-s="4">
-  <div class="big" style="top:70px;font-size:44px"><span class="w">Every</span><span class="w">30</span><span class="w">minutes,</span><span class="w">while</span><span class="w">you</span><span class="w">sleep.</span></div>
-  <div class="clock" style="left:100px;top:230px"><div class="hand"></div></div>
-  <div class="num" style="left:340px;top:220px;font-size:120px"><span class="cnt" data-to="48">48</span></div>
-  <div class="cap" style="left:340px;top:355px;width:400px;font-size:22px;color:var(--ink)">checks a day</div>
-  <div class="num" style="left:760px;top:220px;font-size:120px"><span class="cnt" data-to="1190" data-fmt="comma">1,190</span></div>
-  <div class="cap" style="left:760px;top:355px;width:460px;font-size:22px;color:var(--ink)">runs since 11 August</div>
-  <div class="cap" style="left:100px;top:480px;width:1080px">No window, no sound, no network. It prints one line and writes one file, whether or not a session is open.</div>
+<section class="slide" data-s="4">
+  <div class="big b" data-k="0" style="top:70px;font-size:44px">Every 30 minutes, while you sleep.</div>
+  <div class="clock b keep" data-k="0" data-d="3" style="left:100px;top:230px"><div class="hand" id="hand"></div></div>
+  <div class="num b" data-k="1" style="left:340px;top:220px;font-size:120px">48</div>
+  <div class="cap b" data-k="1" data-d="2" style="left:340px;top:355px;width:400px;font-size:22px;color:var(--ink)">checks a day</div>
+  <div class="num b" data-k="2" style="left:760px;top:220px;font-size:120px">1,190</div>
+  <div class="cap b" data-k="2" data-d="2" style="left:760px;top:355px;width:460px;font-size:22px;color:var(--ink)">runs since 11 August</div>
+  <div class="cap b" data-k="3" style="left:100px;top:480px;width:1080px">No window, no sound, no network. It prints one line and writes one file, whether or not a session is open.</div>
 </section>
 
 <!-- 5 · proof -->
-<section class="scene" data-s="5">
-  <div class="big" style="top:70px;font-size:44px"><span class="w">Ten</span><span class="w">rules</span><span class="w">broken</span><span class="w">on</span><span class="w">purpose.</span></div>
-  <div class="board b5" style="left:180px;top:240px;padding-bottom:50px">
-    <div class="lt red"><div class="tick">✓</div></div><div class="lt red"><div class="tick">✓</div></div><div class="lt red"><div class="tick">✓</div></div><div class="lt red"><div class="tick">✓</div></div><div class="lt red"><div class="tick">✓</div></div><div class="lt red"><div class="tick">✓</div></div><div class="lt red"><div class="tick">✓</div></div><div class="lt red"><div class="tick">✓</div></div><div class="lt red"><div class="tick">✓</div></div><div class="lt red"><div class="tick">✓</div></div>
+<section class="slide" data-s="5">
+  <div class="big b" data-k="0" style="top:70px;font-size:44px">Ten rules broken on purpose.</div>
+  <div class="board b keep" data-k="1" style="left:180px;top:240px;padding-bottom:50px">
+    <div class="lt red b keep" data-k="1" data-d="1"><div class="tick b keep" data-k="2" data-d="0">✓</div></div><div class="lt red b keep" data-k="1" data-d="2"><div class="tick b keep" data-k="2" data-d="1">✓</div></div><div class="lt red b keep" data-k="1" data-d="3"><div class="tick b keep" data-k="2" data-d="2">✓</div></div><div class="lt red b keep" data-k="1" data-d="4"><div class="tick b keep" data-k="2" data-d="3">✓</div></div><div class="lt red b keep" data-k="1" data-d="5"><div class="tick b keep" data-k="2" data-d="4">✓</div></div><div class="lt red b keep" data-k="1" data-d="6"><div class="tick b keep" data-k="2" data-d="5">✓</div></div><div class="lt red b keep" data-k="1" data-d="7"><div class="tick b keep" data-k="2" data-d="6">✓</div></div><div class="lt red b keep" data-k="1" data-d="8"><div class="tick b keep" data-k="2" data-d="7">✓</div></div><div class="lt red b keep" data-k="1" data-d="9"><div class="tick b keep" data-k="2" data-d="8">✓</div></div><div class="lt red b keep" data-k="1" data-d="10"><div class="tick b keep" data-k="2" data-d="9">✓</div></div>
   </div>
-  <div class="num p5" style="left:180px;top:400px;font-size:64px"><span>10 of 10</span> <span class="dim" style="font-size:40px;font-weight:600">caught</span></div>
-  <div class="num p5b" style="left:180px;top:490px;font-size:64px"><span class="red">0</span> <span class="dim" style="font-size:40px;font-weight:600">false alarms in 20 clean runs</span></div>
-  <div class="src" style="left:180px;top:590px">sandbox test, 12 Sep 2026, logs in the repo</div>
+  <div class="num b" data-k="2" data-d="11" style="left:180px;top:400px;font-size:64px"><span>10 of 10</span> <span class="dim" style="font-size:40px;font-weight:600">caught</span></div>
+  <div class="num b" data-k="3" style="left:180px;top:490px;font-size:64px"><span class="red">0</span> <span class="dim" style="font-size:40px;font-weight:600">false alarms in 20 clean runs</span></div>
+  <div class="src b" data-k="3" data-d="3" style="left:180px;top:590px">sandbox test, 12 Sep 2026, logs in the repo</div>
 </section>
 
 <!-- 6 · taste -->
-<section class="scene" data-s="6">
-  <div class="big" style="top:70px;font-size:44px"><span class="w">Corrections</span><span class="w">that</span><span class="w">cluster</span><span class="w">become</span><span class="w">a</span><span class="w">skill.</span></div>
-  <div class="corr c6" style="top:220px">"again, no console.log"</div>
-  <div class="corr c6" style="top:290px">"redo, the console.log is still there"</div>
-  <div class="corr c6" style="top:360px">"not what I asked. console.log!"</div>
-  <div class="count k6" style="top:440px">3 times = a pattern</div>
-  <div class="board b6" style="left:600px;top:236px">
-    <div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt nl"></div>
+<section class="slide" data-s="6">
+  <div class="big b" data-k="0" style="top:70px;font-size:44px">Corrections that cluster become a skill.</div>
+  <div class="corr b" data-k="1" data-d="0" style="top:220px">"again, no console.log"</div>
+  <div class="corr b" data-k="1" data-d="3" style="top:290px">"redo, the console.log is still there"</div>
+  <div class="corr b" data-k="1" data-d="6" style="top:360px">"not what I asked. console.log!"</div>
+  <div class="count b" data-k="2" style="top:440px">3 times = a pattern</div>
+  <div class="board b keep" data-k="2" data-d="3" style="left:600px;top:236px">
+    <div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt nl b keep pop" data-k="2" data-d="9"></div>
   </div>
-  <div class="cap" style="left:600px;top:330px;width:600px">a new light on the board. From now on the timer checks it 48 times a day.</div>
-  <div class="cap c6b" style="left:600px;top:440px;width:600px;font-size:24px;color:var(--ink);font-weight:600">This film was made with one.</div>
-  <div class="cap c6b" style="left:600px;top:485px;width:600px">The deck skill behind it was built only from corrections on earlier decks.</div>
+  <div class="cap b" data-k="2" data-d="11" style="left:600px;top:330px;width:600px">a new light on the board. From now on the timer checks it 48 times a day.</div>
+  <div class="cap b" data-k="3" style="left:600px;top:440px;width:600px;font-size:24px;color:var(--ink);font-weight:600">This film was made with one.</div>
+  <div class="cap b" data-k="3" data-d="3" style="left:600px;top:485px;width:600px">The deck skill behind it was built only from corrections on earlier decks.</div>
 </section>
 
 <!-- 7 · black frame -->
-<section class="scene black" data-s="7">
-  <div class="big" style="top:250px;font-size:52px;line-height:1.15"><span class="w">The</span><span class="w">people</span><span class="w">who</span><span class="w">start</span><span class="w">recording</span><span class="w">this</span><span class="w">month</span><span class="w">will</span><span class="w">have</span><span class="w">a</span><span class="w">year</span><span class="w">of</span><span class="w">it</span><span class="w">by</span><span class="w">next</span><span class="w">September.</span></div>
+<section class="slide black" data-s="7">
+  <div class="big b" data-k="0" style="top:250px;font-size:52px;line-height:1.15">The people who start recording this month will have a year of it by next September.</div>
 </section>
 
 <!-- 8 · the ask -->
-<section class="scene black" data-s="8">
-  <div class="big" style="top:170px;font-size:56px"><span class="w">What</span><span class="w">did</span><span class="w">your</span><span class="w">AI</span><span class="w">get</span><span class="w">wrong</span><span class="w red">twice?</span></div>
-  <div class="term mono t8" style="left:100px;top:330px;width:1080px">
-    <div class="l">$ npx metacognition</div>
-    <div class="l"><span class="green" style="font-weight:700">metacognition GREEN</span>: 11 of 11 rules held</div>
+<section class="slide black" data-s="8">
+  <div class="big b" data-k="0" style="top:170px;font-size:56px">What did your AI get wrong <span class="red">twice?</span></div>
+  <div class="term mono b keep" data-k="1" style="left:100px;top:330px;width:1080px">
+    <div class="l b keep" data-k="1" data-d="2">$ npx metacognition</div>
+    <div class="l b keep" data-k="1" data-d="6"><span class="green" style="font-weight:700">metacognition GREEN</span>: 11 of 11 rules held</div>
   </div>
-  <div class="cap u8 mono" style="left:100px;top:500px;width:1080px;font-size:26px;color:var(--red)">github.com/Jauz256/metacognition</div>
-  <div class="cap u8" style="left:100px;top:550px;width:1080px">One line to install. It asks nothing. macOS or Linux, Node 18 or newer.</div>
+  <div class="cap mono b" data-k="2" style="left:100px;top:500px;width:1080px;font-size:26px;color:var(--red)">github.com/Jauz256/metacognition</div>
+  <div class="cap b" data-k="2" data-d="3" style="left:100px;top:550px;width:1080px">One line to install. It asks nothing. macOS or Linux, Node 18 or newer.</div>
 </section>
 
 <a id="home" href="index.html">metacognition</a>
 <div id="ctr"></div>
-<button id="play" type="button">Pause</button>
 <div id="hint">click or → next · ← back · F fullscreen · S script</div>
 <div id="bar"><i></i></div>
 <div id="say"><b>YOU SAY</b><span></span></div>
@@ -244,210 +257,128 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
 </div>
 </div></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script>
 (() => {
   const stage = document.getElementById('stage');
-  const scenes = [...document.querySelectorAll('.scene')];
-  const N = scenes.length;
-  const ctr = document.getElementById('ctr'), playBtn = document.getElementById('play'), hint = document.getElementById('hint'), bar = document.querySelector('#bar i');
-  const q = new URLSearchParams(location.search);
-  const automated = (!!navigator.webdriver && q.get('motion') !== '1') || q.get('autoplay') === '0';
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const G = (!automated && !reduced && window.gsap) ? window.gsap : null;   // motion engine, or none
-  let autoplay = !automated, holdTimer = null, cur = -1, tl = null;
-
-  // ---- static final state for a scene (used on back-clicks, under tests, and as the fallback) ----
-  const fmt = (v, f) => f === 'comma' ? Math.round(v).toLocaleString('en-US') : (Number.isInteger(+v) ? String(Math.round(v)) : (+v).toFixed(1));
-  function settle(sc) {
-    if (G) G.killTweensOf(sc.querySelectorAll('*'));
-    sc.querySelectorAll('*').forEach(el => { el.style.opacity = ''; el.style.transform = ''; });
-    sc.querySelectorAll('[data-to]').forEach(el => { el.textContent = fmt(el.dataset.to, el.dataset.fmt); });
-    const h = sc.querySelector('.hand'); if (h) h.style.transform = 'rotate(300deg)';
-  }
-  const enter = { opacity: 0, y: 14, scale: .96, ease: 'quint.out' };
-  G && G.registerEase && 0;
-  const Q = 'power4.out', E = 'expo.inOut';
-
-  // ---- forward choreography per scene (final states are the CSS defaults) ----
-  const play = {
-    1(sc, t) {
-      t.from(sc.querySelectorAll('.big:first-child .w'), { opacity: 0, y: 16, scale: .96, duration: .5, stagger: .04, ease: Q })
-       .from(sc.querySelectorAll('.big:last-child .w'), { opacity: 0, y: 16, scale: .96, duration: .5, stagger: .04, ease: Q }, '+=.6')
-       .from(sc.querySelector('.zero'), { scale: 1.9, duration: .75, ease: E }, '-=.1');
-    },
-    2(sc, t) {
-      const ks = sc.querySelectorAll('.ring .k');
-      t.from(ks, { opacity: 0, scale: .96, y: 12, duration: .45, stagger: .35, ease: Q })
-       .from(sc.querySelector('.arc'), { opacity: 0, duration: .4 }, '-=.3')
-       .from(sc.querySelector('.arrow'), { opacity: 0, scale: .6, duration: .3, ease: Q })
-       .from(sc.querySelector('.cap:last-child'), { opacity: 0, y: 12, duration: .4, ease: Q }, '+=.2')
-       .from(sc.querySelectorAll('.num'), { opacity: 0, y: 14, duration: .4, stagger: .12, ease: Q }, '-=.1');
-      const p1 = sc.querySelector('.pct'), p2 = sc.querySelector('.pct2');
-      const o = { a: 0, b: 0 };
-      t.to(o, { a: 4.5, duration: .5, ease: 'power2.out', onUpdate: () => p1.textContent = o.a.toFixed(1) }, '-=.3')
-       .to(o, { b: 8.3, duration: .7, ease: 'power2.out', onUpdate: () => p2.textContent = o.b.toFixed(1) }, '-=.1')
-       .from(sc.querySelector('.num:nth-of-type(2)'), { scale: 1.25, duration: .7, ease: E }, '-=.5')
-       .from(sc.querySelectorAll('.cap')[0], { opacity: 0, y: 10, duration: .4, ease: Q });
-    },
-    3(sc, t) {
-      const rule = sc.querySelector('.rule'), lts = sc.querySelectorAll('.b3 .lt'), redLt = sc.querySelector('.b3 .red');
-      t.from(sc.querySelectorAll('.big .w'), { opacity: 0, y: 16, scale: .96, duration: .5, stagger: .04, ease: Q })
-       .from(rule, { opacity: 0, x: -20, duration: .45, ease: Q }, '+=.2')
-       .from(sc.querySelector('.b3'), { opacity: 0, duration: .3 }, '+=.3')
-       .from(lts, { opacity: 0, scale: .6, duration: .35, stagger: .04, ease: Q }, '-=.1')
-       .from(sc.querySelector('.cap'), { opacity: 0, y: 10, duration: .4, ease: Q })
-       .to(redLt, { backgroundColor: '#F2F2F2', duration: .03 }, '+=.4').to(redLt, { backgroundColor: '#FF453A', duration: .03 })
-       .from(redLt, { scale: 1.8, duration: .5, ease: E })
-       .from(sc.querySelectorAll('.t3 .l'), { opacity: 0, x: -6, duration: .25, stagger: .06, ease: Q }, '+=.2');
-    },
-    4(sc, t) {
-      const hand = sc.querySelector('.hand'); const cs = sc.querySelectorAll('.cnt');
-      t.from(sc.querySelectorAll('.big .w'), { opacity: 0, y: 16, scale: .96, duration: .5, stagger: .04, ease: Q })
-       .from(sc.querySelector('.clock'), { opacity: 0, scale: .9, duration: .4, ease: Q })
-       .fromTo(hand, { rotate: 0 }, { rotate: 300, duration: .8, ease: E }, '-=.1');
-      cs.forEach((c, i) => {
-        const o = { v: 0 }, to = +c.dataset.to, f = c.dataset.fmt;
-        t.from(c.parentElement, { opacity: 0, y: 14, duration: .35, ease: Q }, i ? '+=.15' : '-=.5')
-         .from(c.parentElement.nextElementSibling, { opacity: 0, y: 10, duration: .35, ease: Q }, '-=.2')
-         .to(o, { v: to, duration: .6, ease: 'power2.out', onUpdate: () => c.textContent = fmt(o.v, f) }, '-=.3');
-      });
-      t.from(sc.querySelector('.cap:last-child'), { opacity: 0, y: 10, duration: .4, ease: Q }, '+=.1');
-    },
-    5(sc, t) {
-      const lts = sc.querySelectorAll('.b5 .lt'), ticks = sc.querySelectorAll('.b5 .tick');
-      t.from(sc.querySelectorAll('.big .w'), { opacity: 0, y: 16, scale: .96, duration: .5, stagger: .04, ease: Q })
-       .from(sc.querySelector('.b5'), { opacity: 0, duration: .3 })
-       .fromTo(lts, { backgroundColor: '#30D158' }, { backgroundColor: '#FF453A', duration: .12, stagger: .08 }, '+=.2')
-       .from(ticks, { opacity: 0, y: -10, duration: .25, stagger: .06, ease: Q }, '+=.3')
-       .from(sc.querySelector('.p5'), { opacity: 0, y: 14, duration: .4, ease: Q }, '+=.2')
-       .from(sc.querySelector('.p5'), { scale: 1.15, duration: .6, ease: E }, '-=.3')
-       .from(sc.querySelector('.p5b'), { opacity: 0, y: 14, duration: .4, ease: Q }, '-=.1')
-       .from(sc.querySelector('.src'), { opacity: 0, duration: .3 });
-    },
-    6(sc, t) {
-      const nl = sc.querySelector('.nl');
-      t.from(sc.querySelectorAll('.big .w'), { opacity: 0, y: 16, scale: .96, duration: .5, stagger: .04, ease: Q })
-       .from(sc.querySelectorAll('.c6'), { opacity: 0, y: 12, duration: .35, stagger: .18, ease: Q }, '+=.1')
-       .from(sc.querySelector('.k6'), { opacity: 0, scale: .8, duration: .4, ease: Q }, '+=.1')
-       .from(sc.querySelector('.b6'), { opacity: 0, duration: .3 }, '-=.1')
-       .from(sc.querySelectorAll('.b6 .lt:not(.nl)'), { opacity: 0, scale: .6, duration: .3, stagger: .03, ease: Q }, '-=.1')
-       .from(nl, { x: -330, y: 200, opacity: 0, duration: .6, ease: 'power3.inOut' }, '+=.2')
-       .from(sc.querySelectorAll('.cap:not(.c6b)'), { opacity: 0, y: 10, duration: .4, ease: Q })
-       .from(sc.querySelectorAll('.c6b'), { opacity: 0, y: 10, duration: .4, stagger: .12, ease: Q }, '+=.3');
-    },
-    7(sc, t) {
-      t.from(sc.querySelectorAll('.big .w'), { opacity: 0, y: 16, scale: .96, duration: .5, stagger: .05, ease: Q });
-    },
-    8(sc, t) {
-      t.from(sc.querySelectorAll('.big .w'), { opacity: 0, y: 16, scale: .96, duration: .5, stagger: .04, ease: Q })
-       .from(sc.querySelector('.big .red'), { scale: 1.5, duration: .6, ease: E }, '-=.2')
-       .from(sc.querySelector('.t8'), { opacity: 0, y: 12, duration: .4, ease: Q }, '+=.3')
-       .from(sc.querySelectorAll('.t8 .l'), { opacity: 0, x: -6, duration: .25, stagger: .08, ease: Q })
-       .from(sc.querySelectorAll('.u8'), { opacity: 0, y: 10, duration: .4, stagger: .12, ease: Q }, '+=.2');
-    },
-  };
-
-  // ---- script bar (S): the words to say out loud, one line per scene ----
+  const ctr = document.getElementById('ctr'), hint = document.getElementById('hint'), bar = document.querySelector('#bar i');
   const sayEl = document.getElementById('say'), sayText = sayEl.querySelector('span');
-  const SAY = [
-    'Your AI ignored a rule this week. You saw zero. Nobody sees it, because a sentence in a rules file has no alarm.',
-    'This is the loop. You correct, it obeys once, it forgets, you correct again. Corrections rose from 4.5 to 8.3 percent while the rules file grew.',
-    'A sentence cannot fail. A command can. Each rule becomes a command that exits zero when the rule holds. Eleven rules, eleven lights.',
-    'A timer runs every 30 minutes, also while you sleep. 48 checks a day. No window, no network. It prints one line and writes one file.',
-    'Proof. Ten rules broken on purpose, ten caught. Zero false alarms in twenty clean runs. The logs are in the repo.',
-    'Corrections that cluster become a skill. Three times is a pattern, so it becomes a new light on the board. This film was made with one.',
-    'Whoever starts recording this month has a year of it by next September.',
-    'What did your AI get wrong twice? One line installs it: github.com, Jauz256, metacognition.'
-  ];
+  const q = new URLSearchParams(location.search);
 
-  // ---- render: all visible state derives from the index ----
-  function render(i, dir) {
-    i = Math.max(0, Math.min(N - 1, i));
-    if (tl) { tl.kill(); tl = null; }
-    clearTimeout(holdTimer);
-    const prev = cur; cur = i;
-    scenes.forEach((sc, k) => { const on = k === i; sc.classList.toggle('on', on); if (!on || dir < 0 || k !== i) settle(sc); });
-    const sc = scenes[i];
-    settle(sc);
-    ctr.textContent = `${i + 1} / ${N}`;
-    sayText.textContent = SAY[i] || '';
-    if (i === 0) setTimeout(() => hint.classList.add('off'), 4000);
-    bar.style.transform = `scaleX(${(i + 1) / N})`;
-    hint.classList.toggle('off', i > 0);
-    if (G && dir > 0) {
-      tl = G.timeline({ onComplete: () => { if (autoplay) holdTimer = setTimeout(() => render(cur + 1, 1), 2500); } });
-      tl.delay(prev < 0 ? .3 : .35);
-      play[i + 1](sc, tl);
-    } else if (autoplay && dir > 0) {
-      holdTimer = setTimeout(() => render(cur + 1, 1), 4000);
-    }
-    if (i === N - 1) { autoplay = false; playBtn.classList.remove('on'); playBtn.textContent = 'Play'; }
+  // ---- one click = one idea = one line to say. [scene, build, words] ----
+  const S = [
+    [1, 0, 'Your AI ignored a rule this week.'],
+    [1, 1, 'You saw zero. Nobody sees it, because a sentence in a rules file has no alarm.'],
+    [2, 0, 'This is the loop. First you correct the AI.'],
+    [2, 1, 'It obeys once.'],
+    [2, 2, 'Then it forgets.'],
+    [2, 3, 'So you correct it again. The loop never closes.'],
+    [2, 4, 'Corrections rose from 4.5 to 8.3 percent of messages between June and August, while the rules file grew the whole time.'],
+    [3, 0, 'A sentence cannot fail. A command can.'],
+    [3, 1, 'Here is a sentence in a rules file: run the tests before commit.'],
+    [3, 2, 'Each rule becomes a command that exits zero when the rule holds. Eleven rules, eleven lights.'],
+    [3, 3, 'When a rule breaks, the light turns red, and the next session opens with the failure on its first line.'],
+    [4, 0, 'A timer runs every 30 minutes, also while you sleep.'],
+    [4, 1, 'That is 48 checks a day.'],
+    [4, 2, '1,190 runs since 11 August.'],
+    [4, 3, 'No window, no sound, no network. It prints one line and writes one file.'],
+    [5, 0, 'The proof. Ten rules broken on purpose.'],
+    [5, 1, 'Ten rules, ten red lights.'],
+    [5, 2, 'Ten of ten caught.'],
+    [5, 3, 'Zero false alarms in twenty clean runs. The logs are in the repo.'],
+    [6, 0, 'Corrections that cluster become a skill.'],
+    [6, 1, 'The same correction three times: no console.log.'],
+    [6, 2, 'Three times is a pattern, so it becomes a new light on the board. The timer checks it 48 times a day from now on.'],
+    [6, 3, 'This film was made with one. The deck skill behind it was built only from corrections on earlier decks.'],
+    [7, 0, 'Whoever starts recording this month has a year of it by next September.'],
+    [8, 0, 'What did your AI get wrong twice?'],
+    [8, 1, 'One line installs it. It asks nothing.'],
+    [8, 2, 'github.com, Jauz256, metacognition. macOS or Linux, Node 18 or newer.']
+  ];
+  const N = S.length;
+  let cur = 0;
+  const slides = [...document.querySelectorAll('.slide')];
+  const arcs = [...document.querySelectorAll('.arc')];
+
+  // ---- render: every visible thing derives from (scene, build) ----
+  function render(i) {
+    cur = Math.max(0, Math.min(N - 1, i));
+    const [s, k, say] = S[cur];
+    sayText.textContent = say;
+    ctr.textContent = `${cur + 1} / ${N}`;
+    bar.style.transform = `scaleX(${(cur + 1) / N})`;
+    hint.classList.toggle('off', cur > 0);
+    slides.forEach(sl => {
+      const on = +sl.dataset.s === s;
+      sl.classList.toggle('on', on);
+      sl.querySelectorAll('.b').forEach(el => {
+        const n = +el.dataset.k, d = +(el.dataset.d || 0);
+        el.classList.remove('now', 'past');
+        if (!on) { el.style.transitionDelay = '0ms'; return; }
+        if (n < k) { el.classList.add('past'); el.style.transitionDelay = '0ms'; }
+        else if (n === k) { el.classList.add('now'); el.style.transitionDelay = (d * 50) + 'ms'; }
+        else el.style.transitionDelay = '0ms';
+      });
+    });
+    // scene 2: the arcs draw one per click, clockwise
+    arcs.forEach((a, j) => a.classList.toggle('on', s === 2 && j <= k));
+    // scene 3: the seventh light turns red on the failure click
+    document.getElementById('l3hot').classList.toggle('hot', s === 3 && k >= 3);
+    // scene 4: the hand sweeps once when the scene opens
+    const hand = document.getElementById('hand');
+    hand.style.transitionDelay = s === 4 ? '350ms' : '0ms';
+    hand.classList.toggle('swept', s === 4);
   }
-  const next = () => render(cur + 1, 1), back = () => render(cur - 1, -1);
-  const stop = () => { autoplay = false; clearTimeout(holdTimer); playBtn.classList.remove('on'); playBtn.textContent = 'Play'; };
-  const go = () => { autoplay = true; playBtn.classList.add('on'); playBtn.textContent = 'Pause'; if (!tl || tl.progress() === 1) holdTimer = setTimeout(() => render(cur + 1, 1), 1200); };
+
   // ---- intro: how to watch. Venus, folded from one sheet of paper, shows the keys ----
   const intro = document.getElementById('intro'), $ = id => document.getElementById(id);
   const venus = $('venus'), armR = $('armR'), armL = $('armL'), bubble = $('bubble');
   const STEPS = [
-    { vx: 530, vy: 330, arm: 0, armL: 0, bx: 591, hold: 3000,
-      text: '<b>Venus</b> here, folded from one sheet of paper. This film takes 60 seconds. The keys first, then the film.' },
-    { vx: 280, vy: 330, arm: -30, armL: 0, bx: 341, keys: 'ikeys', ghost: 1, hold: 3600,
-      text: '<b>Click</b> anywhere, or press <b>&rarr;</b>, to go one scene forward. <b>&larr;</b> goes back one scene.' },
-    { vx: 280, vy: 330, arm: -30, armL: 0, bx: 341, keys: 'ikeyF', hold: 3200,
+    { vx: 530, vy: 330, arm: 0, armL: 0, bx: 591,
+      text: '<b>Venus</b> here, folded from one sheet of paper. Eight scenes, one click at a time. The keys first.' },
+    { vx: 280, vy: 330, arm: -30, armL: 0, bx: 341, keys: 'ikeys', ghost: 1,
+      text: '<b>Click</b> anywhere, or press <b>&rarr;</b>. One click shows one idea. <b>&larr;</b> goes back one.' },
+    { vx: 280, vy: 330, arm: -30, armL: 0, bx: 341, keys: 'ikeyF',
       text: 'Press <b>F</b> for fullscreen. Press F again to leave it.' },
-    { vx: 280, vy: 330, arm: -30, armL: 0, bx: 341, keys: 'ikeyS', say: 1, hold: 3800,
-      text: 'Press <b>S</b> to show the script: the words to say out loud, one line per scene. Press S again to hide it.' },
-    { vx: 700, vy: 250, arm: -65, armL: 0, bx: 400, tail: 398, play: 1, hold: 3400, hint: 'click, or press &rarr;, to start the film',
-      text: 'That is everything. The film plays by itself, and the <b>Play</b> button pauses it. Click once more to start.' }
+    { vx: 280, vy: 330, arm: -30, armL: 0, bx: 341, keys: 'ikeyS', say: 1,
+      text: 'Press <b>S</b> to show the script: the words to say out loud, one line per click. Press S again to hide it.' },
+    { vx: 530, vy: 330, arm: -95, armL: 35, bx: 591, hint: 'click, or press &rarr;, to start the film',
+      text: 'That is everything. <b>Click once more and the film starts.</b>' }
   ];
   const wantIntro = q.get('intro') !== '0';
-  let introOn = false, istep = 0, introTimer = null;
+  let introOn = false, istep = 0;
   function introRender(k) {
     istep = k; const st = STEPS[k];
     venus.style.transform = `translate(${st.vx}px,${st.vy}px)`;
     armR.style.transform = `rotate(${st.arm}deg)`; armL.style.transform = `rotate(${st.armL}deg)`;
     bubble.style.left = st.bx + 'px'; bubble.style.bottom = (720 - st.vy + 4) + 'px'; bubble.style.setProperty('--tail', (st.tail || 38) + 'px'); bubble.innerHTML = st.text;
-    intro.classList.toggle('say', !!st.say);
-    $('ihint').innerHTML = st.hint || 'click, or press &rarr; for the next step';
     ['ikeys', 'ikeyF', 'ikeyS'].forEach(id => $(id).classList.toggle('on', st.keys === id));
     $('ighost').classList.toggle('on', !!st.ghost);
     $('isay').classList.toggle('on', !!st.say);
-    playBtn.classList.toggle('glow', !!st.play);
+    intro.classList.toggle('say', !!st.say);
+    $('ihint').innerHTML = st.hint || 'click, or press &rarr; for the next step';
     ctr.textContent = `how to watch · ${k + 1} / ${STEPS.length}`;
-    clearTimeout(introTimer);
-    if (autoplay) introTimer = setTimeout(introNext, st.hold);
+    sayText.textContent = '';
   }
   function introStart(k) {
     introOn = true; intro.classList.add('on');
-    if (tl) { tl.kill(); tl = null; } clearTimeout(holdTimer);
-    scenes.forEach(sc => sc.classList.remove('on')); cur = -1;
-    bar.style.transform = 'scaleX(0)'; hint.classList.add('off'); sayText.textContent = '';
+    slides.forEach(sl => sl.classList.remove('on'));
+    bar.style.transform = 'scaleX(0)'; hint.classList.add('off');
     introRender(k);
   }
-  function introEnd() {
-    introOn = false; clearTimeout(introTimer); intro.classList.remove('on'); playBtn.classList.remove('glow');
-    render(0, 1);
-  }
+  function introEnd() { introOn = false; intro.classList.remove('on'); render(0); }
   function introNext() { istep < STEPS.length - 1 ? introRender(istep + 1) : introEnd(); }
   function introBack() { if (istep > 0) introRender(istep - 1); }
   $('iskip').addEventListener('click', e => { e.stopPropagation(); introEnd(); });
 
-  playBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    if (introOn) { introEnd(); if (!autoplay) go(); return; }
-    autoplay ? stop() : (cur >= N - 1 ? render(0, 1) : 0, go());
-  });
-  if (autoplay) playBtn.classList.add('on'); else playBtn.textContent = 'Play';
-
   function fit() { const f = Math.min(innerWidth / 1280, innerHeight / 720); stage.style.transform = `scale(${f})`; }
   addEventListener('resize', fit); fit();
 
+  // ---- controls: click / arrows / space advance, Home resets, F fullscreen, S script ----
+  const next = () => render(cur + 1);
+  const back = () => (cur === 0 && wantIntro) ? introStart(STEPS.length - 1) : render(cur - 1);
   document.addEventListener('click', e => {
-    if (e.target.closest('#play,#home,#iskip,#say')) return;
-    if (introOn) { introNext(); return; }
-    stop(); next();
+    if (e.target.closest('#home,#iskip,#say')) return;
+    introOn ? introNext() : next();
   });
   document.addEventListener('keydown', e => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
@@ -465,13 +396,13 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
       return;
     }
     switch (e.key) {
-      case 'ArrowRight': case ' ': case 'PageDown': e.preventDefault(); stop(); next(); break;
-      case 'ArrowLeft': case 'PageUp': e.preventDefault(); stop(); cur === 0 && wantIntro ? introStart(STEPS.length - 1) : back(); break;
-      case 'Home': e.preventDefault(); stop(); wantIntro ? introStart(0) : render(0, -1); break;
-      case 'End': e.preventDefault(); stop(); render(N - 1, -1); break;
+      case 'ArrowRight': case ' ': case 'PageDown': e.preventDefault(); next(); break;
+      case 'ArrowLeft': case 'PageUp': e.preventDefault(); back(); break;
+      case 'Home': e.preventDefault(); wantIntro ? introStart(0) : render(0); break;
+      case 'End': e.preventDefault(); render(N - 1); break;
     }
   });
-  wantIntro ? introStart(0) : render(0, 1);
+  wantIntro ? introStart(0) : render(0);
 })();
 </script>
 </body>
