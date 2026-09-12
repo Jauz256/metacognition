@@ -1,0 +1,5 @@
+schema_version: "1.1"
+context:
+  scaffold_script: |
+    mkdir -p wd
+    printf 'metacognition RED: 1 of 3 rules failed. tests-green is FALSE right now: the test suite passes (bash tests/run.sh). Run: node bin/watchdog.mjs status\n' > wd/verdict.txt

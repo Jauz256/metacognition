@@ -15,6 +15,7 @@
 #   curl -fsSL <raw url>/install.sh | bash     install without a clone (downloads the repo)
 #   bash install.sh --dry-run       print what would happen, change nothing
 #   bash install.sh --uninstall     remove the hooks, the timer and the code; keep your data
+#   bash install.sh --no-hooks      code + rules + timer only (use after `claude plugin install metacognition`)
 #
 # Asks nothing. Needs node 18 or newer on PATH.
 set -eu
@@ -30,10 +31,12 @@ PLIST="$HOME/Library/LaunchAgents/$PLIST_LABEL.plist"
 
 DRY=0
 UNINSTALL=0
+NOHOOKS=0
 for arg in "$@"; do
   case "$arg" in
     --dry-run) DRY=1 ;;
     --uninstall) UNINSTALL=1 ;;
+    --no-hooks) NOHOOKS=1 ;;   # the Claude Code plugin already provides the 3 hooks
     -h|--help) sed -n '2,19p' "$0" 2>/dev/null | sed 's/^# \{0,1\}//'; exit 0 ;;
     *) echo "unknown option: $arg" >&2; exit 2 ;;
   esac
@@ -176,7 +179,9 @@ if [ -f "$SETTINGS" ]; then
     exit 1
   fi
 fi
-if [ "$(edit_settings check 2>/dev/null || echo absent)" = present ]; then
+if [ "$NOHOOKS" = 1 ]; then
+  step "skip the 3 hooks in settings.json (--no-hooks: the Claude Code plugin provides them)"
+elif [ "$(edit_settings check 2>/dev/null || echo absent)" = present ]; then
   step "the 3 hooks are already in settings.json, leave them"
 else
   backup_settings

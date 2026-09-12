@@ -21,7 +21,7 @@ if (passThrough.has(first)) {
   process.exit(r.status ?? 1);
 }
 
-if (installWords.has(first) || first === '--dry-run' || first === '--uninstall') {
+if (installWords.has(first) || first === '--dry-run' || first === '--uninstall' || first === '--no-hooks') {
   const flags = args.filter((a) => a.startsWith('--'));
   const r = spawnSync('bash', [path.join(ROOT, 'install.sh'), ...flags], { stdio: 'inherit' });
   process.exit(r.status ?? 1);
@@ -32,6 +32,7 @@ usage:
   npx metacognition                 install and show the first verdict
   npx metacognition --dry-run       print what would happen, change nothing
   npx metacognition --uninstall     remove the hooks, the timer and the code
+  npx metacognition --no-hooks      code, rules and timer only (after `claude plugin install`)
   npx metacognition status          print the last verdict
   npx metacognition history         how often each rule held
   npx metacognition add "<rule>" "<check command>"`);
