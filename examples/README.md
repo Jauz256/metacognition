@@ -5,7 +5,7 @@ at one of these files to try it:
 
 ```sh
 cp examples/javascript.tsv ~/.claude/metacognition/claims.tsv
-npx metacognition run
+npx github:jazzs-thoughts/metacognition run
 ```
 
 Each file is tab separated: `id`, the rule in plain words, then the command that must exit 0.
