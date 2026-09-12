@@ -4,7 +4,7 @@
 
 **Your AI reads your rules and ignores them. This measures which ones.**
 
-<a href="https://jazzs-thoughts.github.io/metacognition/what-is-metacognition.html"><img src="docs/btn-what-is.svg" alt="What is metacognition: 8 scenes, one click at a time" height="48"></a>&nbsp;&nbsp;<a href="https://jazzs-thoughts.github.io/metacognition/how-it-works.html"><img src="docs/btn-how-it-works.svg" alt="How it works, step by step: 10 slides" height="48"></a>
+<a href="https://jazzs-thoughts.github.io/metacognition/what-is-metacognition.html"><img src="docs/btn-what-is.svg" alt="What is metacognition: 8 scenes, one click at a time" height="48"></a>&nbsp;&nbsp;<a href="https://jazzs-thoughts.github.io/metacognition/how-it-works.html"><img src="docs/btn-how-it-works.svg" alt="How it works, step by step: 15 slides" height="48"></a>
 
 [![stars](https://img.shields.io/github/stars/jazzs-thoughts/metacognition?style=flat&color=DC2626)](https://github.com/jazzs-thoughts/metacognition/stargazers)
 [![tests](https://img.shields.io/badge/tests-88%20passing-111111)](tests/)

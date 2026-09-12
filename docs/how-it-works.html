@@ -81,16 +81,30 @@
   .rule.red::before{background:var(--red)}
   .rule.red{border-color:var(--red)}
 
-  /* slide 10 */
+  /* a check card (slide 4) and the yes/no answers */
+  .chk{position:absolute;box-sizing:border-box;padding:16px 20px;border-radius:10px;background:var(--panel);border:1px solid var(--line)}
+  .chk .q{font-size:15px;color:var(--dim);margin-bottom:6px}
+  .chk .a{font-size:22px;color:var(--ink);line-height:1.35}
+  .ans{position:absolute;font-family:"JetBrains Mono",Menlo,monospace;font-size:26px;font-weight:700;padding:10px 22px;border-radius:10px;border:1px solid var(--line);background:#000}
+  .arrow{position:absolute;font-size:34px;color:var(--dim)}
+  .strike{position:absolute;height:3px;background:var(--red);border-radius:2px}
+  /* proof lights (slide 12) */
+  .board{position:absolute;display:flex;gap:16px;padding:18px 20px 50px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+  .lt{width:32px;height:32px;border-radius:50%;background:var(--red);position:relative}
+  .lt .tick{position:absolute;left:0;right:0;top:44px;text-align:center;font-size:20px;font-weight:700;color:var(--ink)}
+  .num{position:absolute;font-weight:800;letter-spacing:-.03em;line-height:1}
+  .qa{position:absolute;left:80px;width:1120px;box-sizing:border-box;padding:12px 20px;border-radius:10px;background:var(--panel);border:1px solid var(--line)}
+  .qa .q{font-size:15px;color:var(--dim);margin-bottom:4px}
+  .qa .a{font-size:18px;color:var(--ink);line-height:1.4}
+  .slide[data-s="9"] .hd,.slide[data-s="9"] .row{grid-template-columns:130px 220px 1fr}
+  /* slide 14 */
   .url{position:absolute;left:0;right:0;top:600px;text-align:center;font-size:22px;color:var(--red);font-family:"JetBrains Mono",Menlo,monospace}
 
   /* always-visible caption for strangers, progress bar, play button, hint */
   #capbar{position:absolute;left:40px;right:40px;bottom:36px;background:rgba(20,20,20,.96);border:1px solid var(--line);border-radius:10px;padding:12px 18px;font-size:19px;line-height:1.4;color:var(--ink);z-index:9;min-height:26px}
   #capbar b{color:var(--red);font-weight:600;margin-right:10px;font-family:"JetBrains Mono",Menlo,monospace;font-size:15px}
   #prog{position:absolute;left:0;bottom:0;height:4px;width:1280px;background:var(--red);transform-origin:0 0;transform:scaleX(0);transition:transform 300ms var(--emph);z-index:9}
-  #ctr{position:absolute;right:120px;top:36px;font-size:14px;color:var(--dim);opacity:.8;z-index:9}
-  #play{position:absolute;right:40px;top:28px;height:30px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:15px Inter,sans-serif;cursor:pointer;z-index:10}
-  #play.on{border-color:var(--red);color:var(--red)}
+  #ctr{position:absolute;right:40px;top:36px;font-size:14px;color:var(--dim);opacity:.8;z-index:9}
   #hint{position:absolute;left:0;right:0;top:640px;text-align:center;font-size:15px;color:var(--dim);z-index:8;transition:opacity 300ms}
   #hint.off{opacity:0}
 
@@ -99,142 +113,179 @@
     .b,.row.fly,.rule{transform:none}
   }
 </style>
-</head>
 <body>
 <div id="wrap"><div id="stage">
 
-<!-- 1 · install -->
+<!-- 1 · your rules file -->
 <section class="slide" data-s="1">
-  <div class="chip">1</div><div class="chap">Install</div>
-  <div class="title">One line to install. It asks nothing.</div>
-  <div class="term" style="left:80px;top:170px;width:1120px;height:300px">
-    <div class="l c-ink b keep" data-k="0">$ npx metacognition</div>
-    <div class="l c-dim b keep" data-k="1">installed: bin/  hooks/  claims.tsv  timer every 30 min</div>
-    <div class="l c-dim b keep" data-k="1" data-d="2">3 hooks added to settings.json (your other hooks are kept)</div>
-    <div class="l c-dim b keep" data-k="1" data-d="4">running the checks once ...</div>
-    <div class="l c-green b keep" data-k="1" data-d="8">metacognition GREEN: 11 of 11 rules held</div>
-  </div>
-  <div class="cap b" data-k="1" data-d="10" style="left:80px;top:500px;width:1120px;font-size:17px">macOS or Linux, Node 18 or newer. Thirty seconds later you see your first verdict.</div>
-</section>
-
-<!-- 2 · the rules file -->
-<section class="slide" data-s="2">
-  <div class="chip">2</div><div class="chap">Your rules</div>
-  <div class="title">Your rules are sentences. A sentence cannot fail.</div>
+  <div class="chip">1</div><div class="chap">Your rules file</div>
+  <div class="title">You already have a rules file. Here it is.</div>
   <div class="sheet" style="left:80px;top:180px;width:440px">
     <div class="h">CLAUDE.md</div>
-    <div class="ln b keep" data-k="0">- run the tests before every commit</div>
-    <div class="ln b keep" data-k="0" data-d="1">- no console.log in shipped code</div>
-    <div class="ln b keep" data-k="0" data-d="2">- answer first, details second</div>
+    <div class="ln b keep" data-k="0">- answer first, details second</div>
+    <div class="ln b keep" data-k="0" data-d="1">- run the tests before every commit</div>
+    <div class="ln b keep" data-k="0" data-d="2">- no console.log in shipped code</div>
     <div class="ln b keep" data-k="0" data-d="3">- one commit per change</div>
     <div class="ln b keep" data-k="0" data-d="4">- ask before touching 3+ files</div>
   </div>
-  <div class="body b" data-k="0" data-d="7" style="left:600px;top:200px;width:600px">The agent reads this file every session.<br><br>It can obey a line, or forget it, and nothing in the file can tell you which happened.</div>
+  <div class="body b" data-k="1" style="left:600px;top:200px;width:600px">This file is called <span class="mono">CLAUDE.md</span>. Claude Code reads it at the start of every session.<br><br>Each line is one instruction you wrote, in your own words. These are five real ones.</div>
 </section>
 
-<!-- 3 · the checks table -->
-<section class="slide" data-s="3">
-  <div class="chip">3</div><div class="chap">Rules become checks</div>
-  <div class="title">Each rule becomes one row: a name, the claim, and a command that exits 0 when the rule holds.</div>
-  <div class="sheet b keep" data-k="0" id="s3sheet" style="left:60px;top:190px;width:330px">
+<!-- 2 · the problem -->
+<section class="slide" data-s="2">
+  <div class="chip">2</div><div class="chap">The problem</div>
+  <div class="title">Some lines are obeyed, some forgotten. Nothing tells you which.</div>
+  <div class="sheet b keep" data-k="0" style="left:80px;top:180px;width:440px">
     <div class="h">CLAUDE.md</div>
-    <div class="ln">- run the tests before commit</div>
-    <div class="ln">- no console.log in shipped code</div>
     <div class="ln">- answer first, details second</div>
+    <div class="ln">- run the tests before every commit</div>
+    <div class="ln">- no console.log in shipped code</div>
+    <div class="ln">- one commit per change</div>
+    <div class="ln">- ask before touching 3+ files</div>
+  </div>
+  <div class="strike b" data-k="1" style="left:98px;top:236px;width:262px"></div>
+  <div class="cap b c-red" data-k="1" data-d="2" style="left:540px;top:224px;color:var(--red);font-size:18px">&larr; ignored today. Nothing told you.</div>
+  <div class="body b" data-k="1" data-d="5" style="left:600px;top:290px;width:600px">A sentence in a file has no alarm on it.<br><br>When a line is ignored, nothing turns red and nothing beeps. You find out later, if at all.</div>
+</section>
+
+<!-- 3 · the loop -->
+<section class="slide" data-s="3">
+  <div class="chip">3</div><div class="chap">The loop</div>
+  <div class="title">So you correct it. It obeys once. Then it forgets.</div>
+  <svg width="1280" height="720" viewBox="0 0 1280 720" fill="none" style="position:absolute;left:0;top:0">
+    <circle cx="380" cy="400" r="150" stroke="#3A3A3A" stroke-width="3" class="b keep" data-k="0"/>
+    <path d="M372,238 l24,12 l-24,12z" fill="#FF453A" class="b keep" data-k="0" data-d="6"/>
+  </svg>
+  <div class="body b keep" data-k="0" style="left:280px;top:196px;width:200px;text-align:center;font-weight:700;font-size:22px">you correct</div>
+  <div class="body b keep" data-k="0" data-d="2" style="left:545px;top:384px;width:200px;text-align:center;font-weight:700;font-size:22px">it obeys once</div>
+  <div class="body b keep" data-k="0" data-d="4" style="left:280px;top:566px;width:200px;text-align:center;font-weight:700;font-size:22px">it forgets</div>
+  <div class="body b keep" data-k="0" data-d="6" style="left:30px;top:384px;width:200px;text-align:center;font-weight:700;font-size:22px">you correct again</div>
+  <div class="num b" data-k="1" style="left:760px;top:250px;font-size:72px;color:var(--dim)">4 or 5</div>
+  <div class="num b" data-k="1" data-d="3" style="left:1005px;top:262px;font-size:48px;color:var(--dim)">&rarr;</div>
+  <div class="num b" data-k="1" data-d="5" style="left:1080px;top:250px;font-size:72px;color:var(--red)">8</div>
+  <div class="body b" data-k="1" data-d="7" style="left:760px;top:340px;width:460px;font-size:18px;color:var(--dim)">of every 100 messages were corrections. June to August 2026, counted from the real chat log. The rules file grew the whole time.</div>
+</section>
+
+<!-- 4 · a check -->
+<section class="slide" data-s="4">
+  <div class="chip">4</div><div class="chap">A check</div>
+  <div class="title">A sentence cannot fail. A check can.</div>
+  <div class="sheet b keep" data-k="0" style="left:80px;top:200px;width:340px">
+    <div class="h">the rule, a sentence</div>
+    <div class="ln">- answer first, details second</div>
+  </div>
+  <div class="body b" data-k="0" data-d="3" style="left:80px;top:320px;width:420px;font-size:18px;color:var(--dim)">A check is a small yes-or-no test that the computer runs by itself. It does not read the sentence. It looks at the real thing.</div>
+  <div class="arrow b" data-k="1" style="left:470px;top:226px">&rarr;</div>
+  <div class="chk b keep" data-k="1" data-d="2" style="left:540px;top:200px;width:480px"><div class="q">the check, a yes-or-no test</div><div class="a">Is the answer on line one of the last reply?</div></div>
+  <div class="ans c-green b" data-k="1" data-d="5" style="left:540px;top:330px">yes</div>
+  <div class="ans c-red b" data-k="1" data-d="7" style="left:660px;top:330px">no</div>
+  <div class="body b" data-k="1" data-d="9" style="left:540px;top:420px;width:600px;font-size:18px;color:var(--dim)">Nothing in between. No opinion, no AI judging it. Yes means the rule held, no means it broke.</div>
+</section>
+
+<!-- 5 · the table -->
+<section class="slide" data-s="5">
+  <div class="chip">5</div><div class="chap">The table</div>
+  <div class="title">Each rule becomes one line in a table: a name, the rule, and its check.</div>
+  <div class="sheet b keep" data-k="0" id="s5sheet" style="left:60px;top:190px;width:330px">
+    <div class="h">CLAUDE.md</div>
+    <div class="ln">- answer first, details second</div>
+    <div class="ln">- run the tests before every commit</div>
+    <div class="ln">- no console.log in shipped code</div>
     <div class="ln">- one commit per change</div>
     <div class="ln">- ask before touching 3+ files</div>
   </div>
   <div class="tbl b keep" data-k="0" data-d="3" style="left:420px;top:190px;width:800px">
-    <div class="hd"><span>id</span><span>claim, plain words</span><span>check command (exit 0 = holds)</span></div>
-    <div class="row fly" data-r="0"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd">bash tests/run.sh</span></div>
-    <div class="row fly" data-r="1"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rq console.log src</span></div>
-    <div class="row fly" data-r="2"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd">node tools/answer-first.mjs</span></div>
+    <div class="hd"><span>name</span><span>the rule, plain words</span><span>the check (yes = the rule holds)</span></div>
+    <div class="row fly" data-r="0"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd">node tools/answer-first.mjs</span></div>
+    <div class="row fly" data-r="1"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd">bash tests/run.sh</span></div>
+    <div class="row fly" data-r="2"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rq console.log src</span></div>
     <div class="row fly" data-r="3"><span class="id">one-commit</span><span class="cl">one change per commit</span><span class="cmd">node tools/one-commit.mjs</span></div>
     <div class="row fly" data-r="4"><span class="id">ask-first</span><span class="cl">3+ files need a yes</span><span class="cmd">node tools/ask-first.mjs</span></div>
   </div>
-  <div class="cap b" data-k="1" data-d="8" style="left:420px;top:470px;width:800px;font-size:17px">This is <span class="mono c-ink">claims.tsv</span>, one line per rule, tab separated. You write the command. Anything that can exit 0 or 1 works.</div>
+  <div class="cap b" data-k="1" data-d="8" style="left:420px;top:470px;width:800px;font-size:17px">This table is a file called <span class="mono c-ink">claims.tsv</span>, one line per rule. You write the check, or you ask Claude Code: "write a check for this rule". Anything that can answer yes or no works.</div>
 </section>
 
-<!-- 4 · one check runs -->
-<section class="slide" data-s="4">
-  <div class="chip">4</div><div class="chap">One check runs</div>
-  <div class="title">Exit 0 means the rule holds. Exit 1 means it broke. Nothing in between.</div>
+<!-- 6 · one check runs -->
+<section class="slide" data-s="6">
+  <div class="chip">6</div><div class="chap">One check runs</div>
+  <div class="title">Yes, the rule holds. No, the rule is red. Nothing in between.</div>
   <div class="tbl b keep" data-k="0" style="left:80px;top:190px;width:1120px">
-    <div class="hd"><span>id</span><span>claim, plain words</span><span>check command</span></div>
-    <div class="row" id="r4a"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd">bash tests/run.sh</span></div>
+    <div class="hd"><span>name</span><span>the rule, plain words</span><span>the check</span></div>
+    <div class="row" id="r6a"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd">node tools/answer-first.mjs</span></div>
+    <div class="row"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd">bash tests/run.sh</span></div>
     <div class="row"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rq console.log src</span></div>
-    <div class="row"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd">node tools/answer-first.mjs</span></div>
   </div>
-  <div class="exit c-green b" data-k="0" data-d="4" style="left:1030px;top:236px">exit 0</div>
-  <div class="cap b" data-k="0" data-d="6" style="left:80px;top:380px;width:560px;font-size:17px">Run one: the tests pass, the command exits 0, the rule holds.</div>
-  <div class="exit c-red b" data-k="1" style="left:1030px;top:286px">exit 1</div>
-  <div class="cap b" data-k="1" data-d="3" style="left:80px;top:420px;width:1120px;font-size:17px">Run two, an hour later: a test broke, the command exits 1, the rule is RED. No opinion, no model, no maybe.</div>
+  <div class="exit c-green b" data-k="0" data-d="4" style="left:1030px;top:236px">yes</div>
+  <div class="cap b" data-k="0" data-d="6" style="left:80px;top:380px;width:1120px;font-size:17px">Run one: the answer is on line one. The check says yes. The rule holds.</div>
+  <div class="exit c-red b" data-k="1" style="left:1030px;top:286px">no</div>
+  <div class="cap b" data-k="1" data-d="3" style="left:80px;top:420px;width:1120px;font-size:17px">Run two, an hour later: the answer sits at the bottom of a long reply. The check says no. The rule is RED. No opinion, no AI judging it.</div>
 </section>
 
-<!-- 5 · the timer -->
-<section class="slide" data-s="5">
-  <div class="chip">5</div><div class="chap">The timer</div>
+<!-- 7 · the timer -->
+<section class="slide" data-s="7">
+  <div class="chip">7</div><div class="chap">The timer</div>
   <div class="title">Every 30 minutes, whether or not a session is open.</div>
   <div class="clock b keep" data-k="0"><div class="hand" id="hand"></div></div>
-  <div class="cap b keep" data-k="0" data-d="2" style="left:130px;top:445px;width:180px;text-align:center">launchd on Mac, cron on Linux</div>
+  <div class="cap b keep" data-k="0" data-d="2" style="left:130px;top:445px;width:180px;text-align:center">a timer built into your Mac. 48 runs a day.</div>
   <div class="tbl b keep" data-k="0" data-d="1" style="left:400px;top:190px;width:800px">
-    <div class="hd"><span>id</span><span>claim</span><span>result</span></div>
-    <div class="row"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd"><span class="dot" id="d0"></span></span></div>
-    <div class="row"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd"><span class="dot" id="d1"></span></span></div>
-    <div class="row"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd"><span class="dot" id="d2"></span></span></div>
+    <div class="hd"><span>name</span><span>the rule</span><span>result</span></div>
+    <div class="row"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd"><span class="dot" id="d0"></span></span></div>
+    <div class="row"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd"><span class="dot" id="d1"></span></span></div>
+    <div class="row"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd"><span class="dot" id="d2"></span></span></div>
     <div class="row"><span class="id">one-commit</span><span class="cl">one change per commit</span><span class="cmd"><span class="dot" id="d3"></span></span></div>
     <div class="row"><span class="id">ask-first</span><span class="cl">3+ files need a yes</span><span class="cmd"><span class="dot" id="d4"></span></span></div>
   </div>
   <div class="term b" data-k="1" style="left:400px;top:470px;width:800px;height:110px;padding-top:40px">
     <div class="l c-green">metacognition GREEN: 11 of 11 rules held &nbsp;<span class="c-dim">· 14:30 · next 15:00</span></div>
   </div>
-  <div class="cap b" data-k="1" data-d="3" style="left:400px;top:592px;width:800px;font-size:17px">It prints one line and writes a file. No window, no sound, no network.</div>
+  <div class="cap b" data-k="1" data-d="3" style="left:400px;top:592px;width:800px;font-size:17px">It prints one line and keeps a record on your Mac. No window, no sound, no internet.</div>
 </section>
 
-<!-- 6 · the verdict opens the session -->
-<section class="slide" data-s="6">
-  <div class="chip">6</div><div class="chap">Session start</div>
-  <div class="title">The agent sees the red rule before it sees your question.</div>
+<!-- 8 · session start -->
+<section class="slide" data-s="8">
+  <div class="chip">8</div><div class="chap">Session start</div>
+  <div class="title">Claude Code sees the red rule before it sees your question.</div>
   <div class="term" style="left:80px;top:180px;width:1120px;height:330px">
     <div class="l c-ink b keep" data-k="0">$ claude</div>
-    <div class="l c-red b keep" data-k="1">metacognition RED: 1 of 11 rules failed. tests-green is FALSE right now</div>
-    <div class="l c-dim b keep" data-k="1" data-d="3">&nbsp;</div>
-    <div class="l c-ink b keep" data-k="1" data-d="4">&gt; what should I work on?</div>
-    <div class="l c-ink b keep" data-k="1" data-d="8">First the red rule: the tests are failing. Run <span class="c-red">bash tests/run.sh</span> and read the last line.</div>
+    <div class="l c-red b keep" data-k="0" data-d="3">metacognition RED: 1 of 11 rules broken: answer-first</div>
+    <div class="l c-dim b keep" data-k="1">&nbsp;</div>
+    <div class="l c-ink b keep" data-k="1" data-d="1">&gt; what should I work on?</div>
+    <div class="l c-ink b keep" data-k="1" data-d="5">First the red rule: my last reply put the answer at the bottom. From now on it goes on line one.</div>
+    <div class="l c-dim b keep" data-k="1" data-d="8">Now your question: ...</div>
   </div>
-  <div class="cap b" data-k="1" data-d="11" style="left:80px;top:530px;width:1120px;font-size:17px">A hook prints the last verdict as the first line of every session. The agent cannot pretend everything is fine.</div>
+  <div class="cap b" data-k="0" data-d="6" style="left:80px;top:530px;width:1120px;font-size:17px">A hook is a small step that Claude Code runs by itself at a fixed moment. This one prints the last verdict as the first line of every session.</div>
 </section>
 
-<!-- 7 · a correction becomes a check -->
-<section class="slide" data-s="7">
-  <div class="chip">7</div><div class="chap">Corrections</div>
-  <div class="title">Every correction is logged, word for word. The third time, it becomes a check.</div>
-  <div class="corr b keep" data-k="0" style="top:200px">"again, no console.log"</div>
-  <div class="corr b keep" data-k="0" data-d="2" style="top:266px">"redo, the console.log is still there"</div>
-  <div class="corr b keep" data-k="0" data-d="4" style="top:332px">"not what I asked. console.log!"</div>
+<!-- 9 · corrections -->
+<section class="slide" data-s="9">
+  <div class="chip">9</div><div class="chap">Corrections</div>
+  <div class="title">Every correction is logged. The third time, it becomes a check.</div>
+  <div class="corr b keep" data-k="0" style="top:200px">"again, answer first"</div>
+  <div class="corr b keep" data-k="0" data-d="2" style="top:266px">"redo, the answer is still at the bottom"</div>
+  <div class="corr b keep" data-k="0" data-d="4" style="top:332px">"not what I asked. Answer first!"</div>
   <div class="count b" data-k="1">3 times = a pattern</div>
-  <div class="tbl b keep" data-k="0" data-d="1" style="left:520px;top:200px;width:700px">
-    <div class="hd"><span>id</span><span>claim</span><span>check command</span></div>
+  <div class="tbl b keep" data-k="0" data-d="1" style="left:500px;top:200px;width:720px">
+    <div class="hd"><span>name</span><span>the rule</span><span>the check</span></div>
     <div class="row"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd">bash tests/run.sh</span></div>
-    <div class="row"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd">node tools/answer-first.mjs</span></div>
-    <div class="row hot b" data-k="1" data-d="4" style="display:grid"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rq console.log src</span></div>
+    <div class="row"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rq console.log src</span></div>
+    <div class="row hot b" data-k="1" data-d="4" style="display:grid"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd">node tools/answer-first.mjs</span></div>
   </div>
-  <div class="cap b" data-k="1" data-d="8" style="left:520px;top:380px;width:700px;font-size:17px">A new row in claims.tsv. From now on the timer checks it 48 times a day, and the light shows whether the mistake comes back.</div>
+  <div class="cap b" data-k="1" data-d="8" style="left:500px;top:380px;width:720px;font-size:17px">A new line in the table, with its own check. From now on the timer checks it 48 times a day, and the light shows whether the mistake comes back.</div>
 </section>
 
-<!-- 8 · red debt -->
-<section class="slide" data-s="8">
-  <div class="chip">8</div><div class="chap">Red debt</div>
-  <div class="title">A red rule older than 24 hours blocks the end of a turn until someone decides.</div>
+<!-- 10 · nothing stays red -->
+<section class="slide" data-s="10">
+  <div class="chip">10</div><div class="chap">Nothing stays red</div>
+  <div class="title">A rule red for more than a day stops Claude Code from ending its reply, until someone decides.</div>
   <div class="debt b keep" data-k="0"><span class="c-red">RED for 26 h</span> &nbsp; tests-green &nbsp; <span class="c-dim">the test suite passes</span><br><span class="c-dim">Two ways out, and both are decisions. Silence is not one of them.</span></div>
   <div class="way b" data-k="1" style="left:80px;top:340px"><div class="w1">Fixed it</div><div class="w2">node red-debt.mjs fixed "tests-green"</div></div>
-  <div class="way b" data-k="1" data-d="3" style="left:670px;top:340px"><div class="w1">Not fixing it now, and why</div><div class="w2">node red-debt.mjs debt "tests-green"<br>"the flaky test waits for the vendor fix on Monday"</div></div>
-  <div class="cap b" data-k="1" data-d="7" style="left:80px;top:480px;width:1120px;font-size:17px">A debt receipt lasts 24 hours. Then it fires again. Nothing stays red by accident.</div>
+  <div class="way b" data-k="1" data-d="3" style="left:670px;top:340px"><div class="w1">Not fixing it now, and why</div><div class="w2">node red-debt.mjs debt "tests-green"<br>"the test needs a fix from another team on Monday"</div></div>
+  <div class="cap b" data-k="1" data-d="7" style="left:80px;top:480px;width:1120px;font-size:17px">That note lasts 24 hours. Then it asks again. Nothing stays red by accident.</div>
 </section>
 
-<!-- 9 · the map -->
-<section class="slide" data-s="9">
-  <div class="chip">9</div><div class="chap">The map</div>
+<!-- 11 · the map -->
+<section class="slide" data-s="11">
+  <div class="chip">11</div><div class="chap">The map</div>
   <div class="title">Every rule sits on the step where it applies. One look tells you where the work breaks.</div>
   <div class="box b keep" data-k="0" style="left:120px">ask</div>
   <div class="box b keep" data-k="0" data-d="1" style="left:340px">plan</div>
@@ -242,30 +293,66 @@
   <div class="box b keep" data-k="0" data-d="3" style="left:780px">test</div>
   <div class="box b keep" data-k="0" data-d="4" style="left:1000px">commit</div>
   <div id="rules"></div>
-  <div class="cap b" data-k="1" data-d="9" style="left:120px;top:520px;width:1060px;font-size:17px;text-align:center">Drawn from claims.tsv by <span class="mono c-ink">tools/rules-map/build.py</span>. Red is the rule that is failing right now.</div>
+  <div class="cap b" data-k="1" data-d="9" style="left:120px;top:520px;width:1060px;font-size:17px;text-align:center">Drawn from the table of rules, fresh every 30 minutes. Red is the rule failing right now. Grey is a rule with no check yet.</div>
 </section>
 
-<!-- 10 · undo -->
-<section class="slide" data-s="10">
-  <div class="chip">10</div><div class="chap">Undo</div>
-  <div class="title">Dry-run first. Uninstall keeps your data.</div>
+<!-- 12 · proof -->
+<section class="slide" data-s="12">
+  <div class="chip">12</div><div class="chap">Proof</div>
+  <div class="title">Ten rules broken on purpose. Ten caught. Zero false alarms.</div>
+  <div class="board b keep" data-k="0" style="left:180px;top:200px">
+    <div class="lt b keep" data-k="0" data-d="1"><div class="tick b keep" data-k="1" data-d="0">✓</div></div><div class="lt b keep" data-k="0" data-d="2"><div class="tick b keep" data-k="1" data-d="1">✓</div></div><div class="lt b keep" data-k="0" data-d="3"><div class="tick b keep" data-k="1" data-d="2">✓</div></div><div class="lt b keep" data-k="0" data-d="4"><div class="tick b keep" data-k="1" data-d="3">✓</div></div><div class="lt b keep" data-k="0" data-d="5"><div class="tick b keep" data-k="1" data-d="4">✓</div></div><div class="lt b keep" data-k="0" data-d="6"><div class="tick b keep" data-k="1" data-d="5">✓</div></div><div class="lt b keep" data-k="0" data-d="7"><div class="tick b keep" data-k="1" data-d="6">✓</div></div><div class="lt b keep" data-k="0" data-d="8"><div class="tick b keep" data-k="1" data-d="7">✓</div></div><div class="lt b keep" data-k="0" data-d="9"><div class="tick b keep" data-k="1" data-d="8">✓</div></div><div class="lt b keep" data-k="0" data-d="10"><div class="tick b keep" data-k="1" data-d="9">✓</div></div>
+  </div>
+  <div class="cap b" data-k="0" data-d="11" style="left:180px;top:330px;width:900px;font-size:17px">A test computer with nothing else on it. Ten rules, each broken on purpose: one at a time.</div>
+  <div class="num b" data-k="1" data-d="11" style="left:180px;top:380px;font-size:56px">10 of 10 <span class="c-dim" style="font-size:32px;font-weight:600">caught</span></div>
+  <div class="num b" data-k="2" style="left:180px;top:460px;font-size:56px"><span class="c-red">0</span> <span class="c-dim" style="font-size:32px;font-weight:600">false alarms in 20 runs with nothing broken</span></div>
+  <div class="cap b" data-k="2" data-d="3" style="left:180px;top:540px;width:900px;font-size:16px">12 September 2026. The records are on GitHub, in the repo.</div>
+</section>
+
+<!-- 13 · install -->
+<section class="slide" data-s="13">
+  <div class="chip">13</div><div class="chap">Install</div>
+  <div class="title">One line to install. It asks nothing.</div>
+  <div class="term" style="left:80px;top:170px;width:1120px;height:300px">
+    <div class="l c-ink b keep" data-k="0">$ npx metacognition</div>
+    <div class="l c-dim b keep" data-k="1">installed: the checks, 3 hooks, the table of rules, a timer every 30 min</div>
+    <div class="l c-dim b keep" data-k="1" data-d="2">3 hooks added to settings.json (your other hooks are kept, a backup is written first)</div>
+    <div class="l c-dim b keep" data-k="1" data-d="4">running the checks once ...</div>
+    <div class="l c-green b keep" data-k="1" data-d="8">metacognition GREEN: 11 of 11 rules held</div>
+  </div>
+  <div class="cap b" data-k="1" data-d="10" style="left:80px;top:500px;width:1120px;font-size:17px">Paste it into the terminal where you run Claude Code. Mac or Linux. Thirty seconds later you see your first verdict: one line, GREEN or RED, and which rule.</div>
+</section>
+
+<!-- 14 · try first, undo -->
+<section class="slide" data-s="14">
+  <div class="chip">14</div><div class="chap">Try first, undo</div>
+  <div class="title">Try it first. Uninstall keeps your data.</div>
   <div class="term" style="left:80px;top:170px;width:1120px;height:400px">
     <div class="l c-ink b keep" data-k="0">$ npx metacognition --dry-run</div>
-    <div class="l c-dim b keep" data-k="0" data-d="2">&nbsp; would: copy bin/ and hooks/ to ~/.claude/metacognition/</div>
+    <div class="l c-dim b keep" data-k="0" data-d="2">&nbsp; would: copy the checks and the hooks to ~/.claude/metacognition/</div>
     <div class="l c-dim b keep" data-k="0" data-d="3">&nbsp; would: add 3 hooks to settings.json (backup first)</div>
     <div class="l c-dim b keep" data-k="0" data-d="4">&nbsp; would: write the 30-minute timer</div>
     <div class="l c-ink b keep" data-k="0" data-d="6">dry run: nothing was changed.</div>
     <div class="l c-ink b keep" data-k="1">$ npx metacognition --uninstall</div>
-    <div class="l c-dim b keep" data-k="1" data-d="2">&nbsp; removed the 3 hooks, the timer and the code. Your logs and your claims.tsv stay.</div>
+    <div class="l c-dim b keep" data-k="1" data-d="2">&nbsp; removed the 3 hooks, the timer and the code. Your records and your table of rules stay.</div>
   </div>
-  <div class="url b" data-k="1" data-d="6">github.com/jazzs-thoughts/metacognition</div>
+</section>
+
+<!-- 15 · you might ask -->
+<section class="slide" data-s="15">
+  <div class="chip">15</div><div class="chap">You might ask</div>
+  <div class="title">Five questions people ask first.</div>
+  <div class="qa b" data-k="0" style="top:165px"><div class="q">Who writes the check?</div><div class="a">You do, or you ask Claude Code: "write a check for this rule". Anything that can answer yes or no works.</div></div>
+  <div class="qa b" data-k="1" style="top:248px"><div class="q">What if a rule has no check?</div><div class="a">It stays a note: grey on the map, still visible, never pretending to be checked.</div></div>
+  <div class="qa b" data-k="2" style="top:331px"><div class="q">Does it send anything anywhere?</div><div class="a">No. No internet, no account. It reads your files and writes one line and one record on your Mac.</div></div>
+  <div class="qa b" data-k="3" style="top:414px"><div class="q">Does it slow Claude Code down?</div><div class="a">No. One line at the start of a session. The checks run on the timer, not inside your chat.</div></div>
+  <div class="qa b" data-k="4" style="top:497px"><div class="q">What does it cost?</div><div class="a">Nothing. Free and open, MIT licence. <span class="mono c-red">github.com/jazzs-thoughts/metacognition</span></div></div>
 </section>
 
 <div id="hint">click, or press → to continue</div>
 <div id="capbar"><b id="capn"></b><span id="captext"></span></div>
 <div id="prog"></div>
 <div id="ctr"></div>
-<button id="play" type="button">Play</button>
 </div></div>
 
 <script>
@@ -276,34 +363,47 @@
   const ctrEl = document.getElementById('ctr');
   const prog = document.getElementById('prog');
   const hint = document.getElementById('hint');
-  const playBtn = document.getElementById('play');
-
-  // ---- the script: one click = one step = one caption ----
+  // ---- one click = one step = one caption. [slide, build, the words] ----
   const S = [
-    [1,0,'One line to install. It asks nothing.'],
-    [1,1,'Thirty seconds later you see your first verdict: 11 rules, all green.'],
-    [2,0,'Your rules are sentences in a file the agent reads every session. A sentence cannot fail, so you never know which one was ignored.'],
-    [3,0,'So each rule becomes one row in a table: a short name, the claim in plain words, and a command.'],
-    [3,1,'The command exits 0 when the rule holds. You write it. Anything that can exit 0 or 1 works.'],
-    [4,0,'Run one: the tests pass, the command exits 0, the rule holds.'],
-    [4,1,'Run two, an hour later: a test broke, the command exits 1, the rule is red. Nothing in between.'],
-    [5,0,'A timer runs every check every 30 minutes, whether or not a session is open.'],
-    [5,1,'It prints one verdict line and writes a file. No window, no sound, no network.'],
-    [6,0,'When a session starts, a hook prints the last verdict as the first line.'],
-    [6,1,'So the agent sees the red rule before it sees your question, and answers that first.'],
-    [7,0,'Every correction you type is logged, word for word. Here the same one comes three times.'],
-    [7,1,'The third time, it becomes a new row in the table. From now on the timer checks it 48 times a day.'],
-    [8,0,'A rule that stays red for more than 24 hours blocks the end of a turn until someone decides.'],
-    [8,1,'Two ways out: fixed, or a debt receipt with one plain sentence why not now. The receipt lasts 24 hours, then it fires again.'],
-    [9,0,'Any task has five steps: ask, plan, build, test, commit.'],
-    [9,1,'The map puts every rule on the step where it applies. Red is the one failing now. One look tells you where the work breaks.'],
-    [10,0,'Dry-run prints what would happen and changes nothing.'],
-    [10,1,'Uninstall removes the hooks, the timer and the code. Your logs and your rules stay. github.com/jazzs-thoughts/metacognition'],
+    [1,0,'You already have a rules file. It is called CLAUDE.md, and Claude Code reads it at the start of every session.'],
+    [1,1,'Each line is one instruction you wrote in your own words, like: answer first, details second. These five are real.'],
+    [2,0,'Claude Code obeys some of these lines and forgets some. Nothing in the file can tell you which happened.'],
+    [2,1,'A sentence in a file has no alarm on it. When a line is ignored, nothing turns red and nothing beeps. You find out later, if at all.'],
+    [3,0,'So you correct it. It obeys once, then it forgets, so you correct it again. The loop never closes.'],
+    [3,1,'Counted over three months: in June, 4 or 5 of every 100 messages were corrections. In August, 8. Adding more lines to the file did not help.'],
+    [4,0,'Here is the idea. A sentence cannot fail, but a check can. A check is a small yes-or-no test that the computer runs by itself.'],
+    [4,1,'For the rule "answer first", the check looks at the last reply and asks: is the answer on line one? Yes or no. Nothing in between.'],
+    [5,0,'Each rule becomes one line in a small table: a short name, the rule in plain words, and its check.'],
+    [5,1,'The table is a file called claims.tsv. You write the check yourself, or you ask Claude Code to write it. Anything that can answer yes or no works.'],
+    [6,0,'Run one: the answer is on line one, the check says yes, the rule holds.'],
+    [6,1,'Run two, an hour later: the answer sits at the bottom of a long reply. The check says no, and the rule is red. No opinion, no AI judging it.'],
+    [7,0,'A timer built into your Mac runs every check every 30 minutes, also while you sleep. That is 48 times a day.'],
+    [7,1,'Each run prints one verdict line and keeps a record on your Mac. No window, no sound, no internet.'],
+    [8,0,'When a session starts, a small step called a hook prints the last verdict as the first line. A hook is something Claude Code runs by itself at a fixed moment.'],
+    [8,1,'So Claude Code sees the red rule before it sees your question, and it cannot pretend everything is fine.'],
+    [9,0,'Every correction you type is logged, word for word. Here the same one comes three times: answer first.'],
+    [9,1,'The third time, it becomes a new line in the table with its own check. From now on the timer checks it 48 times a day, and the light shows whether the mistake comes back.'],
+    [10,0,'A rule that stays red for more than a day stops Claude Code from ending its reply, until someone decides.'],
+    [10,1,'Two ways out: fix it, or write one plain sentence why not now. That note lasts 24 hours, then it asks again. Nothing stays red by accident.'],
+    [11,0,'Any task has five steps: ask, plan, build, test, commit.'],
+    [11,1,'The map puts every rule on the step where it applies. Red is the one failing now, grey is a rule with no check yet. One look tells you where the work breaks.'],
+    [12,0,'The proof. We broke ten rules on purpose, on a test computer with nothing else on it.'],
+    [12,1,'Ten of ten were caught.'],
+    [12,2,'Zero false alarms in twenty runs where nothing was broken. The records are on GitHub, 12 September 2026.'],
+    [13,0,'To install, paste one line into the terminal where you run Claude Code. It asks nothing.'],
+    [13,1,'It adds the checks, three hooks, the table of rules and the timer, then runs once. Thirty seconds later you see your first verdict: one line, 11 rules, all green.'],
+    [14,0,'Try it first: one line prints what would happen and changes nothing.'],
+    [14,1,'Uninstall removes the hooks, the timer and the code. Your records and your rules stay.'],
+    [15,0,'Who writes the check? You do, or you ask Claude Code to write it. Anything that can answer yes or no works.'],
+    [15,1,'What if a rule has no check? It stays a note: grey on the map, still visible, never pretending to be checked.'],
+    [15,2,'Does it send anything anywhere? No. No internet, no account. It reads your files and writes one line and one record on your Mac.'],
+    [15,3,'Does it slow Claude Code down? No. One line at the start of a session. The checks run on the timer, not inside your chat.'],
+    [15,4,'What does it cost? Nothing. It is free and open, MIT licence. github.com, jazzs-thoughts, metacognition.'],
   ];
   const N = S.length;
-  let cur = 0, prevSlide = 1;
+  let cur = 0;
 
-  // ---- slide 9: rule chips, one real element each, FLIP-style flight onto the step boxes ----
+  // ---- slide 11: rule chips, one real element each, FLIP-style flight onto the step boxes ----
   const RULES = [['ask first',0],['clarify first',0],['one goal',1],['answer first',1],['no console.log',2],['min deps',2],['tests-green',3,true],['one commit',4],['pin versions',4]];
   const BOX_X = [120, 340, 560, 780, 1000];
   const rulesEl = document.getElementById('rules');
@@ -317,7 +417,6 @@
     return d;
   });
   function placeChips(k) {
-    // at k>=1 each chip flies to sit above its box; siblings stack upward
     const perBox = {};
     chips.forEach((d, i) => {
       const box = RULES[i][1];
@@ -340,15 +439,12 @@
     cur = Math.max(0, Math.min(N - 1, i));
     const [s, k, say] = S[cur];
     capText.textContent = say;
-    capN.textContent = String(s).padStart(2, '0');
+    capN.textContent = String(cur + 1).padStart(2, '0');
     ctrEl.textContent = (cur + 1) + ' / ' + N;
     prog.style.transform = `scaleX(${(cur + 1) / N})`;
     hint.classList.toggle('off', cur > 0);
-    prevSlide = s;
 
     document.querySelectorAll('.slide').forEach(sl => sl.classList.toggle('on', +sl.dataset.s === s));
-
-    // build steps inside the current slide; everything else derives from (s, k)
     document.querySelectorAll('.slide').forEach(sl => {
       const onSlide = +sl.dataset.s === s;
       sl.querySelectorAll('.b').forEach(el => {
@@ -360,50 +456,44 @@
         else el.style.transitionDelay = '0ms';
       });
     });
-
-    // slide 3: rows fly in from the sheet at k=1; the sheet fades
-    document.getElementById('s3sheet').classList.toggle('faded', s === 3 && k >= 1);
-    document.querySelectorAll('.slide[data-s="3"] .row.fly').forEach(r => {
-      const on = s === 3 && k >= 1;
+    // slide 5: rows fly in from the sheet at k=1; the sheet fades
+    document.getElementById('s5sheet').classList.toggle('faded', s === 5 && k >= 1);
+    document.querySelectorAll('.slide[data-s="5"] .row.fly').forEach(r => {
+      const on = s === 5 && k >= 1;
       r.style.transitionDelay = on ? (+r.dataset.r * 70) + 'ms' : '0ms';
       r.classList.toggle('in', on);
     });
-    // slide 4: the first row highlights on run one, turns hot on run two
-    const r4 = document.getElementById('r4a');
-    r4.classList.toggle('hi', s === 4 && k === 0);
-    r4.classList.toggle('hot', s === 4 && k >= 1);
-    // slide 5: the hand sweeps once, the dots light up in order
-    document.getElementById('hand').classList.toggle('swept', s === 5);
+    // slide 6: the first row highlights on run one, turns hot on run two
+    const r6 = document.getElementById('r6a');
+    r6.classList.toggle('hi', s === 6 && k === 0);
+    r6.classList.toggle('hot', s === 6 && k >= 1);
+    // slide 7: the hand sweeps once, the dots light up in order
+    document.getElementById('hand').classList.toggle('swept', s === 7);
     for (let j = 0; j < 5; j++) {
       const d = document.getElementById('d' + j);
-      d.style.transitionDelay = (s === 5) ? (500 + j * 120) + 'ms' : '0ms';
-      d.classList.toggle('on', s === 5);
+      d.style.transitionDelay = (s === 7) ? (500 + j * 120) + 'ms' : '0ms';
+      d.classList.toggle('on', s === 7);
     }
-    // slide 9: chips fly onto the boxes
-    placeChips(s === 9 ? k : 0);
+    // slide 11: chips fly onto the boxes
+    placeChips(s === 11 ? k : 0);
   }
 
-  // ---- fit the 1280x720 canvas to the window ----
   function fit() {
     const f = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
     stage.style.transform = `scale(${f})`;
   }
   window.addEventListener('resize', fit); fit();
 
-  // ---- controls: click / arrows / space advance, Home resets, F fullscreen. Play = auto every 6 s until any click ----
-  let timer = null;
-  function stopPlay() { if (timer) { clearInterval(timer); timer = null; } playBtn.classList.remove('on'); playBtn.textContent = 'Play'; }
-  function startPlay() { stopPlay(); playBtn.classList.add('on'); playBtn.textContent = 'Playing'; timer = setInterval(() => { if (cur >= N - 1) stopPlay(); else render(cur + 1); }, 6000); }
-  const next = () => { stopPlay(); render(cur + 1); }, prev = () => { stopPlay(); render(cur - 1); };
-  playBtn.addEventListener('click', e => { e.stopPropagation(); if (timer) stopPlay(); else { if (cur >= N - 1) render(0); startPlay(); } });
-  document.addEventListener('click', e => { if (e.target.closest('#play') || e.target.closest('#capbar')) return; next(); });
+  // ---- controls: click / arrows / space advance, Home resets, F fullscreen. No autoplay. ----
+  const next = () => render(cur + 1), prev = () => render(cur - 1);
+  document.addEventListener('click', e => { if (e.target.closest('#capbar')) return; next(); });
   document.addEventListener('keydown', e => {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     switch (e.key) {
       case 'ArrowRight': case ' ': case 'PageDown': e.preventDefault(); next(); break;
       case 'ArrowLeft': case 'PageUp': e.preventDefault(); prev(); break;
-      case 'Home': e.preventDefault(); stopPlay(); render(0); break;
-      case 'End': e.preventDefault(); stopPlay(); render(N - 1); break;
+      case 'Home': e.preventDefault(); render(0); break;
+      case 'End': e.preventDefault(); render(N - 1); break;
       case 'f': case 'F': e.preventDefault(); if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); break;
     }
   });

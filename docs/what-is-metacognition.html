@@ -63,10 +63,10 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
 #bar{position:absolute;left:0;bottom:0;width:1280px;height:4px;background:#1A1A1A;z-index:9}
 #bar i{display:block;height:4px;width:1280px;background:var(--red);transform-origin:left;transform:scaleX(0);transition:transform 400ms var(--emph)}
 #home{position:absolute;left:24px;top:22px;z-index:9;font:500 15px "JetBrains Mono",Menlo,monospace;color:var(--dim);text-decoration:none}
-/* script strip (S): hidden by default, one line per click */
+/* caption strip: one line per click, on by default; S hides or shows it */
 #say{position:absolute;left:0;right:0;bottom:4px;min-height:78px;background:var(--panel);border-top:1px solid var(--line);display:none;align-items:center;justify-content:center;z-index:10;padding:12px 40px;box-sizing:border-box}
 #say.show{display:flex}
-#say b{color:var(--red);font-size:14px;letter-spacing:.1em;margin-right:18px;font-weight:700;white-space:nowrap}
+#say b{color:var(--red);font-size:14px;letter-spacing:.06em;margin-right:18px;font-weight:700;white-space:nowrap;font-family:"JetBrains Mono",Menlo,monospace}
 #say span{color:var(--ink);font-size:22px;line-height:1.3}
 /* intro: how to watch (Venus, folded from one sheet of paper) */
 #intro{position:absolute;inset:0;background:var(--bg);z-index:20;display:none}
@@ -88,7 +88,7 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
 .ikeys .lbl{margin-top:12px}
 #isay{position:absolute;left:0;right:0;bottom:4px;min-height:78px;background:var(--panel);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding:12px 40px;box-sizing:border-box;opacity:0;transition:opacity .4s,box-shadow .4s}
 #isay.on{opacity:1;box-shadow:0 0 0 2px var(--red) inset,0 -8px 40px rgba(255,69,58,.25)}
-#isay b{color:var(--red);font-size:14px;letter-spacing:.1em;margin-right:18px;font-weight:700}
+#isay b{color:var(--red);font-size:14px;letter-spacing:.06em;margin-right:18px;font-weight:700;font-family:"JetBrains Mono",Menlo,monospace}
 #isay span{color:var(--ink);font-size:22px;line-height:1.3}
 #ighost{position:absolute;left:880px;top:500px;z-index:6;opacity:0;transition:opacity .3s}
 #ighost.on{opacity:1}
@@ -129,21 +129,21 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
   <div class="num b" data-k="4" style="left:760px;top:250px;font-size:80px"><span class="dim">4.5%</span></div>
   <div class="num dim b" data-k="4" data-d="3" style="left:945px;top:262px;font-size:52px">→</div>
   <div class="num b" data-k="4" data-d="5" style="left:1010px;top:250px;font-size:80px"><span class="red">8.3%</span></div>
-  <div class="cap b" data-k="4" data-d="8" style="left:760px;top:360px;width:460px">corrections as a share of messages, June to August 2026. The rules file grew the whole time.</div>
+  <div class="cap b" data-k="4" data-d="8" style="left:760px;top:360px;width:460px">8 of every 100 messages were corrections, up from 4 or 5. June to August 2026. The rules file grew the whole time.</div>
 </section>
 
 <!-- 3 · a command can fail -->
 <section class="slide" data-s="3">
-  <div class="big b" data-k="0" style="top:70px;font-size:44px">A sentence cannot fail. A command can.</div>
-  <div class="card b fromleft" data-k="1" style="left:100px;top:230px;width:360px"><div class="h">CLAUDE.md</div>- run the tests before commit</div>
+  <div class="big b" data-k="0" style="top:70px;font-size:44px">A sentence cannot fail. A check can.</div>
+  <div class="card b fromleft" data-k="1" style="left:100px;top:230px;width:360px"><div class="h">CLAUDE.md, your rules file</div>- answer first, details second</div>
   <div class="board b keep" data-k="2" style="left:520px;top:236px">
     <div class="lt b keep" data-k="2" data-d="1"></div><div class="lt b keep" data-k="2" data-d="2"></div><div class="lt b keep" data-k="2" data-d="3"></div><div class="lt b keep" data-k="2" data-d="4"></div><div class="lt b keep" data-k="2" data-d="5"></div><div class="lt b keep" data-k="2" data-d="6"></div><div class="lt b keep" id="l3hot" data-k="2" data-d="7"></div><div class="lt b keep" data-k="2" data-d="8"></div><div class="lt b keep" data-k="2" data-d="9"></div><div class="lt b keep" data-k="2" data-d="10"></div><div class="lt b keep" data-k="2" data-d="11"></div>
   </div>
-  <div class="cap b" data-k="2" data-d="12" style="left:520px;top:330px;width:660px">11 rules, 11 lights. Each one is a command that exits 0 when the rule holds.</div>
+  <div class="cap b" data-k="2" data-d="12" style="left:520px;top:330px;width:660px">11 rules, 11 lights. A light is a check: a small yes-or-no test the computer runs by itself. Green = yes, the rule held.</div>
   <div class="term mono b keep" data-k="3" style="left:100px;top:420px;width:1080px">
     <div class="l b keep" data-k="3" data-d="2">$ claude</div>
-    <div class="l b keep" data-k="3" data-d="5"><span class="red" style="font-weight:700">metacognition RED</span>: 1 of 11 rules failed. <span style="border-bottom:3px solid #FF453A">tests-green</span> is FALSE right now</div>
-    <div class="l dim b keep" data-k="3" data-d="8">fix: bash tests/run.sh</div>
+    <div class="l b keep" data-k="3" data-d="5"><span class="red" style="font-weight:700">metacognition RED</span>: 1 of 11 rules broken: <span style="border-bottom:3px solid #FF453A">answer-first</span></div>
+    <div class="l dim b keep" data-k="3" data-d="8">the verdict: one line, GREEN or RED, and which rule. It is the first line of every new session.</div>
   </div>
 </section>
 
@@ -155,7 +155,7 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
   <div class="cap b" data-k="1" data-d="2" style="left:340px;top:355px;width:400px;font-size:22px;color:var(--ink)">checks a day</div>
   <div class="num b" data-k="2" style="left:760px;top:220px;font-size:120px">1,190</div>
   <div class="cap b" data-k="2" data-d="2" style="left:760px;top:355px;width:460px;font-size:22px;color:var(--ink)">runs since 11 August</div>
-  <div class="cap b" data-k="3" style="left:100px;top:480px;width:1080px">No window, no sound, no network. It prints one line and writes one file, whether or not a session is open.</div>
+  <div class="cap b" data-k="3" style="left:100px;top:480px;width:1080px">No window, no sound, no internet. It prints one line and keeps a record, whether or not you are talking to the AI.</div>
 </section>
 
 <!-- 5 · proof -->
@@ -165,23 +165,23 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
     <div class="lt red b keep" data-k="1" data-d="1"><div class="tick b keep" data-k="2" data-d="0">✓</div></div><div class="lt red b keep" data-k="1" data-d="2"><div class="tick b keep" data-k="2" data-d="1">✓</div></div><div class="lt red b keep" data-k="1" data-d="3"><div class="tick b keep" data-k="2" data-d="2">✓</div></div><div class="lt red b keep" data-k="1" data-d="4"><div class="tick b keep" data-k="2" data-d="3">✓</div></div><div class="lt red b keep" data-k="1" data-d="5"><div class="tick b keep" data-k="2" data-d="4">✓</div></div><div class="lt red b keep" data-k="1" data-d="6"><div class="tick b keep" data-k="2" data-d="5">✓</div></div><div class="lt red b keep" data-k="1" data-d="7"><div class="tick b keep" data-k="2" data-d="6">✓</div></div><div class="lt red b keep" data-k="1" data-d="8"><div class="tick b keep" data-k="2" data-d="7">✓</div></div><div class="lt red b keep" data-k="1" data-d="9"><div class="tick b keep" data-k="2" data-d="8">✓</div></div><div class="lt red b keep" data-k="1" data-d="10"><div class="tick b keep" data-k="2" data-d="9">✓</div></div>
   </div>
   <div class="num b" data-k="2" data-d="11" style="left:180px;top:400px;font-size:64px"><span>10 of 10</span> <span class="dim" style="font-size:40px;font-weight:600">caught</span></div>
-  <div class="num b" data-k="3" style="left:180px;top:490px;font-size:64px"><span class="red">0</span> <span class="dim" style="font-size:40px;font-weight:600">false alarms in 20 clean runs</span></div>
-  <div class="src b" data-k="3" data-d="3" style="left:180px;top:590px">sandbox test, 12 Sep 2026, logs in the repo</div>
+  <div class="num b" data-k="3" style="left:180px;top:490px;font-size:64px"><span class="red">0</span> <span class="dim" style="font-size:40px;font-weight:600">false alarms in 20 runs with nothing broken</span></div>
+  <div class="src b" data-k="3" data-d="3" style="left:180px;top:590px">test on a clean computer, 12 Sep 2026. The records are on GitHub.</div>
 </section>
 
 <!-- 6 · taste -->
 <section class="slide" data-s="6">
-  <div class="big b" data-k="0" style="top:70px;font-size:44px">Corrections that cluster become a skill.</div>
-  <div class="corr b" data-k="1" data-d="0" style="top:220px">"again, no console.log"</div>
-  <div class="corr b" data-k="1" data-d="3" style="top:290px">"redo, the console.log is still there"</div>
-  <div class="corr b" data-k="1" data-d="6" style="top:360px">"not what I asked. console.log!"</div>
+  <div class="big b" data-k="0" style="top:70px;font-size:44px">The same correction three times becomes a rule.</div>
+  <div class="corr b" data-k="1" data-d="0" style="top:220px">"again, answer first"</div>
+  <div class="corr b" data-k="1" data-d="3" style="top:290px">"redo, the answer is still at the bottom"</div>
+  <div class="corr b" data-k="1" data-d="6" style="top:360px">"not what I asked. Answer first!"</div>
   <div class="count b" data-k="2" style="top:440px">3 times = a pattern</div>
   <div class="board b keep" data-k="2" data-d="3" style="left:600px;top:236px">
     <div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt"></div><div class="lt nl b keep pop" data-k="2" data-d="9"></div>
   </div>
-  <div class="cap b" data-k="2" data-d="11" style="left:600px;top:330px;width:600px">a new light on the board. From now on the timer checks it 48 times a day.</div>
+  <div class="cap b" data-k="2" data-d="11" style="left:600px;top:330px;width:600px">a new light, a new check. From now on the timer runs it 48 times a day.</div>
   <div class="cap b" data-k="3" style="left:600px;top:440px;width:600px;font-size:24px;color:var(--ink);font-weight:600">This film was made with one.</div>
-  <div class="cap b" data-k="3" data-d="3" style="left:600px;top:485px;width:600px">The deck skill behind it was built only from corrections on earlier decks.</div>
+  <div class="cap b" data-k="3" data-d="3" style="left:600px;top:485px;width:600px">The way these slides move was learned from corrections on earlier slides.</div>
 </section>
 
 <!-- 7 · black frame -->
@@ -197,14 +197,14 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
     <div class="l b keep" data-k="1" data-d="6"><span class="green" style="font-weight:700">metacognition GREEN</span>: 11 of 11 rules held</div>
   </div>
   <div class="cap mono b" data-k="2" style="left:100px;top:500px;width:1080px;font-size:26px;color:var(--red)">github.com/jazzs-thoughts/metacognition</div>
-  <div class="cap b" data-k="2" data-d="3" style="left:100px;top:550px;width:1080px">One line to install. It asks nothing. macOS or Linux, Node 18 or newer.</div>
+  <div class="cap b" data-k="2" data-d="3" style="left:100px;top:550px;width:1080px">One line, pasted into the terminal where you run Claude Code. It asks nothing.</div>
 </section>
 
 <a id="home" href="index.html">metacognition</a>
 <div id="ctr"></div>
-<div id="hint">click or → next · ← back · F fullscreen · S script</div>
+<div id="hint">click or → next · ← back · F fullscreen · S captions</div>
 <div id="bar"><i></i></div>
-<div id="say"><b>YOU SAY</b><span></span></div>
+<div id="say" class="show"><b></b><span></span></div>
 
 <!-- 0 · how to watch: Venus, folded from one sheet of paper, shows the keys -->
 <div id="intro">
@@ -220,10 +220,10 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
   </div>
   <div class="ikeys" id="ikeyS">
     <span class="keycap">S</span>
-    <div class="lbl">S = show the script, S again = hide it</div>
+    <div class="lbl">S = captions off, S again = captions on</div>
   </div>
   <div id="ighost"><div class="dot"></div><div class="ripple"></div></div>
-  <div id="isay"><b>YOU SAY</b><span>Your AI ignored a rule this week. You saw zero. Nobody sees it, because a sentence in a rules file has no alarm.</span></div>
+  <div id="isay"><b>01</b><span>Your AI ignored a rule this week. You saw zero. Nobody sees it, because a sentence in a rules file has no alarm.</span></div>
   <div id="venus"><div id="venusInner">
   <svg width="220" height="280" viewBox="0 0 220 280">
     <defs>
@@ -261,38 +261,38 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
 (() => {
   const stage = document.getElementById('stage');
   const ctr = document.getElementById('ctr'), hint = document.getElementById('hint'), bar = document.querySelector('#bar i');
-  const sayEl = document.getElementById('say'), sayText = sayEl.querySelector('span');
+  const sayEl = document.getElementById('say'), sayText = sayEl.querySelector('span'), sayN = sayEl.querySelector('b');
   const q = new URLSearchParams(location.search);
 
   // ---- one click = one idea = one line to say. [scene, build, words] ----
   const S = [
-    [1, 0, 'Your AI ignored a rule this week.'],
-    [1, 1, 'You saw zero. Nobody sees it, because a sentence in a rules file has no alarm.'],
-    [2, 0, 'This is the loop. First you correct the AI.'],
+    [1, 0, 'Your AI ignored a rule this week. A rule is one instruction you wrote for it, for example: answer first, details second.'],
+    [1, 1, 'You saw zero of that, because a sentence in a file has no alarm on it.'],
+    [2, 0, 'This is the loop. You tell your AI a rule.'],
     [2, 1, 'It obeys once.'],
     [2, 2, 'Then it forgets.'],
-    [2, 3, 'So you correct it again. The loop never closes.'],
-    [2, 4, 'Corrections rose from 4.5 to 8.3 percent of messages between June and August, while the rules file grew the whole time.'],
-    [3, 0, 'A sentence cannot fail. A command can.'],
-    [3, 1, 'Here is a sentence in a rules file: run the tests before commit.'],
-    [3, 2, 'Each rule becomes a command that exits zero when the rule holds. Eleven rules, eleven lights.'],
-    [3, 3, 'When a rule breaks, the light turns red, and the next session opens with the failure on its first line.'],
-    [4, 0, 'A timer runs every 30 minutes, also while you sleep.'],
+    [2, 3, 'So you tell it again. The loop never closes.'],
+    [2, 4, 'Between June and August, 8 of every 100 messages were corrections, up from 4 or 5. The rules file grew the whole time.'],
+    [3, 0, 'A sentence cannot fail. A check can. A check is a small yes-or-no test that the computer runs by itself.'],
+    [3, 1, 'Here is one rule from your CLAUDE.md: answer first, details second.'],
+    [3, 2, 'Each rule gets one light. Green means the check said yes, the rule held. Eleven rules, eleven lights.'],
+    [3, 3, 'When a rule breaks, its light turns red. Your next Claude Code session starts with the verdict as its first line: RED, and which rule.'],
+    [4, 0, 'A timer runs every check every 30 minutes, also while you sleep.'],
     [4, 1, 'That is 48 checks a day.'],
     [4, 2, '1,190 runs since 11 August.'],
-    [4, 3, 'No window, no sound, no network. It prints one line and writes one file.'],
-    [5, 0, 'The proof. Ten rules broken on purpose.'],
+    [4, 3, 'It needs no window, no sound and no internet. It prints one line and keeps a record.'],
+    [5, 0, 'The proof. We broke ten rules on purpose, on a test computer with nothing else on it.'],
     [5, 1, 'Ten rules, ten red lights.'],
-    [5, 2, 'Ten of ten caught.'],
-    [5, 3, 'Zero false alarms in twenty clean runs. The logs are in the repo.'],
-    [6, 0, 'Corrections that cluster become a skill.'],
-    [6, 1, 'The same correction three times: no console.log.'],
-    [6, 2, 'Three times is a pattern, so it becomes a new light on the board. The timer checks it 48 times a day from now on.'],
-    [6, 3, 'This film was made with one. The deck skill behind it was built only from corrections on earlier decks.'],
+    [5, 2, 'Ten of ten were caught.'],
+    [5, 3, 'Zero false alarms in twenty runs where nothing was broken. The records are on GitHub.'],
+    [6, 0, 'The same correction three times becomes a new rule with a check.'],
+    [6, 1, 'Here is one correction, typed three times: answer first.'],
+    [6, 2, 'Three times is a pattern, so it becomes a new light. From now on the timer checks it 48 times a day.'],
+    [6, 3, 'This film was made with one. The way these slides move was learned from corrections on earlier slides.'],
     [7, 0, 'Whoever starts recording this month has a year of it by next September.'],
     [8, 0, 'What did your AI get wrong twice?'],
-    [8, 1, 'One line installs it. It asks nothing.'],
-    [8, 2, 'github.com, jazzs-thoughts, metacognition. macOS or Linux, Node 18 or newer.']
+    [8, 1, 'One line, pasted into the same terminal where you run Claude Code. It asks nothing, and 30 seconds later you see the first verdict.'],
+    [8, 2, 'github.com, jazzs-thoughts, metacognition.']
   ];
   const N = S.length;
   let cur = 0;
@@ -303,7 +303,7 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
   function render(i) {
     cur = Math.max(0, Math.min(N - 1, i));
     const [s, k, say] = S[cur];
-    sayText.textContent = say;
+    sayText.textContent = say; sayN.textContent = String(cur + 1).padStart(2, '0');
     ctr.textContent = `${cur + 1} / ${N}`;
     bar.style.transform = `scaleX(${(cur + 1) / N})`;
     hint.classList.toggle('off', cur > 0);
@@ -340,7 +340,7 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
     { vx: 280, vy: 330, arm: -30, armL: 0, bx: 341, keys: 'ikeyF',
       text: 'Press <b>F</b> for fullscreen. Press F again to leave it.' },
     { vx: 280, vy: 330, arm: -30, armL: 0, bx: 341, keys: 'ikeyS', say: 1,
-      text: 'Press <b>S</b> to show the script: the words to say out loud, one line per click. Press S again to hide it.' },
+      text: 'Under every scene there is a caption: one line that says what you see. Press <b>S</b> to hide the captions, and S again to bring them back.' },
     { vx: 530, vy: 330, arm: -95, armL: 35, bx: 591, hint: 'click, or press &rarr;, to start the film',
       text: 'That is everything. <b>Click once more and the film starts.</b>' }
   ];
@@ -357,7 +357,7 @@ html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter
     intro.classList.toggle('say', !!st.say);
     $('ihint').innerHTML = st.hint || 'click, or press &rarr; for the next step';
     ctr.textContent = `how to watch · ${k + 1} / ${STEPS.length}`;
-    sayText.textContent = '';
+    sayText.textContent = ''; sayN.textContent = '';
   }
   function introStart(k) {
     introOn = true; intro.classList.add('on');
