@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How metacognition works, step by step</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+  /* One fixed 1280x720 canvas, scaled to the window. Fixed px inside. Black, white, one red;
+     green and red only as the pass/fail signal inside the drawings (BRAND.md). */
+  :root{--bg:#0A0A0A;--ink:#F2F2F2;--dim:#8A8F98;--panel:#141414;--line:#2A2A2A;--red:#FF453A;--green:#30D158;
+        --quint:cubic-bezier(0.23,1,0.32,1);--emph:cubic-bezier(0.2,0,0,1);--fly:cubic-bezier(0.25,0.75,0.3,1);--out:cubic-bezier(0.4,0,1,1)}
+  html,body{margin:0;height:100%;background:#000;overflow:hidden;font-family:Inter,-apple-system,Helvetica,Arial,sans-serif;color:var(--ink)}
+  #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+  #stage{position:relative;width:1280px;height:720px;background:var(--bg);overflow:hidden;transform-origin:center center}
+  #stage::after{content:"";position:absolute;inset:14px;border:1px solid var(--line);border-radius:14px;pointer-events:none}
+  .mono{font-family:"JetBrains Mono",Menlo,Consolas,monospace}
+
+  .slide{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity 220ms var(--emph)}
+  .slide.on{opacity:1}
+
+  .chip{position:absolute;left:40px;top:30px;width:50px;height:34px;border-radius:8px;background:var(--ink);color:var(--bg);font-weight:700;font-size:19px;line-height:34px;text-align:center}
+  .chap{position:absolute;left:104px;top:38px;font-size:16px;color:var(--dim)}
+  .title{position:absolute;left:40px;top:88px;font-size:34px;font-weight:700;line-height:1.2;max-width:1160px;letter-spacing:-.01em}
+
+  /* build steps: hidden -> now -> past (past dims to half) */
+  .b{opacity:0;transform:translateY(12px) scale(.96);transition:opacity 280ms var(--quint),transform 280ms var(--quint)}
+  .b.now{opacity:1;transform:none}
+  .b.past{opacity:.5;transform:none;transition-duration:200ms}
+  .b.keep.past{opacity:1}
+
+  /* terminal window */
+  .term{position:absolute;background:#000;border:1px solid #333;border-radius:10px;padding:44px 22px 18px;box-sizing:border-box;font-family:"JetBrains Mono",Menlo,Consolas,monospace;font-size:18px;line-height:32px}
+  .term::before{content:"";position:absolute;left:16px;top:14px;width:12px;height:12px;border-radius:50%;background:#3A3A3A;box-shadow:20px 0 0 #3A3A3A,40px 0 0 #3A3A3A}
+  .term .l{white-space:nowrap}
+  .c-ink{color:var(--ink)}.c-dim{color:var(--dim)}.c-red{color:var(--red)}.c-green{color:var(--green)}
+
+  /* white rules card */
+  .sheet{position:absolute;width:340px;background:#FFFFFF;border-radius:8px;color:#111;padding:12px 18px 14px;box-sizing:border-box}
+  .sheet .h{font-size:15px;color:#666;margin-bottom:6px;font-family:"JetBrains Mono",Menlo,monospace}
+  .sheet .ln{font-size:18px;line-height:32px;white-space:nowrap;transition:color 300ms}
+  .sheet.faded .ln{color:#9a9a9a}
+
+  /* claims table */
+  .tbl{position:absolute;border:1px solid var(--line);border-radius:10px;background:var(--panel);box-sizing:border-box;overflow:hidden}
+  .tbl .hd{display:grid;grid-template-columns:150px 275px 1fr;padding:10px 16px;font-size:14px;color:var(--dim);border-bottom:1px solid var(--line);font-family:"JetBrains Mono",Menlo,monospace}
+  .row{display:grid;grid-template-columns:150px 275px 1fr;padding:8px 16px;font-size:16px;line-height:26px;border-bottom:1px solid var(--line);font-family:"JetBrains Mono",Menlo,monospace;white-space:nowrap}
+  .row:last-child{border-bottom:0}
+  .row .id{color:var(--ink);font-weight:600}.row .cl{color:var(--dim)}.row .cmd{color:var(--ink)}
+  .row.fly{transform:translateX(-380px);opacity:0;transition:transform 550ms var(--fly),opacity 300ms var(--quint)}
+  .row.fly.in{transform:none;opacity:1}
+  .row.hi{background:#1c1c1c;outline:1px solid var(--ink);outline-offset:-1px}
+  .row.hot{background:#2a1212}
+  .exit{position:absolute;font-family:"JetBrains Mono",Menlo,monospace;font-size:20px;font-weight:700;padding:6px 14px;border-radius:8px;border:1px solid var(--line);background:#000}
+
+  .cap{position:absolute;font-size:16px;color:var(--dim)}
+  .body{position:absolute;font-size:20px;color:var(--ink);line-height:1.45}
+
+  /* slide 5 clock */
+  .clock{position:absolute;left:130px;top:250px;width:180px;height:180px;border-radius:50%;border:3px solid var(--ink);box-sizing:border-box}
+  .hand{position:absolute;left:84px;top:22px;width:6px;height:70px;border-radius:3px;background:var(--red);transform-origin:3px 65px;transform:rotate(0deg);transition:transform 750ms var(--emph)}
+  .hand.swept{transform:rotate(360deg)}
+  .dot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--green);opacity:0;transition:opacity 200ms var(--quint)}
+  .dot.on{opacity:1}
+
+  /* slide 7 corrections */
+  .corr{position:absolute;left:60px;width:400px;box-sizing:border-box;padding:10px 16px;border-radius:10px;background:var(--panel);border:1px solid var(--line);font-size:18px;color:var(--ink)}
+  .count{position:absolute;left:60px;top:410px;width:400px;text-align:center;font-size:24px;color:var(--red);font-weight:700}
+
+  /* slide 8 red debt */
+  .debt{position:absolute;left:80px;top:200px;width:1120px;box-sizing:border-box;padding:16px 22px;border-radius:10px;background:#1a0f0f;border:1px solid var(--red);font-family:"JetBrains Mono",Menlo,monospace;font-size:19px;line-height:32px}
+  .way{position:absolute;width:530px;box-sizing:border-box;padding:16px 20px;border-radius:10px;background:var(--panel);border:1px solid var(--line)}
+  .way .w1{font-size:16px;color:var(--dim);margin-bottom:6px}
+  .way .w2{font-family:"JetBrains Mono",Menlo,monospace;font-size:17px;line-height:28px;color:var(--ink)}
+
+  /* slide 9 map */
+  .box{position:absolute;top:430px;width:180px;height:60px;line-height:60px;text-align:center;border-radius:10px;background:var(--panel);border:1px solid var(--line);font-size:20px}
+  .rule{position:absolute;top:230px;height:34px;line-height:34px;padding:0 12px;border-radius:17px;background:var(--panel);border:1px solid var(--line);font-size:15px;white-space:nowrap;
+        transition:transform 560ms var(--fly),opacity 280ms var(--quint),background 300ms,border-color 300ms}
+  .rule::before{content:"";display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--green);margin-right:8px;vertical-align:middle}
+  .rule.red::before{background:var(--red)}
+  .rule.red{border-color:var(--red)}
+
+  /* slide 10 */
+  .url{position:absolute;left:0;right:0;top:600px;text-align:center;font-size:22px;color:var(--red);font-family:"JetBrains Mono",Menlo,monospace}
+
+  /* always-visible caption for strangers, progress bar, play button, hint */
+  #capbar{position:absolute;left:40px;right:40px;bottom:36px;background:rgba(20,20,20,.96);border:1px solid var(--line);border-radius:10px;padding:12px 18px;font-size:19px;line-height:1.4;color:var(--ink);z-index:9;min-height:26px}
+  #capbar b{color:var(--red);font-weight:600;margin-right:10px;font-family:"JetBrains Mono",Menlo,monospace;font-size:15px}
+  #prog{position:absolute;left:0;bottom:0;height:4px;width:1280px;background:var(--red);transform-origin:0 0;transform:scaleX(0);transition:transform 300ms var(--emph);z-index:9}
+  #ctr{position:absolute;right:120px;top:36px;font-size:14px;color:var(--dim);opacity:.8;z-index:9}
+  #play{position:absolute;right:40px;top:28px;height:30px;padding:0 12px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);font:15px Inter,sans-serif;cursor:pointer;z-index:10}
+  #play.on{border-color:var(--red);color:var(--red)}
+  #hint{position:absolute;left:0;right:0;top:640px;text-align:center;font-size:15px;color:var(--dim);z-index:8;transition:opacity 300ms}
+  #hint.off{opacity:0}
+
+  @media (prefers-reduced-motion:reduce){
+    .b,.row.fly,.rule,.hand,.slide,.dot{transition-property:opacity;transition-duration:200ms}
+    .b,.row.fly,.rule{transform:none}
+  }
+</style>
+</head>
+<body>
+<div id="wrap"><div id="stage">
+
+<!-- 1 · install -->
+<section class="slide" data-s="1">
+  <div class="chip">1</div><div class="chap">Install</div>
+  <div class="title">One line to install. It asks nothing.</div>
+  <div class="term" style="left:80px;top:170px;width:1120px;height:300px">
+    <div class="l c-ink b keep" data-k="0">$ npx metacognition</div>
+    <div class="l c-dim b keep" data-k="1">installed: bin/  hooks/  claims.tsv  timer every 30 min</div>
+    <div class="l c-dim b keep" data-k="1" data-d="2">3 hooks added to settings.json (your other hooks are kept)</div>
+    <div class="l c-dim b keep" data-k="1" data-d="4">running the checks once ...</div>
+    <div class="l c-green b keep" data-k="1" data-d="8">metacognition GREEN: 11 of 11 rules held</div>
+  </div>
+  <div class="cap b" data-k="1" data-d="10" style="left:80px;top:500px;width:1120px;font-size:17px">macOS or Linux, Node 18 or newer. Thirty seconds later you see your first verdict.</div>
+</section>
+
+<!-- 2 · the rules file -->
+<section class="slide" data-s="2">
+  <div class="chip">2</div><div class="chap">Your rules</div>
+  <div class="title">Your rules are sentences. A sentence cannot fail.</div>
+  <div class="sheet" style="left:80px;top:180px;width:440px">
+    <div class="h">CLAUDE.md</div>
+    <div class="ln b keep" data-k="0">- run the tests before every commit</div>
+    <div class="ln b keep" data-k="0" data-d="1">- no console.log in shipped code</div>
+    <div class="ln b keep" data-k="0" data-d="2">- answer first, details second</div>
+    <div class="ln b keep" data-k="0" data-d="3">- one commit per change</div>
+    <div class="ln b keep" data-k="0" data-d="4">- ask before touching 3+ files</div>
+  </div>
+  <div class="body b" data-k="0" data-d="7" style="left:600px;top:200px;width:600px">The agent reads this file every session.<br><br>It can obey a line, or forget it, and nothing in the file can tell you which happened.</div>
+</section>
+
+<!-- 3 · the checks table -->
+<section class="slide" data-s="3">
+  <div class="chip">3</div><div class="chap">Rules become checks</div>
+  <div class="title">Each rule becomes one row: a name, the claim, and a command that exits 0 when the rule holds.</div>
+  <div class="sheet b keep" data-k="0" id="s3sheet" style="left:60px;top:190px;width:330px">
+    <div class="h">CLAUDE.md</div>
+    <div class="ln">- run the tests before commit</div>
+    <div class="ln">- no console.log in shipped code</div>
+    <div class="ln">- answer first, details second</div>
+    <div class="ln">- one commit per change</div>
+    <div class="ln">- ask before touching 3+ files</div>
+  </div>
+  <div class="tbl b keep" data-k="0" data-d="3" style="left:420px;top:190px;width:800px">
+    <div class="hd"><span>id</span><span>claim, plain words</span><span>check command (exit 0 = holds)</span></div>
+    <div class="row fly" data-r="0"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd">bash tests/run.sh</span></div>
+    <div class="row fly" data-r="1"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rn "console.log" src/</span></div>
+    <div class="row fly" data-r="2"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd">node tools/answer-first.mjs</span></div>
+    <div class="row fly" data-r="3"><span class="id">one-commit</span><span class="cl">one change per commit</span><span class="cmd">node tools/one-commit.mjs</span></div>
+    <div class="row fly" data-r="4"><span class="id">ask-first</span><span class="cl">3+ files need a yes</span><span class="cmd">node tools/ask-first.mjs</span></div>
+  </div>
+  <div class="cap b" data-k="1" data-d="8" style="left:420px;top:470px;width:800px;font-size:17px">This is <span class="mono c-ink">claims.tsv</span>, one line per rule, tab separated. You write the command. Anything that can exit 0 or 1 works.</div>
+</section>
+
+<!-- 4 · one check runs -->
+<section class="slide" data-s="4">
+  <div class="chip">4</div><div class="chap">One check runs</div>
+  <div class="title">Exit 0 means the rule holds. Exit 1 means it broke. Nothing in between.</div>
+  <div class="tbl b keep" data-k="0" style="left:80px;top:190px;width:1120px">
+    <div class="hd"><span>id</span><span>claim, plain words</span><span>check command</span></div>
+    <div class="row" id="r4a"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd">bash tests/run.sh</span></div>
+    <div class="row"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rn "console.log" src/</span></div>
+    <div class="row"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd">node tools/answer-first.mjs</span></div>
+  </div>
+  <div class="exit c-green b" data-k="0" data-d="4" style="left:1030px;top:236px">exit 0</div>
+  <div class="cap b" data-k="0" data-d="6" style="left:80px;top:380px;width:560px;font-size:17px">Run one: the tests pass, the command exits 0, the rule holds.</div>
+  <div class="exit c-red b" data-k="1" style="left:1030px;top:286px">exit 1</div>
+  <div class="cap b" data-k="1" data-d="3" style="left:80px;top:420px;width:1120px;font-size:17px">Run two, an hour later: a test broke, the command exits 1, the rule is RED. No opinion, no model, no maybe.</div>
+</section>
+
+<!-- 5 · the timer -->
+<section class="slide" data-s="5">
+  <div class="chip">5</div><div class="chap">The timer</div>
+  <div class="title">Every 30 minutes, whether or not a session is open.</div>
+  <div class="clock b keep" data-k="0"><div class="hand" id="hand"></div></div>
+  <div class="cap b keep" data-k="0" data-d="2" style="left:130px;top:445px;width:180px;text-align:center">launchd on Mac, cron on Linux</div>
+  <div class="tbl b keep" data-k="0" data-d="1" style="left:400px;top:190px;width:800px">
+    <div class="hd"><span>id</span><span>claim</span><span>result</span></div>
+    <div class="row"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd"><span class="dot" id="d0"></span></span></div>
+    <div class="row"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd"><span class="dot" id="d1"></span></span></div>
+    <div class="row"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd"><span class="dot" id="d2"></span></span></div>
+    <div class="row"><span class="id">one-commit</span><span class="cl">one change per commit</span><span class="cmd"><span class="dot" id="d3"></span></span></div>
+    <div class="row"><span class="id">ask-first</span><span class="cl">3+ files need a yes</span><span class="cmd"><span class="dot" id="d4"></span></span></div>
+  </div>
+  <div class="term b" data-k="1" style="left:400px;top:470px;width:800px;height:110px;padding-top:40px">
+    <div class="l c-green">metacognition GREEN: 11 of 11 rules held &nbsp;<span class="c-dim">· 14:30 · next 15:00</span></div>
+  </div>
+  <div class="cap b" data-k="1" data-d="3" style="left:400px;top:592px;width:800px;font-size:17px">It prints one line and writes a file. No window, no sound, no network.</div>
+</section>
+
+<!-- 6 · the verdict opens the session -->
+<section class="slide" data-s="6">
+  <div class="chip">6</div><div class="chap">Session start</div>
+  <div class="title">The agent sees the red rule before it sees your question.</div>
+  <div class="term" style="left:80px;top:180px;width:1120px;height:330px">
+    <div class="l c-ink b keep" data-k="0">$ claude</div>
+    <div class="l c-red b keep" data-k="1">metacognition RED: 1 of 11 rules failed. tests-green is FALSE right now</div>
+    <div class="l c-dim b keep" data-k="1" data-d="3">&nbsp;</div>
+    <div class="l c-ink b keep" data-k="1" data-d="4">&gt; what should I work on?</div>
+    <div class="l c-ink b keep" data-k="1" data-d="8">First the red rule: the tests are failing. Run <span class="c-red">bash tests/run.sh</span> and read the last line.</div>
+  </div>
+  <div class="cap b" data-k="1" data-d="11" style="left:80px;top:530px;width:1120px;font-size:17px">A hook prints the last verdict as the first line of every session. The agent cannot pretend everything is fine.</div>
+</section>
+
+<!-- 7 · a correction becomes a check -->
+<section class="slide" data-s="7">
+  <div class="chip">7</div><div class="chap">Corrections</div>
+  <div class="title">Every correction is logged, word for word. The third time, it becomes a check.</div>
+  <div class="corr b keep" data-k="0" style="top:200px">"again, no console.log"</div>
+  <div class="corr b keep" data-k="0" data-d="2" style="top:266px">"redo, the console.log is still there"</div>
+  <div class="corr b keep" data-k="0" data-d="4" style="top:332px">"not what I asked. console.log!"</div>
+  <div class="count b" data-k="1">3 times = a pattern</div>
+  <div class="tbl b keep" data-k="0" data-d="1" style="left:520px;top:200px;width:700px">
+    <div class="hd"><span>id</span><span>claim</span><span>check command</span></div>
+    <div class="row"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd">bash tests/run.sh</span></div>
+    <div class="row"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd">node tools/answer-first.mjs</span></div>
+    <div class="row hot b" data-k="1" data-d="4" style="display:grid"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rn "console.log" src/</span></div>
+  </div>
+  <div class="cap b" data-k="1" data-d="8" style="left:520px;top:380px;width:700px;font-size:17px">A new row in claims.tsv. From now on the timer checks it 48 times a day, and the light shows whether the mistake comes back.</div>
+</section>
+
+<!-- 8 · red debt -->
+<section class="slide" data-s="8">
+  <div class="chip">8</div><div class="chap">Red debt</div>
+  <div class="title">A red rule older than 24 hours blocks the end of a turn until someone decides.</div>
+  <div class="debt b keep" data-k="0"><span class="c-red">RED for 26 h</span> &nbsp; tests-green &nbsp; <span class="c-dim">the test suite passes</span><br><span class="c-dim">Two ways out, and both are decisions. Silence is not one of them.</span></div>
+  <div class="way b" data-k="1" style="left:80px;top:340px"><div class="w1">Fixed it</div><div class="w2">node red-debt.mjs fixed "tests-green"</div></div>
+  <div class="way b" data-k="1" data-d="3" style="left:670px;top:340px"><div class="w1">Not fixing it now, and why</div><div class="w2">node red-debt.mjs debt "tests-green"<br>"the flaky test waits for the vendor fix on Monday"</div></div>
+  <div class="cap b" data-k="1" data-d="7" style="left:80px;top:480px;width:1120px;font-size:17px">A debt receipt lasts 24 hours. Then it fires again. Nothing stays red by accident.</div>
+</section>
+
+<!-- 9 · the map -->
+<section class="slide" data-s="9">
+  <div class="chip">9</div><div class="chap">The map</div>
+  <div class="title">Every rule sits on the step where it applies. One look tells you where the work breaks.</div>
+  <div class="box b keep" data-k="0" style="left:120px">ask</div>
+  <div class="box b keep" data-k="0" data-d="1" style="left:340px">plan</div>
+  <div class="box b keep" data-k="0" data-d="2" style="left:560px">build</div>
+  <div class="box b keep" data-k="0" data-d="3" style="left:780px">test</div>
+  <div class="box b keep" data-k="0" data-d="4" style="left:1000px">commit</div>
+  <div id="rules"></div>
+  <div class="cap b" data-k="1" data-d="9" style="left:120px;top:520px;width:1060px;font-size:17px;text-align:center">Drawn from claims.tsv by <span class="mono c-ink">tools/rules-map/build.py</span>. Red is the rule that is failing right now.</div>
+</section>
+
+<!-- 10 · undo -->
+<section class="slide" data-s="10">
+  <div class="chip">10</div><div class="chap">Undo</div>
+  <div class="title">Dry-run first. Uninstall keeps your data.</div>
+  <div class="term" style="left:80px;top:170px;width:1120px;height:400px">
+    <div class="l c-ink b keep" data-k="0">$ npx metacognition --dry-run</div>
+    <div class="l c-dim b keep" data-k="0" data-d="2">&nbsp; would: copy bin/ and hooks/ to ~/.claude/metacognition/</div>
+    <div class="l c-dim b keep" data-k="0" data-d="3">&nbsp; would: add 3 hooks to settings.json (backup first)</div>
+    <div class="l c-dim b keep" data-k="0" data-d="4">&nbsp; would: write the 30-minute timer</div>
+    <div class="l c-ink b keep" data-k="0" data-d="6">dry run: nothing was changed.</div>
+    <div class="l c-ink b keep" data-k="1">$ npx metacognition --uninstall</div>
+    <div class="l c-dim b keep" data-k="1" data-d="2">&nbsp; removed the 3 hooks, the timer and the code. Your logs and your claims.tsv stay.</div>
+  </div>
+  <div class="url b" data-k="1" data-d="6">github.com/Jauz256/metacognition</div>
+</section>
+
+<div id="hint">click, or press → to continue</div>
+<div id="capbar"><b id="capn"></b><span id="captext"></span></div>
+<div id="prog"></div>
+<div id="ctr"></div>
+<button id="play" type="button">Play</button>
+</div></div>
+
+<script>
+(() => {
+  const stage = document.getElementById('stage');
+  const capText = document.getElementById('captext');
+  const capN = document.getElementById('capn');
+  const ctrEl = document.getElementById('ctr');
+  const prog = document.getElementById('prog');
+  const hint = document.getElementById('hint');
+  const playBtn = document.getElementById('play');
+
+  // ---- the script: one click = one step = one caption ----
+  const S = [
+    [1,0,'One line to install. It asks nothing.'],
+    [1,1,'Thirty seconds later you see your first verdict: 11 rules, all green.'],
+    [2,0,'Your rules are sentences in a file the agent reads every session. A sentence cannot fail, so you never know which one was ignored.'],
+    [3,0,'So each rule becomes one row in a table: a short name, the claim in plain words, and a command.'],
+    [3,1,'The command exits 0 when the rule holds. You write it. Anything that can exit 0 or 1 works.'],
+    [4,0,'Run one: the tests pass, the command exits 0, the rule holds.'],
+    [4,1,'Run two, an hour later: a test broke, the command exits 1, the rule is red. Nothing in between.'],
+    [5,0,'A timer runs every check every 30 minutes, whether or not a session is open.'],
+    [5,1,'It prints one verdict line and writes a file. No window, no sound, no network.'],
+    [6,0,'When a session starts, a hook prints the last verdict as the first line.'],
+    [6,1,'So the agent sees the red rule before it sees your question, and answers that first.'],
+    [7,0,'Every correction you type is logged, word for word. Here the same one comes three times.'],
+    [7,1,'The third time, it becomes a new row in the table. From now on the timer checks it 48 times a day.'],
+    [8,0,'A rule that stays red for more than 24 hours blocks the end of a turn until someone decides.'],
+    [8,1,'Two ways out: fixed, or a debt receipt with one plain sentence why not now. The receipt lasts 24 hours, then it fires again.'],
+    [9,0,'Any task has five steps: ask, plan, build, test, commit.'],
+    [9,1,'The map puts every rule on the step where it applies. Red is the one failing now. One look tells you where the work breaks.'],
+    [10,0,'Dry-run prints what would happen and changes nothing.'],
+    [10,1,'Uninstall removes the hooks, the timer and the code. Your logs and your rules stay. github.com/Jauz256/metacognition'],
+  ];
+  const N = S.length;
+  let cur = 0, prevSlide = 1;
+
+  // ---- slide 9: rule chips, one real element each, FLIP-style flight onto the step boxes ----
+  const RULES = [['ask first',0],['clarify first',0],['one goal',1],['answer first',1],['no console.log',2],['min deps',2],['tests-green',3,true],['one commit',4],['pin versions',4]];
+  const BOX_X = [120, 340, 560, 780, 1000];
+  const rulesEl = document.getElementById('rules');
+  const chips = RULES.map(([name, box, red], i) => {
+    const d = document.createElement('div');
+    d.className = 'rule b keep' + (red ? ' red' : '');
+    d.dataset.k = '0'; d.dataset.d = String(5 + i);
+    d.textContent = name;
+    d.style.left = (120 + i * 118) + 'px';
+    rulesEl.appendChild(d);
+    return d;
+  });
+  function placeChips(k) {
+    // at k>=1 each chip flies to sit above its box; siblings stack upward
+    const perBox = {};
+    chips.forEach((d, i) => {
+      const box = RULES[i][1];
+      const n = perBox[box] = (perBox[box] || 0);
+      perBox[box]++;
+      if (k >= 1) {
+        const w = d.offsetWidth || 110;
+        const tx = BOX_X[box] + 90 - w / 2 - (120 + i * 118);
+        const ty = 380 - 230 - n * 44;
+        d.style.transitionDelay = (i * 45) + 'ms';
+        d.style.transform = `translate(${tx}px,${ty}px)`;
+      } else {
+        d.style.transitionDelay = '0ms';
+        d.style.transform = '';
+      }
+    });
+  }
+
+  function render(i) {
+    cur = Math.max(0, Math.min(N - 1, i));
+    const [s, k, say] = S[cur];
+    capText.textContent = say;
+    capN.textContent = String(s).padStart(2, '0');
+    ctrEl.textContent = (cur + 1) + ' / ' + N;
+    prog.style.transform = `scaleX(${(cur + 1) / N})`;
+    hint.classList.toggle('off', cur > 0);
+    prevSlide = s;
+
+    document.querySelectorAll('.slide').forEach(sl => sl.classList.toggle('on', +sl.dataset.s === s));
+
+    // build steps inside the current slide; everything else derives from (s, k)
+    document.querySelectorAll('.slide').forEach(sl => {
+      const onSlide = +sl.dataset.s === s;
+      sl.querySelectorAll('.b').forEach(el => {
+        const n = +el.dataset.k, d = +(el.dataset.d || 0);
+        el.classList.remove('now', 'past');
+        if (!onSlide) { el.style.transitionDelay = '0ms'; return; }
+        if (n < k) { el.classList.add('past'); el.style.transitionDelay = '0ms'; }
+        else if (n === k) { el.classList.add('now'); el.style.transitionDelay = (d * 50) + 'ms'; }
+        else el.style.transitionDelay = '0ms';
+      });
+    });
+
+    // slide 3: rows fly in from the sheet at k=1; the sheet fades
+    document.getElementById('s3sheet').classList.toggle('faded', s === 3 && k >= 1);
+    document.querySelectorAll('.slide[data-s="3"] .row.fly').forEach(r => {
+      const on = s === 3 && k >= 1;
+      r.style.transitionDelay = on ? (+r.dataset.r * 70) + 'ms' : '0ms';
+      r.classList.toggle('in', on);
+    });
+    // slide 4: the first row highlights on run one, turns hot on run two
+    const r4 = document.getElementById('r4a');
+    r4.classList.toggle('hi', s === 4 && k === 0);
+    r4.classList.toggle('hot', s === 4 && k >= 1);
+    // slide 5: the hand sweeps once, the dots light up in order
+    document.getElementById('hand').classList.toggle('swept', s === 5);
+    for (let j = 0; j < 5; j++) {
+      const d = document.getElementById('d' + j);
+      d.style.transitionDelay = (s === 5) ? (500 + j * 120) + 'ms' : '0ms';
+      d.classList.toggle('on', s === 5);
+    }
+    // slide 9: chips fly onto the boxes
+    placeChips(s === 9 ? k : 0);
+  }
+
+  // ---- fit the 1280x720 canvas to the window ----
+  function fit() {
+    const f = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+    stage.style.transform = `scale(${f})`;
+  }
+  window.addEventListener('resize', fit); fit();
+
+  // ---- controls: click / arrows / space advance, Home resets, F fullscreen. Play = auto every 6 s until any click ----
+  let timer = null;
+  function stopPlay() { if (timer) { clearInterval(timer); timer = null; } playBtn.classList.remove('on'); playBtn.textContent = 'Play'; }
+  function startPlay() { stopPlay(); playBtn.classList.add('on'); playBtn.textContent = 'Playing'; timer = setInterval(() => { if (cur >= N - 1) stopPlay(); else render(cur + 1); }, 6000); }
+  const next = () => { stopPlay(); render(cur + 1); }, prev = () => { stopPlay(); render(cur - 1); };
+  playBtn.addEventListener('click', e => { e.stopPropagation(); if (timer) stopPlay(); else { if (cur >= N - 1) render(0); startPlay(); } });
+  document.addEventListener('click', e => { if (e.target.closest('#play') || e.target.closest('#capbar')) return; next(); });
+  document.addEventListener('keydown', e => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    switch (e.key) {
+      case 'ArrowRight': case ' ': case 'PageDown': e.preventDefault(); next(); break;
+      case 'ArrowLeft': case 'PageUp': e.preventDefault(); prev(); break;
+      case 'Home': e.preventDefault(); stopPlay(); render(0); break;
+      case 'End': e.preventDefault(); stopPlay(); render(N - 1); break;
+      case 'f': case 'F': e.preventDefault(); if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); break;
+    }
+  });
+  render(0);
+})();
+</script>
+</body>
+</html>
