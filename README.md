@@ -10,7 +10,10 @@
 [![tests](https://img.shields.io/badge/tests-88%20passing-111111)](tests/)
 [![license](https://img.shields.io/badge/license-MIT-111111)](LICENSE)
 
-<img src="docs/verdict.png" alt="Terminal: metacognition RED, 1 of 11 rules broken, rules-file-no-model-name, then one line per rule, ten GREEN and one RED" width="920">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/verdict-dark.png">
+  <img src="docs/verdict.png" alt="Terminal: metacognition RED, 1 of 11 rules broken, rules-file-no-model-name, then one line per rule, ten GREEN and one RED" width="920">
+</picture>
 
 </div>
 
