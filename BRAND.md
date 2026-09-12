@@ -40,7 +40,10 @@ His words: "use modern color. simple." then "use red black white." Three tokens.
 
 - Type: **Inter** for text, **JetBrains Mono** for numbers, commands, verdicts and the name. Both on Google Fonts.
 - The mark: no icon in version 1. The mark is one real verdict line in mono, with RED in red and the failing rule underlined in red.
-- A pass is a white ring or a check mark in ink. A fail is a red disc. No green anywhere, ever. No gold, no navy, no gradients.
+- **Universal status colours are allowed inside illustrations, and required where a stranger must read
+  pass or fail in one second** (his correction, 12 Sep 16:35): pass = green #30D158 (dark) / #16A34A
+  (light), fail = red. The brand accent (red) is for the mark, the underline and the counter; the signal
+  colours are for status inside a screen or a drawing. No gold, no navy, no gradients.
 - Reference pictures: `~/Downloads/brand-white.png` and `~/Downloads/brand-black.png` (rendered 12 Sep).
 - Rejected on the way, with the reason: navy and gold (none of the five respected brands uses either); red-orange pen #D9480F (read as a warning); blue #2563EB (modern but not his); violet (every AI product); teal (reads as success next to a failed verdict).
 
@@ -58,8 +61,8 @@ His words: "use modern color. simple." then "use red black white." Three tokens.
 2. One red mark per picture: an underline, a circle, or one word. Never two.
 3. One plain sentence on the picture, 12 words or fewer. Readable in 3 seconds.
 4. One number at most in the sentence. Other numbers stay inside the screenshot.
-5. The deck: black stage, white type, red for the fail. The board of lights is a row of white
-   rings; the failing rule is a red disc. The macOS window dots are grey, not three colours.
+5. The deck: black stage, white type. The board of lights uses the universal signal: green discs
+   for pass, a red disc for fail. The macOS window dots are grey.
 
 ## 7. FOMO rules, honest only
 
@@ -89,7 +92,7 @@ Not allowed:
 | Do | Do not |
 |---|---|
 | lowercase name in mono | capital M, a logo icon, a mascot |
-| one accent, red #DC2626 / #FF453A | gold, navy, green, blue, violet, gradients |
+| one brand accent, red; green only as the pass signal inside illustrations | gold, navy, blue, violet, gradients |
 | numbers with sources | adjectives, exclamation marks, emoji |
 | real screens | illustrations, stock photos, robots, brains |
 | white by default, near-black dark mode | mid-tone dark blues or greys |
