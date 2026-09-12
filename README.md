@@ -2,7 +2,7 @@
 
 **Your AI reads your rules and ignores them. This measures which ones.**
 
-[![stars](https://img.shields.io/github/stars/Jauz256/jazzs-thoughts?style=flat&color=DC2626)](https://github.com/Jauz256/jazzs-thoughts/stargazers)
+[![stars](https://img.shields.io/github/stars/Jauz256/metacognition?style=flat&color=DC2626)](https://github.com/Jauz256/metacognition/stargazers)
 [![tests](https://img.shields.io/badge/tests-80%20passing-111111)](tests/)
 [![license](https://img.shields.io/badge/license-MIT-111111)](LICENSE)
 
@@ -15,9 +15,9 @@ npx metacognition
 One line. It asks nothing. Thirty seconds later you see your first verdict.
 
 **See it move, no install:**
-[**What is metacognition**](https://jauz256.github.io/jazzs-thoughts/what-is-metacognition.html) (8 scenes, 27 clicks, one idea per click)
+[**What is metacognition**](https://jauz256.github.io/metacognition/what-is-metacognition.html) (8 scenes, 27 clicks, one idea per click)
 ·
-[**How it works, step by step**](https://jauz256.github.io/jazzs-thoughts/how-it-works.html) (4 minutes, 10 slides)
+[**How it works, step by step**](https://jauz256.github.io/metacognition/how-it-works.html) (4 minutes, 10 slides)
 
 A correction you typed once is never typed again. It becomes a check that can fail, and you
 can see whether the agent improves. Why it exists, with the evidence: [WHY.md](WHY.md). The
@@ -49,7 +49,7 @@ npx metacognition
 **Or install it as a Claude Code plugin** (gives the 3 hooks and a `/metacognition` command):
 
 ```sh
-claude plugin marketplace add Jauz256/jazzs-thoughts
+claude plugin marketplace add Jauz256/metacognition
 claude plugin install metacognition@metacognition
 npx metacognition --no-hooks     # the rules file and the 30-minute timer; the plugin has the hooks
 ```
