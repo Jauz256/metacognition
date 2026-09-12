@@ -231,6 +231,20 @@ case "$(uname -s)" in
   Linux) expect_not_contains "15g crontab line removed" "# $APP" "$(cat "$TMP/crontab.txt")" ;;
 esac
 
+echo "== 16. the npx entry point itself: every .mjs parses, and cli.mjs answers --dry-run"
+# 12 Sep 2026: a backtick inside cli.mjs's usage string shipped a SyntaxError; 80 tests were green
+# because none of them ran the file a stranger runs first.
+for f in "$ROOT"/bin/*.mjs "$ROOT"/hooks/*.mjs; do
+  [ -f "$f" ] || continue
+  if node --check "$f" 2>/dev/null; then ok "16a parses: $(basename "$f")"; else bad "16a parses: $(basename "$f")" "$(node --check "$f" 2>&1 | head -3)"; fi
+done
+OUT=$(cd "$HOME" && node "$ROOT/bin/cli.mjs" --dry-run 2>&1); CODE=$?
+[ "$CODE" -eq 0 ] && ok "16b cli.mjs --dry-run exits 0" || bad "16b cli.mjs --dry-run exits 0 (got $CODE)" "$OUT"
+expect_contains "16b cli.mjs --dry-run prints the plan" "dry run: nothing was changed" "$OUT"
+OUT=$(cd "$HOME" && node "$ROOT/bin/cli.mjs" nonsense 2>&1); CODE=$?
+[ "$CODE" -eq 2 ] && ok "16c unknown command exits 2 with usage" || bad "16c unknown command exits 2 (got $CODE)" "$OUT"
+expect_contains "16c usage names --uninstall" "--uninstall" "$OUT"
+
 echo
 echo "$PASS passed, $FAIL failed"
 [ "$FAIL" -eq 0 ]

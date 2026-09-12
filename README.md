@@ -3,7 +3,7 @@
 **Your AI reads your rules and ignores them. This measures which ones.**
 
 [![stars](https://img.shields.io/github/stars/jazzs-thoughts/metacognition?style=flat&color=DC2626)](https://github.com/jazzs-thoughts/metacognition/stargazers)
-[![tests](https://img.shields.io/badge/tests-80%20passing-111111)](tests/)
+[![tests](https://img.shields.io/badge/tests-88%20passing-111111)](tests/)
 [![license](https://img.shields.io/badge/license-MIT-111111)](LICENSE)
 
 ![The verdict line: RED, 1 of 11 rules failed, tests-green underlined](docs/hero.png)

@@ -32,7 +32,7 @@ usage:
   npx metacognition                 install and show the first verdict
   npx metacognition --dry-run       print what would happen, change nothing
   npx metacognition --uninstall     remove the hooks, the timer and the code
-  npx metacognition --no-hooks      code, rules and timer only (after `claude plugin install`)
+  npx metacognition --no-hooks      code, rules and timer only (after "claude plugin install")
   npx metacognition status          print the last verdict
   npx metacognition history         how often each rule held
   npx metacognition add "<rule>" "<check command>"`);
