@@ -36,7 +36,7 @@
 <text x="752" y="826" font-size="15"><tspan fill="#56C271">check: </tspan><tspan fill="#56C271">few-dependencies</tspan></text>
 <path d="M560,865 C650,865 650,880 740,880" fill="none" stroke="#56C271" stroke-width="2" opacity="0.9"/>
 <rect class="rule mechanism" data-id="leave-console-log-debug-statements" data-step="3" x="740" y="850" width="620" height="60" rx="9" fill="#163B2A" stroke="#0B0E14" stroke-width="2"/>
-<text x="752" y="872" fill="#BFF0CF" font-size="17">Never leave console.log or debug statements in shipped code.</text>
+<text x="752" y="872" fill="#BFF0CF" font-size="17">Never leave console.log or debug statements in shipped code....</text>
 <text x="752" y="896" font-size="15"><tspan fill="#56C271">check: </tspan><tspan fill="#56C271">no-debug-statements</tspan></text>
 <g class="step" data-step="4">
 <rect x="100" y="1030" width="460" height="130" rx="16" fill="#F2F0EA" stroke="#0B0E14" stroke-width="3"/>
@@ -60,7 +60,7 @@
 <text x="752" y="1286" font-size="15"><tspan fill="#56C271">check: </tspan><tspan fill="#56C271">atomic-commits</tspan></text>
 <path d="M560,1325 C650,1325 650,1340 740,1340" fill="none" stroke="#56C271" stroke-width="2" opacity="0.9"/>
 <rect class="rule mechanism" data-id="say-without-pasting-command-proves" data-step="5" x="740" y="1310" width="620" height="60" rx="9" fill="#163B2A" stroke="#0B0E14" stroke-width="2"/>
-<text x="752" y="1332" fill="#BFF0CF" font-size="17">Never say &quot;done&quot; without pasting the command that proves it.</text>
+<text x="752" y="1332" fill="#BFF0CF" font-size="17">Never say &quot;done&quot; without pasting the command that proves it....</text>
 <text x="752" y="1356" font-size="15"><tspan fill="#56C271">check: </tspan><tspan fill="#56C271">proof-in-done</tspan></text>
 <path d="M560,1325 C650,1325 1370,1270 1460,1270" fill="none" stroke="#3A3F4C" stroke-width="2" opacity="0.9"/>
 <rect class="rule note" data-id="answer-details-second-reply-answer" data-step="5" x="1460" y="1240" width="620" height="60" rx="9" fill="#1E2230" stroke="#0B0E14" stroke-width="2"/>

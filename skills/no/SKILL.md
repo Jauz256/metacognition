@@ -1,6 +1,7 @@
 ---
 name: no
 description: Use when the user types /no <reason> — log the reason verbatim, acknowledge in one line, then redo the work with the reason applied. Do not use for ordinary questions or when the user is only choosing between options.
+disallowed-tools: WebFetch, WebSearch
 ---
 
 # /no — log the correction, then fix it
