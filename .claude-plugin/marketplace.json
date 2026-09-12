@@ -2,7 +2,7 @@
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "metacognition",
   "description": "Your AI reads your rules and ignores them. This measures which ones, every 30 minutes, and draws it.",
-  "owner": { "name": "Jauz256", "url": "https://github.com/Jauz256" },
+  "owner": { "name": "jazzs-thoughts", "url": "https://github.com/jazzs-thoughts" },
   "plugins": [
     {
       "name": "metacognition",
