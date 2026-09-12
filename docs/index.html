@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>metacognition</title>
+<meta name="description" content="Your AI reads your rules and ignores them. This measures which ones, every 30 minutes.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#FFFFFF;--card:#F7F7F7;--line:#EBEBEB;--ink:#111111;--muted:#6B7280;--red:#DC2626;--green:#16A34A}
+@media (prefers-color-scheme:dark){:root{--bg:#0A0A0A;--card:#141414;--line:#2A2A2A;--ink:#F2F2F2;--muted:#8A8F98;--red:#FF453A;--green:#30D158}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 Inter,system-ui,-apple-system,sans-serif;padding:0 20px 80px}
+.mono{font-family:"JetBrains Mono",Menlo,monospace}
+.wrap{max-width:960px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:center;padding:28px 0 0}
+header .name{font-size:20px;font-weight:500}
+header a{color:var(--muted);text-decoration:none;font-size:15px;padding:10px 12px;margin:-10px -12px}
+h1{font-size:clamp(30px,5.2vw,54px);line-height:1.15;letter-spacing:-.02em;margin:72px 0 24px;font-weight:700}
+h1 span{color:var(--red)}
+.term{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px;font-size:clamp(14px,1.9vw,20px);line-height:1.6;overflow-x:auto;max-width:900px}
+.term .r{color:var(--red);font-weight:700}.term .u{border-bottom:3px solid var(--red)}.term .m{color:var(--muted)}
+.row{display:flex;flex-wrap:wrap;gap:40px;margin:36px 0 12px;color:var(--muted);font-size:15px}
+.row b{display:block;font-size:30px;color:var(--ink);font-weight:700;letter-spacing:-.02em}
+.row .a b{color:var(--red)}
+.btns{display:flex;flex-wrap:wrap;gap:14px;margin:44px 0 8px}
+.btn{flex:1 1 300px;display:block;padding:22px 24px;border-radius:12px;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line)}
+.btn b{display:block;font-size:20px;margin-bottom:6px}
+.btn span{color:var(--muted);font-size:15px}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.primary span{color:var(--bg);opacity:.75}
+.install{margin:44px 0 0;font-size:15px;color:var(--muted);max-width:640px}
+.install code{display:block;margin-top:8px;font-size:18px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 16px}
+footer{margin-top:64px;color:var(--muted);font-size:15px;max-width:640px}
+footer a{color:var(--muted);padding:8px 0;display:inline-block}
+a:focus-visible,.btn:focus-visible{outline:3px solid var(--red);outline-offset:3px;border-radius:8px}
+.btn{transition:transform 120ms ease,border-color 120ms ease}.btn:hover{transform:translateY(-1px);border-color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="name mono">metacognition</div><a href="https://github.com/Jauz256/metacognition">GitHub</a></header>
+
+<h1>Your AI reads your rules and ignores them.<br>This measures <span>which ones</span>.</h1>
+
+<div class="term mono">$ npx metacognition<br><span class="r">RED</span>: 1 of 11 rules failed. <span class="u">tests-green</span> is FALSE right now<br><span class="m">fix: bash tests/run.sh &nbsp;·&nbsp; checked 48 times today, next in 22 min</span></div>
+
+<div class="row">
+  <div><b>48</b>checks a day, while you sleep</div>
+  <div><b>10 of 10</b>planted breaks caught</div>
+  <div class="a"><b>0</b>false alarms in 20 clean runs</div>
+  <div><b>21</b>rules, each a command that can fail</div>
+</div>
+
+<div class="btns">
+  <a class="btn primary" href="what-is-metacognition.html"><b>What is metacognition</b><span>3 minutes, click through, 12 slides</span></a>
+  <a class="btn" href="how-it-works.html"><b>How it works, step by step</b><span>4 minutes, install to uninstall, 10 slides</span></a>
+</div>
+
+<div class="install">One line to install. macOS or Linux, Node 18 or newer. It asks nothing.<code class="mono">npx metacognition</code></div>
+
+<footer>Why it exists, with the evidence: <a href="https://github.com/Jauz256/metacognition/blob/master/WHY.md">WHY.md</a>. Every number above is counted by a program, not judged by AI. Numbers are from the owner's own system on 12 Sep 2026.</footer>
+</div>
+</body>
+</html>

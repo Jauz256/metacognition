@@ -1,9 +1,27 @@
 # metacognition
 
-Your AI reads your rules and ignores them. This measures which ones, every 30 minutes, and
-draws it. The point is not the watching. The point is that a correction you typed once is never
-typed again: it becomes a check that can fail, and you can see whether the agent improves.
-Why it exists, with the evidence: [WHY.md](WHY.md). The rules for deciding: [PRINCIPLES.md](PRINCIPLES.md).
+**Your AI reads your rules and ignores them. This measures which ones.**
+
+[![stars](https://img.shields.io/github/stars/Jauz256/metacognition?style=flat&color=DC2626)](https://github.com/Jauz256/metacognition/stargazers)
+[![tests](https://img.shields.io/badge/tests-80%20passing-111111)](tests/)
+[![license](https://img.shields.io/badge/license-MIT-111111)](LICENSE)
+
+![The verdict line: RED, 1 of 11 rules failed, tests-green underlined](docs/hero.png)
+
+```sh
+npx metacognition
+```
+
+One line. It asks nothing. Thirty seconds later you see your first verdict.
+
+**See it move, no install:**
+[**What is metacognition**](https://jauz256.github.io/metacognition/what-is-metacognition.html) (3 minutes, 12 slides)
+·
+[**How it works, step by step**](https://jauz256.github.io/metacognition/how-it-works.html) (4 minutes, 10 slides)
+
+A correction you typed once is never typed again. It becomes a check that can fail, and you
+can see whether the agent improves. Why it exists, with the evidence: [WHY.md](WHY.md). The
+rules for deciding: [PRINCIPLES.md](PRINCIPLES.md). The look: [BRAND.md](BRAND.md).
 
 Metacognition means thinking about your own thinking. That is what this does for a coding
 agent: it watches whether the agent still follows the rules you wrote for it.

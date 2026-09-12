@@ -147,7 +147,7 @@
   <div class="tbl b keep" data-k="0" data-d="3" style="left:420px;top:190px;width:800px">
     <div class="hd"><span>id</span><span>claim, plain words</span><span>check command (exit 0 = holds)</span></div>
     <div class="row fly" data-r="0"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd">bash tests/run.sh</span></div>
-    <div class="row fly" data-r="1"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rn "console.log" src/</span></div>
+    <div class="row fly" data-r="1"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rq console.log src</span></div>
     <div class="row fly" data-r="2"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd">node tools/answer-first.mjs</span></div>
     <div class="row fly" data-r="3"><span class="id">one-commit</span><span class="cl">one change per commit</span><span class="cmd">node tools/one-commit.mjs</span></div>
     <div class="row fly" data-r="4"><span class="id">ask-first</span><span class="cl">3+ files need a yes</span><span class="cmd">node tools/ask-first.mjs</span></div>
@@ -162,7 +162,7 @@
   <div class="tbl b keep" data-k="0" style="left:80px;top:190px;width:1120px">
     <div class="hd"><span>id</span><span>claim, plain words</span><span>check command</span></div>
     <div class="row" id="r4a"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd">bash tests/run.sh</span></div>
-    <div class="row"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rn "console.log" src/</span></div>
+    <div class="row"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rq console.log src</span></div>
     <div class="row"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd">node tools/answer-first.mjs</span></div>
   </div>
   <div class="exit c-green b" data-k="0" data-d="4" style="left:1030px;top:236px">exit 0</div>
@@ -217,7 +217,7 @@
     <div class="hd"><span>id</span><span>claim</span><span>check command</span></div>
     <div class="row"><span class="id">tests-green</span><span class="cl">the test suite passes</span><span class="cmd">bash tests/run.sh</span></div>
     <div class="row"><span class="id">answer-first</span><span class="cl">the answer is line one</span><span class="cmd">node tools/answer-first.mjs</span></div>
-    <div class="row hot b" data-k="1" data-d="4" style="display:grid"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rn "console.log" src/</span></div>
+    <div class="row hot b" data-k="1" data-d="4" style="display:grid"><span class="id">no-console</span><span class="cl">no console.log shipped</span><span class="cmd">! grep -rq console.log src</span></div>
   </div>
   <div class="cap b" data-k="1" data-d="8" style="left:520px;top:380px;width:700px;font-size:17px">A new row in claims.tsv. From now on the timer checks it 48 times a day, and the light shows whether the mistake comes back.</div>
 </section>
