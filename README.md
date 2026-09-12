@@ -166,7 +166,10 @@ cp examples/javascript.tsv ~/.claude/metacognition/claims.tsv
 
 ## Draw the map
 
-![Every rule on the step where it applies: six steps down the left, each rule a card wired to its step; green cards have a check, grey cards are notes, a red ring is a check that failed, step 0 holds rules not placed yet](docs/rules-map.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/rules-map-dark.png">
+  <img src="docs/rules-map.png" alt="Every rule on the step where it applies: six numbered steps down the left; each rule is a card in the band of its step; a green bar means a check enforces it, a red frame means that check failed, a grey bar means it is written down only" width="920">
+</picture>
 
 The example above is the shipped demo data, drawn on purpose with one failed check (the red
 ring) and one rule nobody has placed yet (step 0), so every state the map can show is visible.
@@ -176,7 +179,7 @@ python3 ~/.claude/metacognition/tools/rules-map/build.py \
   --rules ~/.claude/CLAUDE.md \
   --claims ~/.claude/metacognition/claims.tsv \
   --verdict ~/.claude/metacognition/verdict.json \
-  --out rules-map.svg
+  --out rules-map.svg          # add --theme dark for a black page
 ```
 
 Every top-level bullet in CLAUDE.md becomes a card. A card with a matching claim is green.

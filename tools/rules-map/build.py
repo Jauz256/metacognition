@@ -208,96 +208,150 @@ def wrap(text, width, lines):
     return out
 
 
-def draw(rules, cfg, unlinked, ts):
+THEMES = {
+    # BRAND.md: red, black, white; green and red only as the pass/fail signal inside a drawing.
+    'light': dict(bg='#FFFFFF', ink='#111111', muted='#6B7280', card='#F7F7F7', line='#E5E7EB', rail='#D1D5DB',
+                  green='#16A34A', red='#DC2626', mono='#374151'),
+    'dark': dict(bg='#0A0A0A', ink='#F2F2F2', muted='#8A8F98', card='#141414', line='#2A2A2A', rail='#3A3A3A',
+                 green='#30D158', red='#FF453A', mono='#C9CCD3'),
+}
+SANS = "Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+MONO = "'JetBrains Mono', Menlo, Consolas, monospace"
+
+
+def draw(rules, cfg, unlinked, ts, theme='light'):
+    """One picture: a numbered rail of steps down the left, every rule as a card in the band of
+    its step. Left column = rules a check enforces (green bar, red when the check failed).
+    Right column = rules that are written down only (grey bar). No wires: the band is the link."""
     esc = html.escape
+    T = THEMES.get(theme, THEMES['light'])
     steps = cfg['steps']
-    W, SX, SW, BOX = 2200, 100, 460, 130
-    MX, CW, CH, GAP = 740, 620, 60, 10
-    NX = MX + CW + 100
+    W = 1200
+    RAIL_X, NAME_X = 72, 104           # circle centre, step name
+    C1, C1W, C2, C2W = 300, 440, 770, 380   # the two card columns
+    GAP, BAND_GAP = 10, 30
+    TOP = 218                          # first band
     order = list(range(1, len(steps) + 1)) + ([0] if any(r['step'] == 0 for r in rules) else [])
-    y, layout = 320, []
+
+    def card_h(r):
+        if r['claims']:
+            return 30 + 21 * len(wrap(r['text'], 54, 2)) + 22   # text lines + the check line
+        return 30 + 21 * len(wrap(r['text'], 48, 2))
+
+    y, layout = TOP, []
     for st in order:
         its = [r for r in rules if r['step'] == st]
         mech = sorted([r for r in its if r['claims']], key=lambda r: (-len(r['red']), -len(r['claims']), r['text']))
         note = sorted([r for r in its if not r['claims']], key=lambda r: r['text'])
-        h = max(max(len(mech), len(note), 1) * (CH + GAP), BOX + 40)
+        h1 = sum(card_h(r) + GAP for r in mech)
+        h2 = sum(card_h(r) + GAP for r in note)
+        h = max(h1, h2, 56)
         layout.append((st, y, h, mech, note))
-        y += h + 60
+        y += h + BAND_GAP
     total = len(rules)
     n_mech = sum(1 for r in rules if r['claims'])
     n_red = sum(1 for r in rules if r['red'])
     n_unp = sum(1 for r in rules if r['step'] == 0)
-    TH = y + 120
-    s = ['<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d" '
-         'font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif">' % (W, TH, W, TH),
-         '<defs><marker id="ar" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">'
-         '<path d="M0,0 L12,6 L0,12 z" fill="#8A8F98"/></marker></defs>',
-         '<rect width="100%" height="100%" fill="#0B0E14"/>',
-         '<text x="60" y="80" fill="#F2F0EA" font-size="46" font-weight="900">Every rule, on the step where it applies</text>',
-         '<text x="60" y="128" fill="#C9CCD3" font-size="24">%d rules. %d have a check that runs. %d are only notes. %d broke today. %d not placed yet.</text>'
-         % (total, n_mech, total - n_mech, n_red, n_unp),
-         '<text x="60" y="168" fill="#C9CCD3" font-size="22">Left: the steps of one piece of work, top to bottom. Each card is one rule, wired to its step. '
-         'Green card = a check in claims.tsv enforces it. Grey card = written down only. Red ring = its check failed in the last verdict.</text>',
-         '<text x="%d" y="260" fill="#56C271" font-size="28" font-weight="900">A check enforces it (%d)</text>' % (MX, n_mech),
-         '<text x="%d" y="260" fill="#8A8F98" font-size="28" font-weight="900">Only a note (%d)</text>' % (NX, total - n_mech)]
-    prev = None
+    TH = y + 40
+
+    s = ['<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d" font-family="%s">'
+         % (W, TH, W, TH, SANS),
+         '<rect width="100%%" height="100%%" fill="%s"/>' % T['bg'],
+         '<text x="60" y="64" fill="%s" font-size="30" font-weight="700" letter-spacing="-0.02em">Every rule, on the step where it applies</text>' % T['ink']]
+    parts = ['%d rules' % total, '%d enforced by a check' % n_mech, '%d written down only' % (total - n_mech)]
+    if n_red:
+        parts.append('<tspan fill="%s" font-weight="600">%d failing now</tspan>' % (T['red'], n_red))
+    if n_unp:
+        parts.append('%d not placed yet' % n_unp)
+    s.append('<text x="60" y="96" fill="%s" font-size="16">%s</text>' % (T['muted'], '  ·  '.join(parts)))
+    s.append('<text x="60" y="124" fill="%s" font-size="14">Down the left: the steps of one piece of work. Each card is one rule, in the band of its step.</text>' % T['muted'])
+    # column headers: name on one line, meaning on the next, so the two columns never collide
+    s.append('<circle cx="%d" cy="%d" r="5" fill="%s"/>' % (C1 + 6, 160, T['green']))
+    s.append('<text x="%d" y="165" fill="%s" font-size="15" font-weight="600">Enforced by a check</text>' % (C1 + 18, T['ink']))
+    s.append('<text x="%d" y="184" fill="%s" font-size="12.5">a command that exits 0 when the rule holds. Red: it failed in the last verdict.</text>' % (C1 + 18, T['muted']))
+    s.append('<circle cx="%d" cy="%d" r="5" fill="%s"/>' % (C2 + 6, 160, T['rail']))
+    s.append('<text x="%d" y="165" fill="%s" font-size="15" font-weight="600">Written down only</text>' % (C2 + 18, T['ink']))
+    s.append('<text x="%d" y="184" fill="%s" font-size="12.5">no check yet, so nobody knows if it holds.</text>' % (C2 + 18, T['muted']))
+    s.append('<line x1="%d" y1="198" x2="%d" y2="198" stroke="%s" stroke-width="1"/>' % (60, W - 60, T['line']))
+
+    # the rail: one line through every placed step, a circle per step
+    placed = [(st, yy) for st, yy, h, m, n in layout if st != 0]
+    if len(placed) > 1:
+        s.append('<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="%s" stroke-width="2"/>'
+                 % (RAIL_X, placed[0][1] + 18, RAIL_X, placed[-1][1] + 18, T['rail']))
     for st, yy, h, mech, note in layout:
-        cx, cy = SX, yy + h / 2 - BOX / 2
-        label = '%d. %s' % (st, steps[st - 1]['name']) if st else '0. not placed yet'
-        s.append('<g class="step" data-step="%d">' % st)
-        s.append('<rect x="%d" y="%d" width="%d" height="%d" rx="16" fill="%s" stroke="#0B0E14" stroke-width="3"/>'
-                 % (cx, cy, SW, BOX, '#E8503A' if st == 0 else '#F2F0EA'))
-        for i, ln in enumerate(wrap(label, 26, 2)):
-            s.append('<text x="%d" y="%d" text-anchor="middle" fill="#0B0E14" font-size="28" font-weight="900">%s</text>'
-                     % (cx + SW / 2, cy + 52 + i * 32, esc(ln)))
-        s.append('<text x="%d" y="%d" text-anchor="middle" fill="#0B0E14" font-size="18">%d rules</text>'
-                 % (cx + SW / 2, cy + BOX - 16, len(mech) + len(note)))
-        s.append('</g>')
-        if prev is not None and st != 0:
-            s.append('<path d="M%d,%d L%d,%d" stroke="#8A8F98" stroke-width="5" marker-end="url(#ar)"/>' % (SX + SW / 2, prev, SX + SW / 2, cy))
-        prev = cy + BOX
-        for x0, lst, fill, fg in ((MX, mech, '#163B2A', '#BFF0CF'), (NX, note, '#1E2230', '#D9DCE3')):
-            for i, r in enumerate(lst):
-                ry = yy + i * (CH + GAP)
-                mid = ry + CH / 2
+        cy = yy + 18
+        if st == 0:
+            s.append('<circle cx="%d" cy="%d" r="16" fill="%s" stroke="%s" stroke-width="2" stroke-dasharray="4 3"/>' % (RAIL_X, cy, T['bg'], T['rail']))
+            s.append('<text x="%d" y="%d" text-anchor="middle" fill="%s" font-size="14" font-weight="700">?</text>' % (RAIL_X, cy + 5, T['muted']))
+            name = 'not placed yet'
+        else:
+            s.append('<circle cx="%d" cy="%d" r="16" fill="%s"/>' % (RAIL_X, cy, T['ink']))
+            s.append('<text x="%d" y="%d" text-anchor="middle" fill="%s" font-size="14" font-weight="700">%d</text>' % (RAIL_X, cy + 5, T['bg'], st))
+            name = steps[st - 1]['name']
+        for i, ln in enumerate(wrap(name, 16, 2)):
+            s.append('<text x="%d" y="%d" fill="%s" font-size="17" font-weight="600">%s</text>' % (NAME_X, cy + 6 + i * 20, T['ink'] if st else T['muted'], esc(ln)))
+        s.append('<text x="%d" y="%d" fill="%s" font-size="13">%d %s</text>' % (NAME_X, cy + 28 + (20 if len(wrap(name, 16, 2)) > 1 else 0), T['muted'], len(mech) + len(note), 'rule' if len(mech) + len(note) == 1 else 'rules'))
+        if st != 0 and st != layout[-1][0] and not (layout[-1][0] == 0 and st == layout[-2][0]):
+            pass
+        # a faint band line under each step except the last
+        if (st, yy) != (layout[-1][0], layout[-1][1]):
+            s.append('<line x1="%d" y1="%d" x2="%d" y2="%d" stroke="%s" stroke-width="1"/>' % (C1, yy + h + BAND_GAP / 2, W - 60, yy + h + BAND_GAP / 2, T['line']))
+        for x0, cw, lst in ((C1, C1W, mech), (C2, C2W, note)):
+            ry = yy
+            for r in lst:
+                ch = card_h(r)
                 broken = bool(r['red'])
-                s.append('<path d="M%d,%d C%d,%d %d,%d %d,%d" fill="none" stroke="%s" stroke-width="2" opacity="0.9"/>'
-                         % (cx + SW, cy + BOX / 2, cx + SW + 90, cy + BOX / 2, x0 - 90, mid, x0, mid,
-                            '#E8503A' if broken else '#56C271' if r['claims'] else '#3A3F4C'))
+                bar = T['red'] if broken else T['green'] if r['claims'] else T['rail']
+                dash = ' stroke-dasharray="5 4"' if st == 0 else ''
                 cls = 'rule mechanism broken' if broken else 'rule mechanism' if r['claims'] else 'rule note'
-                s.append('<rect class="%s" data-id="%s" data-step="%d" x="%d" y="%d" width="%d" height="%d" rx="9" fill="%s" stroke="%s" stroke-width="%d"/>'
-                         % (cls, esc(r['id']), st, x0, ry, CW, CH, fill, '#E8503A' if broken else '#0B0E14', 4 if broken else 2))
+                s.append('<rect class="%s" data-id="%s" data-step="%d" x="%d" y="%d" width="%d" height="%d" rx="8" fill="%s" stroke="%s" stroke-width="%s"%s/>'
+                         % (cls, esc(r['id']), st, x0, ry, cw, ch, T['card'], T['red'] if broken else T['line'], '1.5' if broken else '1', dash))
+                s.append('<rect x="%d" y="%d" width="4" height="%d" rx="2" fill="%s"/>' % (x0 + 10, ry + 12, ch - 24, bar))
+                lines = wrap(r['text'], 54 if r['claims'] else 48, 2)
+                for j, ln in enumerate(lines):
+                    s.append('<text x="%d" y="%d" fill="%s" font-size="15">%s</text>' % (x0 + 26, ry + 27 + j * 21, T['ink'], esc(ln)))
                 if r['claims']:
-                    s.append('<text x="%d" y="%d" fill="%s" font-size="17">%s</text>' % (x0 + 12, ry + 22, fg, esc(wrap(r['text'], 66, 1)[0])))
-                    parts = ['<tspan fill="%s">%s%s</tspan>' % ('#E8503A' if c['id'] in r['red'] else '#56C271', esc(c['id']),
-                                                                 ' RED' if c['id'] in r['red'] else '') for c in r['claims']]
-                    s.append('<text x="%d" y="%d" font-size="15"><tspan fill="#56C271">check: </tspan>%s</text>' % (x0 + 12, ry + 46, ', '.join(parts)))
-                else:
-                    for j, ln in enumerate(wrap(r['text'], 68, 2)):
-                        s.append('<text x="%d" y="%d" fill="%s" font-size="17">%s</text>' % (x0 + 12, ry + 22 + j * 22, fg, esc(ln)))
+                    cy2 = ry + 27 + len(lines) * 21
+                    items = []
+                    for c in r['claims']:
+                        if c['id'] in r['red']:
+                            items.append('<tspan fill="%s" font-weight="700">%s  failing</tspan>' % (T['red'], esc(c['id'])))
+                        else:
+                            items.append('<tspan fill="%s">%s</tspan>' % (T['mono'], esc(c['id'])))
+                    s.append('<text x="%d" y="%d" font-family="%s" font-size="12.5"><tspan fill="%s">check </tspan>%s</text>'
+                             % (x0 + 26, cy2, MONO, T['muted'], '<tspan fill="%s">, </tspan>'.join(items) % (() if len(items) < 2 else tuple([T['muted']] * (len(items) - 1)))))
+                ry += ch + GAP
     foot = []
     if ts:
-        foot.append('Last verdict: %s.' % ts)
+        foot.append('Last verdict %s' % ts.replace('T', ' ').replace('Z', ' UTC'))
+    foot.append('Drawn from CLAUDE.md, claims.tsv and verdict.json by tools/rules-map/build.py')
     if unlinked:
-        foot.append('Checks that match no rule: %s (link them in placement.json).' % ', '.join(c['id'] for c in unlinked))
+        foot.append('Checks that match no rule: %s' % ', '.join(c['id'] for c in unlinked))
     if n_unp:
-        foot.append('Not placed yet: pin them to a step in placement.json.')
-    s.append('<text x="60" y="%d" fill="#8A8F98" font-size="20">%s</text>' % (TH - 40, esc(' '.join(foot))))
+        foot.append('Pin unplaced rules to a step in placement.json')
+    s.append('<text x="60" y="%d" fill="%s" font-size="12.5">%s</text>' % (TH - 16, T['muted'], esc('  ·  '.join(foot))))
     s.append('</svg>')
     return '\n'.join(s), W, TH
 
 
-def write_png(svg, png_path, w, h):
+def write_png(svg, png_path, w, h, theme='light'):
     try:
         from playwright.sync_api import sync_playwright
     except ImportError:
         return 'png skipped: Playwright for Python is not installed (pip install playwright; playwright install chromium)'
+    bg = THEMES.get(theme, THEMES['light'])['bg']
     try:
         with sync_playwright() as pw:
             b = pw.chromium.launch()
-            pg = b.new_page(viewport={'width': w, 'height': min(h, 1400)})
-            pg.set_content('<html><body style="margin:0;background:#0B0E14">' + svg + '</body></html>')
-            pg.wait_for_timeout(200)
+            pg = b.new_page(viewport={'width': w, 'height': min(h, 1400)}, device_scale_factor=2)
+            pg.set_content('<html><head><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap"></head>'
+                           '<body style="margin:0;background:%s">%s</body></html>' % (bg, svg))
+            try:
+                pg.evaluate('document.fonts.ready')
+                pg.wait_for_timeout(1200)   # fonts arrive from the network; offline, the fallback face is used
+            except Exception:
+                pass
             pg.screenshot(path=png_path, full_page=True)
             b.close()
         return None
@@ -313,6 +367,7 @@ def main():
     ap.add_argument('--placement', default=os.path.join(HERE, 'placement.json'))
     ap.add_argument('--out', default='rules-map.svg')
     ap.add_argument('--no-png', action='store_true', help='write the SVG only')
+    ap.add_argument('--theme', choices=('light', 'dark'), default='light', help='light (white page) or dark (black page)')
     ap.add_argument('--list', action='store_true', help='print rule ids and placements, write nothing')
     a = ap.parse_args()
 
@@ -333,7 +388,7 @@ def main():
             print('%-48s  %-18s  (matches no rule)' % (c['id'], 'claim'))
         return 0
 
-    svg, w, h = draw(rules, cfg, unlinked, ts)
+    svg, w, h = draw(rules, cfg, unlinked, ts, a.theme)
     out = a.out
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     with open(out, 'w', encoding='utf-8') as f:
@@ -341,7 +396,7 @@ def main():
     png = None
     if not a.no_png:
         png = os.path.splitext(out)[0] + '.png'
-        note = write_png(svg, png, w, h)
+        note = write_png(svg, png, w, h, a.theme)
         if note:
             print(note, file=sys.stderr)
             png = None

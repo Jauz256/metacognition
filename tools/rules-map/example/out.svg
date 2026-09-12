@@ -1,88 +1,92 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="2050" viewBox="0 0 2200 2050" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif">
-<defs><marker id="ar" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#8A8F98"/></marker></defs>
-<rect width="100%" height="100%" fill="#0B0E14"/>
-<text x="60" y="80" fill="#F2F0EA" font-size="46" font-weight="900">Every rule, on the step where it applies</text>
-<text x="60" y="128" fill="#C9CCD3" font-size="24">10 rules. 5 have a check that runs. 5 are only notes. 1 broke today. 1 not placed yet.</text>
-<text x="60" y="168" fill="#C9CCD3" font-size="22">Left: the steps of one piece of work, top to bottom. Each card is one rule, wired to its step. Green card = a check in claims.tsv enforces it. Grey card = written down only. Red ring = its check failed in the last verdict.</text>
-<text x="740" y="260" fill="#56C271" font-size="28" font-weight="900">A check enforces it (5)</text>
-<text x="1460" y="260" fill="#8A8F98" font-size="28" font-weight="900">Only a note (5)</text>
-<g class="step" data-step="1">
-<rect x="100" y="340" width="460" height="130" rx="16" fill="#F2F0EA" stroke="#0B0E14" stroke-width="3"/>
-<text x="330" y="392" text-anchor="middle" fill="#0B0E14" font-size="28" font-weight="900">1. read the ask</text>
-<text x="330" y="454" text-anchor="middle" fill="#0B0E14" font-size="18">1 rules</text>
-</g>
-<path d="M560,405 C650,405 1370,350 1460,350" fill="none" stroke="#3A3F4C" stroke-width="2" opacity="0.9"/>
-<rect class="rule note" data-id="clarify-request-before-any-change" data-step="1" x="1460" y="320" width="620" height="60" rx="9" fill="#1E2230" stroke="#0B0E14" stroke-width="2"/>
-<text x="1472" y="342" fill="#D9DCE3" font-size="17">Clarify the request before any change that touches more than three</text>
-<text x="1472" y="364" fill="#D9DCE3" font-size="17">files.</text>
-<g class="step" data-step="2">
-<rect x="100" y="570" width="460" height="130" rx="16" fill="#F2F0EA" stroke="#0B0E14" stroke-width="3"/>
-<text x="330" y="622" text-anchor="middle" fill="#0B0E14" font-size="28" font-weight="900">2. plan</text>
-<text x="330" y="684" text-anchor="middle" fill="#0B0E14" font-size="18">1 rules</text>
-</g>
-<path d="M330,470 L330,570" stroke="#8A8F98" stroke-width="5" marker-end="url(#ar)"/>
-<path d="M560,635 C650,635 1370,580 1460,580" fill="none" stroke="#3A3F4C" stroke-width="2" opacity="0.9"/>
-<rect class="rule note" data-id="restate-goal-one-wait-yes" data-step="2" x="1460" y="550" width="620" height="60" rx="9" fill="#1E2230" stroke="#0B0E14" stroke-width="2"/>
-<text x="1472" y="572" fill="#D9DCE3" font-size="17">Restate the goal in one line and wait for a yes before a big build.</text>
-<g class="step" data-step="3">
-<rect x="100" y="800" width="460" height="130" rx="16" fill="#F2F0EA" stroke="#0B0E14" stroke-width="3"/>
-<text x="330" y="852" text-anchor="middle" fill="#0B0E14" font-size="28" font-weight="900">3. build</text>
-<text x="330" y="914" text-anchor="middle" fill="#0B0E14" font-size="18">2 rules</text>
-</g>
-<path d="M330,700 L330,800" stroke="#8A8F98" stroke-width="5" marker-end="url(#ar)"/>
-<path d="M560,865 C650,865 650,810 740,810" fill="none" stroke="#56C271" stroke-width="2" opacity="0.9"/>
-<rect class="rule mechanism" data-id="dependencies-minimal-add-package-standard" data-step="3" x="740" y="780" width="620" height="60" rx="9" fill="#163B2A" stroke="#0B0E14" stroke-width="2"/>
-<text x="752" y="802" fill="#BFF0CF" font-size="17">Keep dependencies minimal; do not add a package when the standa...</text>
-<text x="752" y="826" font-size="15"><tspan fill="#56C271">check: </tspan><tspan fill="#56C271">few-dependencies</tspan></text>
-<path d="M560,865 C650,865 650,880 740,880" fill="none" stroke="#56C271" stroke-width="2" opacity="0.9"/>
-<rect class="rule mechanism" data-id="leave-console-log-debug-statements" data-step="3" x="740" y="850" width="620" height="60" rx="9" fill="#163B2A" stroke="#0B0E14" stroke-width="2"/>
-<text x="752" y="872" fill="#BFF0CF" font-size="17">Never leave console.log or debug statements in shipped code....</text>
-<text x="752" y="896" font-size="15"><tspan fill="#56C271">check: </tspan><tspan fill="#56C271">no-debug-statements</tspan></text>
-<g class="step" data-step="4">
-<rect x="100" y="1030" width="460" height="130" rx="16" fill="#F2F0EA" stroke="#0B0E14" stroke-width="3"/>
-<text x="330" y="1082" text-anchor="middle" fill="#0B0E14" font-size="28" font-weight="900">4. verify</text>
-<text x="330" y="1144" text-anchor="middle" fill="#0B0E14" font-size="18">1 rules</text>
-</g>
-<path d="M330,930 L330,1030" stroke="#8A8F98" stroke-width="5" marker-end="url(#ar)"/>
-<path d="M560,1095 C650,1095 650,1040 740,1040" fill="none" stroke="#E8503A" stroke-width="2" opacity="0.9"/>
-<rect class="rule mechanism broken" data-id="run-lint-typecheck-before-commit" data-step="4" x="740" y="1010" width="620" height="60" rx="9" fill="#163B2A" stroke="#E8503A" stroke-width="4"/>
-<text x="752" y="1032" fill="#BFF0CF" font-size="17">Run lint and typecheck before every commit.</text>
-<text x="752" y="1056" font-size="15"><tspan fill="#56C271">check: </tspan><tspan fill="#56C271">lint-clean</tspan>, <tspan fill="#E8503A">typecheck-clean RED</tspan></text>
-<g class="step" data-step="5">
-<rect x="100" y="1260" width="460" height="130" rx="16" fill="#F2F0EA" stroke="#0B0E14" stroke-width="3"/>
-<text x="330" y="1312" text-anchor="middle" fill="#0B0E14" font-size="28" font-weight="900">5. show</text>
-<text x="330" y="1374" text-anchor="middle" fill="#0B0E14" font-size="18">3 rules</text>
-</g>
-<path d="M330,1160 L330,1260" stroke="#8A8F98" stroke-width="5" marker-end="url(#ar)"/>
-<path d="M560,1325 C650,1325 650,1270 740,1270" fill="none" stroke="#56C271" stroke-width="2" opacity="0.9"/>
-<rect class="rule mechanism" data-id="commit-atomically-message-names-change" data-step="5" x="740" y="1240" width="620" height="60" rx="9" fill="#163B2A" stroke="#0B0E14" stroke-width="2"/>
-<text x="752" y="1262" fill="#BFF0CF" font-size="17">Commit atomically, with a message that names the change.</text>
-<text x="752" y="1286" font-size="15"><tspan fill="#56C271">check: </tspan><tspan fill="#56C271">atomic-commits</tspan></text>
-<path d="M560,1325 C650,1325 650,1340 740,1340" fill="none" stroke="#56C271" stroke-width="2" opacity="0.9"/>
-<rect class="rule mechanism" data-id="say-without-pasting-command-proves" data-step="5" x="740" y="1310" width="620" height="60" rx="9" fill="#163B2A" stroke="#0B0E14" stroke-width="2"/>
-<text x="752" y="1332" fill="#BFF0CF" font-size="17">Never say &quot;done&quot; without pasting the command that proves it....</text>
-<text x="752" y="1356" font-size="15"><tspan fill="#56C271">check: </tspan><tspan fill="#56C271">proof-in-done</tspan></text>
-<path d="M560,1325 C650,1325 1370,1270 1460,1270" fill="none" stroke="#3A3F4C" stroke-width="2" opacity="0.9"/>
-<rect class="rule note" data-id="answer-details-second-reply-answer" data-step="5" x="1460" y="1240" width="620" height="60" rx="9" fill="#1E2230" stroke="#0B0E14" stroke-width="2"/>
-<text x="1472" y="1262" fill="#D9DCE3" font-size="17">Answer first, details second: the first line of a reply is the</text>
-<text x="1472" y="1284" fill="#D9DCE3" font-size="17">answer.</text>
-<g class="step" data-step="6">
-<rect x="100" y="1490" width="460" height="130" rx="16" fill="#F2F0EA" stroke="#0B0E14" stroke-width="3"/>
-<text x="330" y="1542" text-anchor="middle" fill="#0B0E14" font-size="28" font-weight="900">6. learn</text>
-<text x="330" y="1604" text-anchor="middle" fill="#0B0E14" font-size="18">1 rules</text>
-</g>
-<path d="M330,1390 L330,1490" stroke="#8A8F98" stroke-width="5" marker-end="url(#ar)"/>
-<path d="M560,1555 C650,1555 1370,1500 1460,1500" fill="none" stroke="#3A3F4C" stroke-width="2" opacity="0.9"/>
-<rect class="rule note" data-id="correction-comes-write-down-comment" data-step="6" x="1460" y="1470" width="620" height="60" rx="9" fill="#1E2230" stroke="#0B0E14" stroke-width="2"/>
-<text x="1472" y="1492" fill="#D9DCE3" font-size="17">When the same correction comes twice, write it down as a rule, not a</text>
-<text x="1472" y="1514" fill="#D9DCE3" font-size="17">comment.</text>
-<g class="step" data-step="0">
-<rect x="100" y="1720" width="460" height="130" rx="16" fill="#E8503A" stroke="#0B0E14" stroke-width="3"/>
-<text x="330" y="1772" text-anchor="middle" fill="#0B0E14" font-size="28" font-weight="900">0. not placed yet</text>
-<text x="330" y="1834" text-anchor="middle" fill="#0B0E14" font-size="18">1 rules</text>
-</g>
-<path d="M560,1785 C650,1785 1370,1730 1460,1730" fill="none" stroke="#3A3F4C" stroke-width="2" opacity="0.9"/>
-<rect class="rule note" data-id="direct-filler-words" data-step="0" x="1460" y="1700" width="620" height="60" rx="9" fill="#1E2230" stroke="#0B0E14" stroke-width="2"/>
-<text x="1472" y="1722" fill="#D9DCE3" font-size="17">Be direct. No filler words.</text>
-<text x="60" y="2010" fill="#8A8F98" font-size="20">Last verdict: 2026-09-07T10:30:00Z. Not placed yet: pin them to a step in placement.json.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1274" viewBox="0 0 1200 1274" font-family="Inter, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+<rect width="100%" height="100%" fill="#FFFFFF"/>
+<text x="60" y="64" fill="#111111" font-size="30" font-weight="700" letter-spacing="-0.02em">Every rule, on the step where it applies</text>
+<text x="60" y="96" fill="#6B7280" font-size="16">10 rules  ·  5 enforced by a check  ·  5 written down only  ·  <tspan fill="#DC2626" font-weight="600">1 failing now</tspan>  ·  1 not placed yet</text>
+<text x="60" y="124" fill="#6B7280" font-size="14">Down the left: the steps of one piece of work. Each card is one rule, in the band of its step.</text>
+<circle cx="306" cy="160" r="5" fill="#16A34A"/>
+<text x="318" y="165" fill="#111111" font-size="15" font-weight="600">Enforced by a check</text>
+<text x="318" y="184" fill="#6B7280" font-size="12.5">a command that exits 0 when the rule holds. Red: it failed in the last verdict.</text>
+<circle cx="776" cy="160" r="5" fill="#D1D5DB"/>
+<text x="788" y="165" fill="#111111" font-size="15" font-weight="600">Written down only</text>
+<text x="788" y="184" fill="#6B7280" font-size="12.5">no check yet, so nobody knows if it holds.</text>
+<line x1="60" y1="198" x2="1140" y2="198" stroke="#E5E7EB" stroke-width="1"/>
+<line x1="72" y1="236" x2="72" y2="1049" stroke="#D1D5DB" stroke-width="2"/>
+<circle cx="72" cy="236" r="16" fill="#111111"/>
+<text x="72" y="241" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="700">1</text>
+<text x="104" y="242" fill="#111111" font-size="17" font-weight="600">read the ask</text>
+<text x="104" y="264" fill="#6B7280" font-size="13">1 rule</text>
+<line x1="300" y1="315" x2="1140" y2="315" stroke="#E5E7EB" stroke-width="1"/>
+<rect class="rule note" data-id="clarify-request-before-any-change" data-step="1" x="770" y="218" width="380" height="72" rx="8" fill="#F7F7F7" stroke="#E5E7EB" stroke-width="1"/>
+<rect x="780" y="230" width="4" height="48" rx="2" fill="#D1D5DB"/>
+<text x="796" y="245" fill="#111111" font-size="15">Clarify the request before any change that</text>
+<text x="796" y="266" fill="#111111" font-size="15">touches more than three files.</text>
+<circle cx="72" cy="348" r="16" fill="#111111"/>
+<text x="72" y="353" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="700">2</text>
+<text x="104" y="354" fill="#111111" font-size="17" font-weight="600">plan</text>
+<text x="104" y="376" fill="#6B7280" font-size="13">1 rule</text>
+<line x1="300" y1="427" x2="1140" y2="427" stroke="#E5E7EB" stroke-width="1"/>
+<rect class="rule note" data-id="restate-goal-one-wait-yes" data-step="2" x="770" y="330" width="380" height="72" rx="8" fill="#F7F7F7" stroke="#E5E7EB" stroke-width="1"/>
+<rect x="780" y="342" width="4" height="48" rx="2" fill="#D1D5DB"/>
+<text x="796" y="357" fill="#111111" font-size="15">Restate the goal in one line and wait for a yes</text>
+<text x="796" y="378" fill="#111111" font-size="15">before a big build.</text>
+<circle cx="72" cy="460" r="16" fill="#111111"/>
+<text x="72" y="465" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="700">3</text>
+<text x="104" y="466" fill="#111111" font-size="17" font-weight="600">build</text>
+<text x="104" y="488" fill="#6B7280" font-size="13">2 rules</text>
+<line x1="300" y1="665" x2="1140" y2="665" stroke="#E5E7EB" stroke-width="1"/>
+<rect class="rule mechanism" data-id="dependencies-minimal-add-package-standard" data-step="3" x="300" y="442" width="440" height="94" rx="8" fill="#F7F7F7" stroke="#E5E7EB" stroke-width="1"/>
+<rect x="310" y="454" width="4" height="70" rx="2" fill="#16A34A"/>
+<text x="326" y="469" fill="#111111" font-size="15">Keep dependencies minimal; do not add a package when</text>
+<text x="326" y="490" fill="#111111" font-size="15">the standard library will do.</text>
+<text x="326" y="511" font-family="'JetBrains Mono', Menlo, Consolas, monospace" font-size="12.5"><tspan fill="#6B7280">check </tspan><tspan fill="#374151">few-dependencies</tspan></text>
+<rect class="rule mechanism" data-id="leave-console-log-debug-statements" data-step="3" x="300" y="546" width="440" height="94" rx="8" fill="#F7F7F7" stroke="#E5E7EB" stroke-width="1"/>
+<rect x="310" y="558" width="4" height="70" rx="2" fill="#16A34A"/>
+<text x="326" y="573" fill="#111111" font-size="15">Never leave console.log or debug statements in shipped</text>
+<text x="326" y="594" fill="#111111" font-size="15">code. Instead, remove them before the commit.</text>
+<text x="326" y="615" font-family="'JetBrains Mono', Menlo, Consolas, monospace" font-size="12.5"><tspan fill="#6B7280">check </tspan><tspan fill="#374151">no-debug-statements</tspan></text>
+<circle cx="72" cy="698" r="16" fill="#111111"/>
+<text x="72" y="703" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="700">4</text>
+<text x="104" y="704" fill="#111111" font-size="17" font-weight="600">verify</text>
+<text x="104" y="726" fill="#6B7280" font-size="13">1 rule</text>
+<line x1="300" y1="778" x2="1140" y2="778" stroke="#E5E7EB" stroke-width="1"/>
+<rect class="rule mechanism broken" data-id="run-lint-typecheck-before-commit" data-step="4" x="300" y="680" width="440" height="73" rx="8" fill="#F7F7F7" stroke="#DC2626" stroke-width="1.5"/>
+<rect x="310" y="692" width="4" height="49" rx="2" fill="#DC2626"/>
+<text x="326" y="707" fill="#111111" font-size="15">Run lint and typecheck before every commit.</text>
+<text x="326" y="728" font-family="'JetBrains Mono', Menlo, Consolas, monospace" font-size="12.5"><tspan fill="#6B7280">check </tspan><tspan fill="#374151">lint-clean</tspan><tspan fill="#6B7280">, </tspan><tspan fill="#DC2626" font-weight="700">typecheck-clean  failing</tspan></text>
+<circle cx="72" cy="811" r="16" fill="#111111"/>
+<text x="72" y="816" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="700">5</text>
+<text x="104" y="817" fill="#111111" font-size="17" font-weight="600">show</text>
+<text x="104" y="839" fill="#6B7280" font-size="13">3 rules</text>
+<line x1="300" y1="1016" x2="1140" y2="1016" stroke="#E5E7EB" stroke-width="1"/>
+<rect class="rule mechanism" data-id="commit-atomically-message-names-change" data-step="5" x="300" y="793" width="440" height="94" rx="8" fill="#F7F7F7" stroke="#E5E7EB" stroke-width="1"/>
+<rect x="310" y="805" width="4" height="70" rx="2" fill="#16A34A"/>
+<text x="326" y="820" fill="#111111" font-size="15">Commit atomically, with a message that names the</text>
+<text x="326" y="841" fill="#111111" font-size="15">change.</text>
+<text x="326" y="862" font-family="'JetBrains Mono', Menlo, Consolas, monospace" font-size="12.5"><tspan fill="#6B7280">check </tspan><tspan fill="#374151">atomic-commits</tspan></text>
+<rect class="rule mechanism" data-id="say-without-pasting-command-proves" data-step="5" x="300" y="897" width="440" height="94" rx="8" fill="#F7F7F7" stroke="#E5E7EB" stroke-width="1"/>
+<rect x="310" y="909" width="4" height="70" rx="2" fill="#16A34A"/>
+<text x="326" y="924" fill="#111111" font-size="15">Never say &quot;done&quot; without pasting the command that</text>
+<text x="326" y="945" fill="#111111" font-size="15">proves it. Instead, paste the command and its last...</text>
+<text x="326" y="966" font-family="'JetBrains Mono', Menlo, Consolas, monospace" font-size="12.5"><tspan fill="#6B7280">check </tspan><tspan fill="#374151">proof-in-done</tspan></text>
+<rect class="rule note" data-id="answer-details-second-reply-answer" data-step="5" x="770" y="793" width="380" height="72" rx="8" fill="#F7F7F7" stroke="#E5E7EB" stroke-width="1"/>
+<rect x="780" y="805" width="4" height="48" rx="2" fill="#D1D5DB"/>
+<text x="796" y="820" fill="#111111" font-size="15">Answer first, details second: the first line of</text>
+<text x="796" y="841" fill="#111111" font-size="15">a reply is the answer.</text>
+<circle cx="72" cy="1049" r="16" fill="#111111"/>
+<text x="72" y="1054" text-anchor="middle" fill="#FFFFFF" font-size="14" font-weight="700">6</text>
+<text x="104" y="1055" fill="#111111" font-size="17" font-weight="600">learn</text>
+<text x="104" y="1077" fill="#6B7280" font-size="13">1 rule</text>
+<line x1="300" y1="1128" x2="1140" y2="1128" stroke="#E5E7EB" stroke-width="1"/>
+<rect class="rule note" data-id="correction-comes-write-down-comment" data-step="6" x="770" y="1031" width="380" height="72" rx="8" fill="#F7F7F7" stroke="#E5E7EB" stroke-width="1"/>
+<rect x="780" y="1043" width="4" height="48" rx="2" fill="#D1D5DB"/>
+<text x="796" y="1058" fill="#111111" font-size="15">When the same correction comes twice, write it</text>
+<text x="796" y="1079" fill="#111111" font-size="15">down as a rule, not a comment.</text>
+<circle cx="72" cy="1161" r="16" fill="#FFFFFF" stroke="#D1D5DB" stroke-width="2" stroke-dasharray="4 3"/>
+<text x="72" y="1166" text-anchor="middle" fill="#6B7280" font-size="14" font-weight="700">?</text>
+<text x="104" y="1167" fill="#6B7280" font-size="17" font-weight="600">not placed yet</text>
+<text x="104" y="1189" fill="#6B7280" font-size="13">1 rule</text>
+<rect class="rule note" data-id="direct-filler-words" data-step="0" x="770" y="1143" width="380" height="51" rx="8" fill="#F7F7F7" stroke="#E5E7EB" stroke-width="1" stroke-dasharray="5 4"/>
+<rect x="780" y="1155" width="4" height="27" rx="2" fill="#D1D5DB"/>
+<text x="796" y="1170" fill="#111111" font-size="15">Be direct. No filler words.</text>
+<text x="60" y="1258" fill="#6B7280" font-size="12.5">Last verdict 2026-09-07 10:30:00 UTC  ·  Drawn from CLAUDE.md, claims.tsv and verdict.json by tools/rules-map/build.py  ·  Pin unplaced rules to a step in placement.json</text>
 </svg>
