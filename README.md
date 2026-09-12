@@ -1,7 +1,9 @@
 # metacognition
 
 Your AI reads your rules and ignores them. This measures which ones, every 30 minutes, and
-draws it.
+draws it. The point is not the watching. The point is that a correction you typed once is never
+typed again: it becomes a check that can fail, and you can see whether the agent improves.
+Why it exists, with the evidence: [WHY.md](WHY.md). The rules for deciding: [PRINCIPLES.md](PRINCIPLES.md).
 
 Metacognition means thinking about your own thinking. That is what this does for a coding
 agent: it watches whether the agent still follows the rules you wrote for it.
