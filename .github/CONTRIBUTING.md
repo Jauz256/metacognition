@@ -32,7 +32,7 @@ A good shipped rule is true for almost everyone, not just for you. It must:
 Open an issue with the output of:
 
 ```sh
-npx github:jazzs-thoughts/metacognition status
+npx metacognition status
 node --version
 ```
 

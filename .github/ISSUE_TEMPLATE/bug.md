@@ -11,7 +11,7 @@ labels: bug
 **Paste the output of these two commands**
 
 ```
-npx github:jazzs-thoughts/metacognition status
+npx metacognition status
 node --version
 ```
 
